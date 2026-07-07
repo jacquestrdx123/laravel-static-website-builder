@@ -1,0 +1,79 @@
+# Caddy configuration for serving the builder app + all published customer sites.
+#
+# Assumptions (adjust to your infrastructure):
+#   - The Laravel app runs behind PHP-FPM (or `php artisan serve` / Octane) on this host.
+#   - Published sites are copied to SITES_PUBLISH_PATH (default /srv/websites/{slug}).
+#   - Customers get {slug}.sites.example.com for free; custom domains point their
+#     DNS at this server and are validated via the on_demand_tls "ask" endpoint.
+#
+# DNS you need:
+#   - A record:      app.example.com        -> this server
+#   - Wildcard A:    *.sites.example.com    -> this server
+#
+# For the wildcard certificate on *.sites.example.com you either need a DNS
+# provider module (recommended, see https://caddyserver.com/docs/automatic-https#wildcard-certificates)
+# or you can rely on on-demand TLS below (per-hostname certs, no DNS plugin needed).
+
+{
+	email admin@example.com
+
+	# Only issue certificates for hostnames the app says are published.
+	on_demand_tls {
+		ask http://127.0.0.1:8080/caddy/allowed
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The builder application itself
+# ---------------------------------------------------------------------------
+app.example.com {
+	encode zstd gzip
+
+	root * /var/www/builder/public
+	php_fastcgi unix//run/php/php8.4-fpm.sock
+	file_server
+}
+
+# Plain HTTP listener Caddy uses for the on_demand_tls ask endpoint
+# (kept off the public TLS name so the check works before certs exist).
+http://127.0.0.1:8080 {
+	reverse_proxy unix//run/php/php8.4-fpm.sock {
+		transport fastcgi {
+			root /var/www/builder/public
+			split .php
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Published customer sites: {slug}.sites.example.com AND custom domains.
+# One site block serves them all; the hostname picks the directory.
+# ---------------------------------------------------------------------------
+https:// {
+	tls {
+		on_demand
+	}
+
+	encode zstd gzip
+
+	# {slug}.sites.example.com -> /srv/websites/{slug}
+	@subdomain host_regexp sub ^([a-z0-9-]+)\.sites\.example\.com$
+	handle @subdomain {
+		root * /srv/websites/{re.sub.1}
+		file_server
+	}
+
+	# Custom domains -> /srv/websites/domains/{host}
+	# (create a symlink to the slug directory when a customer attaches a domain:
+	#   ln -s /srv/websites/{slug} /srv/websites/domains/www.customer.com )
+	handle {
+		root * /srv/websites/domains/{host}
+		file_server
+	}
+
+	# Sensible security headers for static customer sites
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+	}
+}
