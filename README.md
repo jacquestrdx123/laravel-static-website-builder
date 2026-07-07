@@ -38,6 +38,9 @@ php artisan key:generate
 touch database/database.sqlite
 php artisan migrate
 
+npm install
+npm run build
+
 # Required for generation:
 #   ANTHROPIC_API_KEY=sk-ant-...   (in .env)
 
@@ -76,6 +79,48 @@ run the generation. Without a queue worker jobs sit in the `jobs` table forever.
 
 DNS required: `A app.example.com` and a wildcard `A *.sites.example.com`
 pointing at the server.
+
+## Laravel Forge deployment
+
+Vite 8 uses [Rolldown](https://rolldown.rs/), which ships a platform-specific
+native binary (`@rolldown/binding-linux-x64-gnu`). If that binary is missing,
+`npm run build` fails with:
+
+```
+Cannot find module '../rolldown-binding.linux-x64-gnu.node'
+```
+
+**Node version:** Vite 8 requires **Node 20.19+** or **22.12+**. Node 21 is not
+supported. In your Forge deployment script, use Node 22 (not 21):
+
+```bash
+$CREATE_RELEASE()
+
+cd $FORGE_RELEASE_DIRECTORY
+
+. ~/.nvm/nvm.sh
+nvm use 22   # or: nvm use   (reads .nvmrc)
+
+rm -rf node_modules
+npm ci
+npm run build
+$FORGE_PHP artisan optimize
+$FORGE_PHP artisan storage:link
+$FORGE_PHP artisan migrate --force
+
+$ACTIVATE_RELEASE()
+
+$RESTART_QUEUES()
+```
+
+Key points:
+
+- Commit `package-lock.json` so `npm ci` installs the exact dependency tree
+  (including the Linux rolldown binding).
+- Run `npm ci` on the server — do not copy `node_modules` from another OS.
+- `rm -rf node_modules` before install avoids stale bindings from a prior release.
+- `@rolldown/binding-linux-x64-gnu` is listed in `optionalDependencies` as a
+  workaround for an npm bug with optional deps ([npm/cli#4828](https://github.com/npm/cli/issues/4828)).
 
 ## Credits & payments
 
