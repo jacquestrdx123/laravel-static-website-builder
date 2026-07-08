@@ -90,10 +90,20 @@ class WebsiteBuilderTest extends TestCase
 
         File::ensureDirectoryExists($website->sitePath());
         File::put($website->sitePath().'/index.html', '<h1>Hello</h1>');
+        File::put($website->sitePath().'/styles.css', 'body{}');
 
+        // Bare /preview redirects to /preview/index.html so that relative
+        // asset URLs in the document resolve inside the preview route.
         $this->actingAs($owner)->get(route('websites.preview', $website))
+            ->assertRedirect(route('websites.preview', [$website, 'index.html']));
+
+        $this->actingAs($owner)->get(route('websites.preview', [$website, 'index.html']))
             ->assertOk()
             ->assertHeader('Content-Type', 'text/html; charset=UTF-8');
+
+        $this->actingAs($owner)->get(route('websites.preview', [$website, 'styles.css']))
+            ->assertOk()
+            ->assertHeader('Content-Type', 'text/css; charset=UTF-8');
 
         $this->actingAs($other)->get(route('websites.preview', $website))->assertForbidden();
 

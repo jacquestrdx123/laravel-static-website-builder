@@ -3,16 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Website;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PreviewController extends Controller
 {
     /** Serve a file from the generated (unpublished) site to its owner. */
-    public function __invoke(Request $request, Website $website, string $path = 'index.html'): BinaryFileResponse
+    public function __invoke(Request $request, Website $website, string $path = ''): BinaryFileResponse|RedirectResponse
     {
         abort_unless($website->user_id === $request->user()->id, 403);
         abort_unless($website->isGenerated(), 404);
+
+        // Relative asset URLs (styles.css, script.js) resolve against the last
+        // path segment, so the document must be served from an explicit
+        // filename URL — /preview alone would make the browser request
+        // /websites/{id}/styles.css. Redirect to the real document.
+        if ($path === '' || str_ends_with($path, '/')) {
+            return redirect()->route('websites.preview', [$website, $path.'index.html']);
+        }
 
         $root = realpath($website->sitePath());
         abort_if($root === false, 404);
