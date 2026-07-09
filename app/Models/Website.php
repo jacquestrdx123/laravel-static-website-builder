@@ -40,10 +40,20 @@ class Website extends Model
         return $this->hasMany(WebsiteImage::class)->orderBy('sort');
     }
 
-    /** Directory (on the local disk) holding the generated static site. */
+    /**
+     * Directory holding the generated static site. Lives on the public disk
+     * so the web server serves previews directly (via the storage:link
+     * symlink) and relative asset URLs just work - no Laravel routing.
+     */
     public function sitePath(): string
     {
-        return Storage::disk('local')->path('sites/'.$this->slug);
+        return Storage::disk('public')->path('sites/'.$this->slug);
+    }
+
+    /** Publicly served URL of the generated site's index. */
+    public function previewUrl(): string
+    {
+        return asset('storage/sites/'.$this->slug.'/index.html');
     }
 
     public function isGenerated(): bool

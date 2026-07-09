@@ -76,7 +76,7 @@ class WebsiteBuilderTest extends TestCase
         Queue::assertNothingPushed();
     }
 
-    public function test_preview_is_owner_only_and_blocks_path_traversal(): void
+    public function test_generated_sites_live_on_the_public_disk(): void
     {
         $owner = User::factory()->create();
         $other = User::factory()->create();
@@ -88,28 +88,24 @@ class WebsiteBuilderTest extends TestCase
             'settings' => [],
         ]);
 
+        // Sites are written to the public disk so the web server serves
+        // previews directly through the storage:link symlink.
+        $this->assertSame(
+            Storage::disk('public')->path('sites/site'),
+            $website->sitePath()
+        );
+        $this->assertStringEndsWith('/storage/sites/site/index.html', $website->previewUrl());
+
+        // The show page embeds the direct static URL (owner only).
         File::ensureDirectoryExists($website->sitePath());
         File::put($website->sitePath().'/index.html', '<h1>Hello</h1>');
-        File::put($website->sitePath().'/styles.css', 'body{}');
-
-        // Bare /preview redirects to /preview/index.html so that relative
-        // asset URLs in the document resolve inside the preview route.
-        $this->actingAs($owner)->get(route('websites.preview', $website))
-            ->assertRedirect(route('websites.preview', [$website, 'index.html']));
-
-        $this->actingAs($owner)->get(route('websites.preview', [$website, 'index.html']))
-            ->assertOk()
-            ->assertHeader('Content-Type', 'text/html; charset=UTF-8');
-
-        $this->actingAs($owner)->get(route('websites.preview', [$website, 'styles.css']))
-            ->assertOk()
-            ->assertHeader('Content-Type', 'text/css; charset=UTF-8');
-
-        $this->actingAs($other)->get(route('websites.preview', $website))->assertForbidden();
 
         $this->actingAs($owner)
-            ->get('/websites/'.$website->id.'/preview/..%2F..%2F.env')
-            ->assertNotFound();
+            ->get(route('websites.show', $website))
+            ->assertOk()
+            ->assertSee('/storage/sites/site/index.html');
+
+        $this->actingAs($other)->get(route('websites.show', $website))->assertForbidden();
 
         File::deleteDirectory($website->sitePath());
     }

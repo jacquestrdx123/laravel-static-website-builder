@@ -10,8 +10,8 @@ by Caddy with automatic HTTPS.
 ```
 register → buy AI credits → describe business + upload images + choose toggles
         → queued job calls the Claude API (vision + structured output)
-        → static site written to storage/app/private/sites/{slug}
-        → owner previews in-app
+        → static site written to storage/app/public/sites/{slug}
+        → owner previews in-app (served directly at /storage/sites/{slug}/)
         → publish copies the site to SITES_PUBLISH_PATH
         → Caddy serves {slug}.sites.yourdomain.com (and custom domains)
 ```
@@ -23,7 +23,7 @@ register → buy AI credits → describe business + upload images + choose toggl
 | AI generation (Claude API, streaming + structured JSON output) | `app/Services/WebsiteGenerator.php` |
 | Queued generation job (refunds credit on failure) | `app/Jobs/GenerateWebsiteJob.php` |
 | Builder wizard (uploads + toggles) | `app/Http/Controllers/WebsiteController.php`, `resources/views/websites/create.blade.php` |
-| Owner-only preview of generated sites | `app/Http/Controllers/PreviewController.php` |
+| Preview of generated sites | Served statically from the public disk (`/storage/sites/{slug}/index.html` via `php artisan storage:link`); URL built by `Website::previewUrl()` |
 | Publish / unpublish to the Caddy web root | `app/Http/Controllers/PublishController.php` |
 | Credits ledger + stubbed checkout | `app/Http/Controllers/BillingController.php`, `App\Models\User::spendCredits()` |
 | Caddy `on_demand_tls` ask endpoint | `app/Http/Controllers/CaddyController.php` (`GET /caddy/allowed`) |
@@ -37,6 +37,7 @@ cp .env.example .env
 php artisan key:generate
 touch database/database.sqlite
 php artisan migrate
+php artisan storage:link   # previews are served from the public disk
 
 # Required for generation:
 #   ANTHROPIC_API_KEY=sk-ant-...   (in .env)

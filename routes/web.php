@@ -3,7 +3,6 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\CaddyController;
-use App\Http\Controllers\PreviewController;
 use App\Http\Controllers\PublishController;
 use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Route;
@@ -31,10 +30,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/websites/{website}/status', [WebsiteController::class, 'status'])->name('websites.status');
     Route::post('/websites/{website}/regenerate', [WebsiteController::class, 'regenerate'])->name('websites.regenerate');
     Route::delete('/websites/{website}', [WebsiteController::class, 'destroy'])->name('websites.destroy');
-
-    Route::get('/websites/{website}/preview/{path?}', PreviewController::class)
-        ->where('path', '.*')
-        ->name('websites.preview');
 
     Route::post('/websites/{website}/publish', [PublishController::class, 'store'])->name('websites.publish');
     Route::delete('/websites/{website}/publish', [PublishController::class, 'destroy'])->name('websites.unpublish');

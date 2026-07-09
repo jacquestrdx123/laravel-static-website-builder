@@ -42,9 +42,9 @@
         <div class="card">
             <div class="actions" style="justify-content: space-between; margin-bottom: .8rem;">
                 <strong>Preview</strong>
-                <a class="btn secondary" target="_blank" href="{{ route('websites.preview', [$website, 'index.html']) }}">Open full screen ↗</a>
+                <a class="btn secondary" target="_blank" href="{{ $website->previewUrl() }}">Open full screen ↗</a>
             </div>
-            <iframe class="preview" src="{{ route('websites.preview', [$website, 'index.html']) }}" title="Website preview"></iframe>
+            <iframe class="preview" src="{{ $website->previewUrl() }}" title="Website preview"></iframe>
         </div>
 
         <div class="card">
