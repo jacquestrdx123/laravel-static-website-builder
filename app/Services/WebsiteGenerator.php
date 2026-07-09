@@ -196,6 +196,10 @@ Requirements for every site you produce:
   invent other image filenames or hotlink external images. Design around the actual content
   of the photos, which you can see.
 - Real, well-written copy based on the business details provided - no lorem ipsum.
+- When the brief includes "offerings" (the customer's services, products, or menu items), feature
+  every one of them in a dedicated section using the customer's EXACT names and prices - never
+  invent, rename, drop, or re-price items. Expand short descriptions into appealing copy. When
+  no offerings are listed, write plausible section content from the business description instead.
 - SEO basics when requested: title, meta description, Open Graph tags.
 - Contact forms must degrade gracefully as static sites: use a mailto: fallback or a clearly
   marked form action placeholder comment.
@@ -248,6 +252,8 @@ PROMPT;
             'color_scheme' => $settings['color_scheme'] ?? 'light',
             'accent_color' => $settings['accent_color'] ?? null,
             'features' => $settings['features'] ?? [],
+            'offering_type' => $settings['offering_type'] ?? 'services',
+            'offerings' => $settings['offerings'] ?? [],
             'extra_instructions' => $settings['extra_instructions'] ?? null,
             'image_assets' => $assetNames,
         ];

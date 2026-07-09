@@ -16,6 +16,8 @@ use RuntimeException;
 class WebsiteController extends Controller
 {
     public const SITE_TYPES = ['business', 'portfolio', 'restaurant', 'landing', 'personal', 'event'];
+    public const OFFERING_TYPES = ['services', 'products', 'menu'];
+    public const MAX_OFFERINGS = 12;
     public const SECTIONS = ['hero', 'about', 'services', 'gallery', 'testimonials', 'pricing', 'faq', 'contact'];
     public const STYLES = ['minimal', 'bold', 'elegant', 'playful', 'corporate'];
     public const COLOR_SCHEMES = ['light', 'dark', 'auto'];
@@ -49,9 +51,20 @@ class WebsiteController extends Controller
             'features' => ['nullable', 'array'],
             'features.*' => ['in:'.implode(',', self::FEATURES)],
             'extra_instructions' => ['nullable', 'string', 'max:2000'],
+            'offering_type' => ['required', 'in:'.implode(',', self::OFFERING_TYPES)],
+            'offerings' => ['nullable', 'array', 'max:'.self::MAX_OFFERINGS],
+            'offerings.*.name' => ['nullable', 'string', 'max:100'],
+            'offerings.*.description' => ['nullable', 'string', 'max:500'],
+            'offerings.*.price' => ['nullable', 'string', 'max:50'],
             'images' => ['nullable', 'array', 'max:'.config('sites.max_images')],
             'images.*' => ['image', 'mimes:jpeg,png,gif,webp', 'max:8192'],
         ]);
+
+        // Drop repeater rows the customer left empty.
+        $offerings = array_values(array_filter(
+            $data['offerings'] ?? [],
+            fn ($offering) => filled($offering['name'] ?? null)
+        ));
 
         $user = $request->user();
 
@@ -79,6 +92,12 @@ class WebsiteController extends Controller
                 'color_scheme' => $data['color_scheme'],
                 'accent_color' => $data['accent_color'] ?? null,
                 'features' => array_values($data['features'] ?? []),
+                'offering_type' => $data['offering_type'],
+                'offerings' => array_map(fn ($offering) => [
+                    'name' => $offering['name'],
+                    'description' => $offering['description'] ?? null,
+                    'price' => $offering['price'] ?? null,
+                ], $offerings),
                 'extra_instructions' => $data['extra_instructions'] ?? null,
             ],
         ]);
