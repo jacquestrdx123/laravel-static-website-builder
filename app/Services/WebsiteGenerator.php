@@ -5,10 +5,12 @@ namespace App\Services;
 use Anthropic\Client;
 use Anthropic\Messages\RawContentBlockDeltaEvent;
 use Anthropic\Messages\RawMessageDeltaEvent;
+use Anthropic\Messages\RawMessageStartEvent;
 use Anthropic\Messages\TextDelta;
 use App\Models\Website;
 use App\Models\WebsiteImage;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use RuntimeException;
 
@@ -63,11 +65,20 @@ class WebsiteGenerator
     /** @return array{files: list<array{path: string, content: string}>} */
     private function requestSite(Website $website, array $assetNames): array
     {
+        // The system spec is a static file and is byte-identical on every
+        // request, so it forms a cacheable prefix: the first generation pays
+        // a one-off cache write, subsequent ones within the TTL read it at
+        // ~10% of the normal input price. Everything volatile (the brief,
+        // the photos) comes after the breakpoint, in the user turn.
         $stream = $this->client->messages->createStream(
             model: config('services.anthropic.model'),
             maxTokens: config('services.anthropic.max_tokens'),
             thinking: ['type' => 'adaptive'],
-            system: $this->systemPrompt(),
+            system: [[
+                'type' => 'text',
+                'text' => $this->systemPrompt(),
+                'cacheControl' => ['type' => 'ephemeral', 'ttl' => config('services.anthropic.cache_ttl')],
+            ]],
             outputConfig: ['format' => $this->outputSchema()],
             messages: [[
                 'role' => 'user',
@@ -83,6 +94,13 @@ class WebsiteGenerator
                 $buffer .= $event->delta->text;
             } elseif ($event instanceof RawMessageDeltaEvent) {
                 $stopReason = $event->delta->stopReason;
+            } elseif ($event instanceof RawMessageStartEvent) {
+                Log::info('Website generation started', [
+                    'website_id' => $website->id,
+                    'input_tokens' => $event->message->usage->inputTokens,
+                    'cache_write_tokens' => $event->message->usage->cacheCreationInputTokens,
+                    'cache_read_tokens' => $event->message->usage->cacheReadInputTokens,
+                ]);
             }
         }
 
@@ -173,41 +191,14 @@ class WebsiteGenerator
         return $content;
     }
 
+    /**
+     * The permanent generation spec. Loaded verbatim from a static file so
+     * the cached prompt prefix is byte-identical across requests - never
+     * interpolate anything volatile (dates, ids, per-user data) into it.
+     */
     private function systemPrompt(): string
     {
-        return <<<'PROMPT'
-You are an expert web designer and front-end developer. You build complete, production-quality
-static websites using only HTML, CSS, and vanilla JavaScript - no frameworks, no build steps,
-no CDN dependencies, no external fonts or scripts. Everything must work offline from plain files.
-
-Requirements for every site you produce:
-- Semantic, accessible HTML (landmarks, alt text, sufficient color contrast, keyboard navigable).
-- Fully responsive: flawless on mobile, tablet, and desktop. Use CSS grid/flexbox and relative units.
-- A cohesive, distinctive visual identity. Never produce generic "AI slop" design: no overused
-  system-font stacks presented as design, no cliched purple-gradient-on-white schemes, no
-  cookie-cutter layouts. Use characterful type pairings (system-available fonts are fine when
-  chosen deliberately), a cohesive palette, and considered spacing.
-- All CSS in styles.css, all JavaScript in script.js.
-- CRITICAL: every internal link and asset reference must be a RELATIVE path with no leading
-  slash: href="styles.css", src="assets/image-1.jpg", href="about.html" (or "../styles.css"
-  from a file inside a subdirectory). Never use root-absolute paths like "/styles.css" - the
-  site is served from a subdirectory during preview, so a leading slash breaks every asset.
-- Reference the customer's photos with the exact relative asset paths you are given - never
-  invent other image filenames or hotlink external images. Design around the actual content
-  of the photos, which you can see.
-- Real, well-written copy based on the business details provided - no lorem ipsum.
-- When the brief includes "offerings" (the customer's services, products, or menu items), feature
-  every one of them in a dedicated section using the customer's EXACT names and prices - never
-  invent, rename, drop, or re-price items. Expand short descriptions into appealing copy. When
-  no offerings are listed, write plausible section content from the business description instead.
-- SEO basics when requested: title, meta description, Open Graph tags.
-- Contact forms must degrade gracefully as static sites: use a mailto: fallback or a clearly
-  marked form action placeholder comment.
-
-Return the complete site as a JSON object with a "files" array. Each entry has "path" (relative,
-e.g. "index.html", "styles.css", "script.js") and "content" (the full file contents). Do not
-include the provided image assets in the files array - they are already in place.
-PROMPT;
+        return File::get(resource_path('prompts/website-generator-system.md'));
     }
 
     private function outputSchema(): array

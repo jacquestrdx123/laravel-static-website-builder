@@ -18,6 +18,9 @@ return [
         'key' => env('ANTHROPIC_API_KEY'),
         'model' => env('ANTHROPIC_MODEL', 'claude-opus-4-8'),
         'max_tokens' => (int) env('ANTHROPIC_MAX_TOKENS', 64000),
+        // Prompt-cache TTL for the static system spec: '5m' or '1h'.
+        // 1h costs 2x to write but survives gaps between generations.
+        'cache_ttl' => env('ANTHROPIC_CACHE_TTL', '1h'),
     ],
 
     'postmark' => [
