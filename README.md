@@ -10,8 +10,8 @@ by Caddy with automatic HTTPS.
 ```
 register → buy AI credits → describe business + upload images + choose toggles
         → queued job calls the Claude API (vision + structured output)
-        → static site written to storage/app/private/sites/{slug}
-        → owner previews in-app
+        → static site written to storage/app/public/sites/{slug}
+        → owner previews in-app (served directly at /storage/sites/{slug}/)
         → publish copies the site to SITES_PUBLISH_PATH
         → Caddy serves {slug}.sites.yourdomain.com (and custom domains)
 ```
@@ -23,7 +23,7 @@ register → buy AI credits → describe business + upload images + choose toggl
 | AI generation (Claude API, streaming + structured JSON output) | `app/Services/WebsiteGenerator.php` |
 | Queued generation job (refunds credit on failure) | `app/Jobs/GenerateWebsiteJob.php` |
 | Builder wizard (uploads + toggles) | `app/Http/Controllers/WebsiteController.php`, `resources/views/websites/create.blade.php` |
-| Owner-only preview of generated sites | `app/Http/Controllers/PreviewController.php` |
+| Preview of generated sites | Served statically from the public disk (`/storage/sites/{slug}/index.html` via `php artisan storage:link`); URL built by `Website::previewUrl()` |
 | Publish / unpublish to the Caddy web root | `app/Http/Controllers/PublishController.php` |
 | Credits ledger + stubbed checkout | `app/Http/Controllers/BillingController.php`, `App\Models\User::spendCredits()` |
 | Caddy `on_demand_tls` ask endpoint | `app/Http/Controllers/CaddyController.php` (`GET /caddy/allowed`) |
@@ -37,9 +37,7 @@ cp .env.example .env
 php artisan key:generate
 touch database/database.sqlite
 php artisan migrate
-
-npm install
-npm run build
+php artisan storage:link   # previews are served from the public disk
 
 # Required for generation:
 #   ANTHROPIC_API_KEY=sk-ant-...   (in .env)
@@ -82,28 +80,15 @@ pointing at the server.
 
 ## Laravel Forge deployment
 
-Vite 8 uses [Rolldown](https://rolldown.rs/), which ships a platform-specific
-native binary (`@rolldown/binding-linux-x64-gnu`). If that binary is missing,
-`npm run build` fails with:
-
-```
-Cannot find module '../rolldown-binding.linux-x64-gnu.node'
-```
-
-**Node version:** Vite 8 requires **Node 20.19+** or **22.12+**. Node 21 is not
-supported. In your Forge deployment script, use Node 22 (not 21):
+This app has **no frontend build** — all styling is inline in the Blade layout,
+so there is no `package.json` and Node/npm are not needed at all. Keep the
+deployment script npm-free:
 
 ```bash
 $CREATE_RELEASE()
 
 cd $FORGE_RELEASE_DIRECTORY
 
-. ~/.nvm/nvm.sh
-nvm use 22   # or: nvm use   (reads .nvmrc)
-
-rm -rf node_modules
-npm ci
-npm run build
 $FORGE_PHP artisan optimize
 $FORGE_PHP artisan storage:link
 $FORGE_PHP artisan migrate --force
@@ -113,14 +98,13 @@ $ACTIVATE_RELEASE()
 $RESTART_QUEUES()
 ```
 
-Key points:
+Also configure in Forge:
 
-- Commit `package-lock.json` so `npm ci` installs the exact dependency tree
-  (including the Linux rolldown binding).
-- Run `npm ci` on the server — do not copy `node_modules` from another OS.
-- `rm -rf node_modules` before install avoids stale bindings from a prior release.
-- `@rolldown/binding-linux-x64-gnu` is listed in `optionalDependencies` as a
-  workaround for an npm bug with optional deps ([npm/cli#4828](https://github.com/npm/cli/issues/4828)).
+- **Environment**: `ANTHROPIC_API_KEY`, `SITES_DOMAIN`, `SITES_PUBLISH_PATH`.
+- **Queues**: add a worker on the `database` connection — generations are
+  queued jobs and never run without one.
+- **Branch**: make sure the site deploys the branch that actually contains
+  this code.
 
 ## Credits & payments
 

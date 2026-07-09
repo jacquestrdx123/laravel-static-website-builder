@@ -127,8 +127,50 @@ class WebsiteGenerator
                 continue;
             }
 
-            File::put($target, $file['content']);
+            File::put($target, $this->relativizeUrls($relative, $file['content']));
         }
+    }
+
+    /**
+     * Rewrite root-absolute references (/styles.css, /assets/x.jpg) to
+     * document-relative ones. Previews are served from a subdirectory
+     * (/storage/sites/{slug}/), so a leading slash would resolve against the
+     * app's domain root and 404. Relative paths work both there and on the
+     * published domain root.
+     */
+    public function relativizeUrls(string $relativePath, string $content): string
+    {
+        // How deep this document sits inside the site, e.g. pages/about.html
+        // needs "../" to reach a sibling of index.html.
+        $prefix = str_repeat('../', substr_count($relativePath, '/'));
+
+        $extension = strtolower(pathinfo($relativePath, PATHINFO_EXTENSION));
+
+        if (in_array($extension, ['html', 'htm'], true)) {
+            // src="/x", href="/x", poster="/x" — but not protocol-relative "//cdn".
+            $content = preg_replace(
+                '/\b(src|href|poster)=(["\'])\/(?!\/)/i',
+                '$1=$2'.$prefix,
+                $content
+            );
+            // srcset lists: each candidate URL may start with "/".
+            $content = preg_replace_callback(
+                '/\bsrcset=(["\'])(.*?)\1/is',
+                fn ($m) => 'srcset='.$m[1].preg_replace('/(^|,\s*)\/(?!\/)/', '$1'.$prefix, $m[2]).$m[1],
+                $content
+            );
+        }
+
+        if (in_array($extension, ['html', 'htm', 'css'], true)) {
+            // CSS url(/assets/x.jpg) in stylesheets and inline <style> blocks.
+            $content = preg_replace(
+                '/\burl\((["\']?)\/(?!\/)/i',
+                'url($1'.$prefix,
+                $content
+            );
+        }
+
+        return $content;
     }
 
     private function systemPrompt(): string
@@ -145,9 +187,14 @@ Requirements for every site you produce:
   system-font stacks presented as design, no cliched purple-gradient-on-white schemes, no
   cookie-cutter layouts. Use characterful type pairings (system-available fonts are fine when
   chosen deliberately), a cohesive palette, and considered spacing.
-- All CSS in styles.css, all JavaScript in script.js, referenced with relative paths.
-- Reference the customer's photos with the exact relative asset paths you are given. Design
-  around the actual content of the photos, which you can see.
+- All CSS in styles.css, all JavaScript in script.js.
+- CRITICAL: every internal link and asset reference must be a RELATIVE path with no leading
+  slash: href="styles.css", src="assets/image-1.jpg", href="about.html" (or "../styles.css"
+  from a file inside a subdirectory). Never use root-absolute paths like "/styles.css" - the
+  site is served from a subdirectory during preview, so a leading slash breaks every asset.
+- Reference the customer's photos with the exact relative asset paths you are given - never
+  invent other image filenames or hotlink external images. Design around the actual content
+  of the photos, which you can see.
 - Real, well-written copy based on the business details provided - no lorem ipsum.
 - SEO basics when requested: title, meta description, Open Graph tags.
 - Contact forms must degrade gracefully as static sites: use a mailto: fallback or a clearly
