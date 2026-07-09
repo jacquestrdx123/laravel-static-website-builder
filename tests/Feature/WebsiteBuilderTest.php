@@ -44,6 +44,12 @@ class WebsiteBuilderTest extends TestCase
             'style' => 'minimal',
             'color_scheme' => 'light',
             'features' => ['seo_meta'],
+            'offering_type' => 'products',
+            'offerings' => [
+                ['name' => 'Sourdough loaf', 'description' => 'Naturally leavened', 'price' => 'R65'],
+                ['name' => '', 'description' => '', 'price' => ''], // empty repeater row
+                ['name' => 'Wedding cake', 'description' => '', 'price' => 'from R2,500'],
+            ],
             'images' => [UploadedFile::fake()->image('shop.jpg', 640, 480)],
         ]);
 
@@ -53,6 +59,13 @@ class WebsiteBuilderTest extends TestCase
         $this->assertSame(1, $user->fresh()->ai_credits);
         $this->assertSame(Website::STATUS_QUEUED, $website->status);
         $this->assertCount(1, $website->images);
+
+        // Offerings are stored with empty rows filtered out.
+        $this->assertSame('products', $website->settings['offering_type']);
+        $this->assertCount(2, $website->settings['offerings']);
+        $this->assertSame('Sourdough loaf', $website->settings['offerings'][0]['name']);
+        $this->assertSame('from R2,500', $website->settings['offerings'][1]['price']);
+
         Queue::assertPushed(GenerateWebsiteJob::class);
     }
 
@@ -69,6 +82,7 @@ class WebsiteBuilderTest extends TestCase
             'sections' => ['hero'],
             'style' => 'minimal',
             'color_scheme' => 'light',
+            'offering_type' => 'services',
         ]);
 
         $response->assertRedirect(route('billing.index'));

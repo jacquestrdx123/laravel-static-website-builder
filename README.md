@@ -133,6 +133,16 @@ billing lands.
   site's `assets/` directory, and the model is told each file's path.
 - **Structured output**: `output_config.format` with a JSON schema
   (`{files: [{path, content}]}`) guarantees parseable output.
+- **Locked-in spec + prompt caching**: the system prompt is a static spec file
+  (`resources/prompts/website-generator-system.md`) sent byte-identically on
+  every request with `cache_control` (`ANTHROPIC_CACHE_TTL`, default `1h`).
+  The first generation writes the cache; subsequent generations within the TTL
+  read the whole spec at ~10% of the normal input price. Everything volatile
+  (brief, photos) sits after the cache breakpoint. **Never interpolate dynamic
+  values into the spec file** — one changed byte invalidates the cache. Note
+  the spec must stay above ~4,100 tokens (Opus 4.8's minimum cacheable prefix)
+  or caching silently stops. Verify via the "Website generation started" log
+  line: `cache_read_tokens` > 0 means the cache hit.
 - **Streaming**: long generations run for minutes; streaming avoids HTTP
   timeouts. Refusals and `max_tokens` truncation are handled with clear
   user-facing errors and an automatic credit refund.

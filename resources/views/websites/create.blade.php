@@ -41,7 +41,84 @@
         </div>
 
         <div class="card">
-            <h2 style="margin-top:0">3. Choose your options</h2>
+            <h2 style="margin-top:0">3. Your services or products <span class="hint">(optional)</span></h2>
+            <p class="hint">List what you offer and the AI will feature each item on the site with
+                your exact names and prices. Leave empty to let the AI write this from your description.</p>
+
+            <label>These are…</label>
+            <div class="choices">
+                @php $offeringLabels = ['services' => 'Services', 'products' => 'Products', 'menu' => 'Menu items']; @endphp
+                @foreach (\App\Http\Controllers\WebsiteController::OFFERING_TYPES as $type)
+                    <label><input type="radio" name="offering_type" value="{{ $type }}"
+                        @checked(old('offering_type', 'services') === $type)>{{ $offeringLabels[$type] }}</label>
+                @endforeach
+            </div>
+
+            <div id="offerings" style="margin-top: 1rem;">
+                @foreach (old('offerings', [['name' => '', 'description' => '', 'price' => '']]) as $i => $offering)
+                    <fieldset class="offering-row" style="border: 1px solid var(--line); border-radius: 8px; padding: .8rem 1rem; margin-bottom: .8rem;">
+                        <div class="grid-2">
+                            <div>
+                                <label style="margin-top:0">Name</label>
+                                <input type="text" name="offerings[{{ $i }}][name]" maxlength="100"
+                                       value="{{ $offering['name'] ?? '' }}" placeholder="e.g. Full-day island tour">
+                            </div>
+                            <div>
+                                <label style="margin-top:0">Price <span class="hint">(optional)</span></label>
+                                <input type="text" name="offerings[{{ $i }}][price]" maxlength="50"
+                                       value="{{ $offering['price'] ?? '' }}" placeholder="e.g. R1,450 / from R99">
+                            </div>
+                        </div>
+                        <label>Short description <span class="hint">(optional)</span></label>
+                        <input type="text" name="offerings[{{ $i }}][description]" maxlength="500"
+                               value="{{ $offering['description'] ?? '' }}" placeholder="One or two sentences about this item">
+                        <button type="button" class="btn secondary remove-offering" style="margin-top:.6rem; padding:.25rem .8rem">Remove</button>
+                    </fieldset>
+                @endforeach
+            </div>
+            <button type="button" id="add-offering" class="btn secondary">+ Add another</button>
+            @error('offerings')<div class="error">{{ $message }}</div>@enderror
+
+            <script>
+                (function () {
+                    const max = {{ \App\Http\Controllers\WebsiteController::MAX_OFFERINGS }};
+                    const list = document.getElementById('offerings');
+                    const addButton = document.getElementById('add-offering');
+
+                    function renumber() {
+                        list.querySelectorAll('.offering-row').forEach(function (row, i) {
+                            row.querySelectorAll('input').forEach(function (input) {
+                                input.name = input.name.replace(/offerings\[\d+\]/, 'offerings[' + i + ']');
+                            });
+                        });
+                        addButton.style.display = list.children.length >= max ? 'none' : '';
+                    }
+
+                    addButton.addEventListener('click', function () {
+                        const row = list.querySelector('.offering-row').cloneNode(true);
+                        row.querySelectorAll('input').forEach(function (input) { input.value = ''; });
+                        list.appendChild(row);
+                        renumber();
+                    });
+
+                    list.addEventListener('click', function (e) {
+                        if (!e.target.classList.contains('remove-offering')) return;
+                        const row = e.target.closest('.offering-row');
+                        if (list.children.length > 1) {
+                            row.remove();
+                        } else {
+                            row.querySelectorAll('input').forEach(function (input) { input.value = ''; });
+                        }
+                        renumber();
+                    });
+
+                    renumber();
+                })();
+            </script>
+        </div>
+
+        <div class="card">
+            <h2 style="margin-top:0">4. Choose your options</h2>
 
             <label>Type of site</label>
             <div class="choices">
