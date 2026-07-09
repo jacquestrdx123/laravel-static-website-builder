@@ -247,6 +247,9 @@ class WebsiteGenerator
             'offerings' => $settings['offerings'] ?? [],
             'extra_instructions' => $settings['extra_instructions'] ?? null,
             'image_assets' => $assetNames,
+            // Fresh per generation so regenerating the same brief commits to
+            // a different art direction (the model has no sampling params).
+            'design_seed' => random_int(1, 9999),
         ];
 
         $content = [[

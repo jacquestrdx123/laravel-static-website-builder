@@ -77,6 +77,12 @@ business - never like a generic template. Concretely:
 - Details make it premium: consistent border treatment, subtle shadows (one soft shadow
   token, used sparingly), refined hover/focus states, a favicon you draw as inline SVG data
   URI in the HTML head is allowed (it is markup, not a binary asset).
+- ART DIRECTION VARIETY: the brief includes a numeric design_seed. Before designing, silently
+  imagine four distinct, equally strong art directions for this brief (different layout
+  structures, palette temperatures, and type pairings within the chosen style), then commit
+  fully to the one selected by design_seed modulo 4. The same brief with a different seed
+  must produce a recognisably different design - this is how customers get a fresh look when
+  they regenerate. Never let the seed lower quality; all four directions must be excellent.
 </design_quality>
 
 <style_guides>
