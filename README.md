@@ -78,6 +78,34 @@ run the generation. Without a queue worker jobs sit in the `jobs` table forever.
 DNS required: `A app.example.com` and a wildcard `A *.sites.example.com`
 pointing at the server.
 
+## Laravel Forge deployment
+
+This app has **no frontend build** — all styling is inline in the Blade layout,
+so there is no `package.json` and Node/npm are not needed at all. Keep the
+deployment script npm-free:
+
+```bash
+$CREATE_RELEASE()
+
+cd $FORGE_RELEASE_DIRECTORY
+
+$FORGE_PHP artisan optimize
+$FORGE_PHP artisan storage:link
+$FORGE_PHP artisan migrate --force
+
+$ACTIVATE_RELEASE()
+
+$RESTART_QUEUES()
+```
+
+Also configure in Forge:
+
+- **Environment**: `ANTHROPIC_API_KEY`, `SITES_DOMAIN`, `SITES_PUBLISH_PATH`.
+- **Queues**: add a worker on the `database` connection — generations are
+  queued jobs and never run without one.
+- **Branch**: make sure the site deploys the branch that actually contains
+  this code.
+
 ## Credits & payments
 
 Credits are integer balances on the user with a `credit_transactions` ledger.
