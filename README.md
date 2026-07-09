@@ -80,14 +80,18 @@ pointing at the server.
 
 ## Laravel Forge deployment
 
-This app has **no frontend build** — all styling is inline in the Blade layout,
-so there is no `package.json` and Node/npm are not needed at all. Keep the
-deployment script npm-free:
+This app has **no frontend build** — all styling is inline in the Blade layout.
+A stub `package.json` is included so Forge's default `npm ci && npm run build`
+steps succeed as no-ops if you haven't customised the deployment script yet.
+
+Recommended deployment script (also in `deploy/forge-deploy.sh`):
 
 ```bash
 $CREATE_RELEASE()
 
 cd $FORGE_RELEASE_DIRECTORY
+
+$FORGE_COMPOSER install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
 $FORGE_PHP artisan optimize
 $FORGE_PHP artisan storage:link
