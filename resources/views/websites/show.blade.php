@@ -42,7 +42,10 @@
         <div class="card">
             <div class="actions" style="justify-content: space-between; margin-bottom: .8rem;">
                 <strong>Preview</strong>
-                <a class="btn secondary" target="_blank" href="{{ $website->previewUrl() }}">Open full screen ↗</a>
+                <span class="actions">
+                    <a class="btn secondary" href="{{ route('websites.content.edit', $website) }}">✏ Edit content (free)</a>
+                    <a class="btn secondary" target="_blank" href="{{ $website->previewUrl() }}">Open full screen ↗</a>
+                </span>
             </div>
             <iframe class="preview" src="{{ $website->previewUrl() }}" title="Website preview"></iframe>
         </div>
