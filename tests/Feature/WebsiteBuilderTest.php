@@ -144,6 +144,41 @@ class WebsiteBuilderTest extends TestCase
         $this->get('/caddy/allowed')->assertBadRequest();
     }
 
+    public function test_content_edits_rewrite_the_static_site_without_credits(): void
+    {
+        $owner = User::factory()->create(['ai_credits' => 0]);
+
+        $website = $owner->websites()->create([
+            'name' => 'Shop',
+            'slug' => 'shop',
+            'status' => Website::STATUS_READY,
+            'settings' => ['offering_type' => 'products', 'offerings' => []],
+        ]);
+
+        File::ensureDirectoryExists($website->sitePath());
+        File::put($website->sitePath().'/index.html',
+            '<html><body><ul><li data-offering="1"><span data-field="name">Old</span>'
+            .'<span data-field="description"></span><span data-field="price">R1</span></li></ul></body></html>');
+
+        $response = $this->actingAs($owner)->post(route('websites.content.update', $website), [
+            'offering_type' => 'products',
+            'offerings' => [['name' => 'New product', 'description' => 'Nice', 'price' => 'R500']],
+        ]);
+
+        $response->assertRedirect(route('websites.show', $website));
+
+        $html = File::get($website->sitePath().'/index.html');
+        $this->assertStringContainsString('New product', $html);
+        $this->assertStringContainsString('R500', $html);
+        $this->assertStringNotContainsString('Old', $html);
+
+        // Settings updated, and no credits were involved at any point.
+        $this->assertSame('New product', $website->fresh()->settings['offerings'][0]['name']);
+        $this->assertSame(0, $owner->fresh()->ai_credits);
+
+        File::deleteDirectory($website->sitePath());
+    }
+
     public function test_billing_stub_adds_credits(): void
     {
         $user = User::factory()->create(['ai_credits' => 0]);

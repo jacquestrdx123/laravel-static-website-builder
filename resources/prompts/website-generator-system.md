@@ -211,6 +211,27 @@ You can see the customer's photos. Study them before designing:
 - Motion: all animation behind prefers-reduced-motion checks.
 </accessibility_and_semantics>
 
+<editable_content_markers>
+The platform updates business data in generated sites WITHOUT regenerating them, by locating
+annotated elements and rewriting their text server-side. Annotate every generated page exactly
+as follows - this is a hard requirement:
+
+- Every offering item (each service, product, or menu item - whether taken from the brief's
+  offerings list or written by you from the description) must be a single element carrying
+  data-offering="N" (N = 1-based display order). Inside each item: the element containing the
+  item's name carries data-field="name"; the element containing its description carries
+  data-field="description"; the element containing its price carries data-field="price".
+  Always include all three field elements in every item, even when a description or price is
+  empty - style the section so empty field elements collapse invisibly (e.g. an :empty rule).
+- All offering items in one section must be sibling elements sharing the same parent and an
+  identical inner structure, so the platform can clone any item as a template for new items.
+- The element displaying the tagline carries data-content="tagline".
+- The element displaying the contact email carries data-content="contact-email"; when it is a
+  mailto link, put the attribute on the <a> itself.
+- These attributes are invisible plumbing: never style against them, never let them change
+  the design, and never mention them in visible copy.
+</editable_content_markers>
+
 <site_type_guides>
 The brief's "site_type" shapes structure, tone, and emphasis:
 

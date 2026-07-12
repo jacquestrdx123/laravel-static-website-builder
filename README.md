@@ -23,6 +23,7 @@ register → buy AI credits → describe business + upload images + choose toggl
 | AI generation (Claude API, streaming + structured JSON output) | `app/Services/WebsiteGenerator.php` |
 | Queued generation job (refunds credit on failure) | `app/Jobs/GenerateWebsiteJob.php` |
 | Builder wizard (uploads + toggles) | `app/Http/Controllers/WebsiteController.php`, `resources/views/websites/create.blade.php` |
+| Free structured-content editing (offerings, prices, tagline, email) | `app/Services/SiteContentUpdater.php`, `app/Http/Controllers/ContentController.php` — rewrites `data-offering`/`data-field`/`data-content` annotated elements in the static HTML; no AI call |
 | Preview of generated sites | Served statically from the public disk (`/storage/sites/{slug}/index.html` via `php artisan storage:link`); URL built by `Website::previewUrl()` |
 | Publish / unpublish to the Caddy web root | `app/Http/Controllers/PublishController.php` |
 | Credits ledger + stubbed checkout | `app/Http/Controllers/BillingController.php`, `App\Models\User::spendCredits()` |
@@ -139,15 +140,22 @@ billing lands.
   The first generation writes the cache; subsequent generations within the TTL
   read the whole spec at ~10% of the normal input price. Everything volatile
   (brief, photos) sits after the cache breakpoint. **Never interpolate dynamic
-  values into the spec file** — one changed byte invalidates the cache. Note
-  the spec must stay above ~4,100 tokens (Opus 4.8's minimum cacheable prefix)
-  or caching silently stops. Verify via the "Website generation started" log
-  line: `cache_read_tokens` > 0 means the cache hit.
+  values into the spec file** — one changed byte invalidates the cache. The
+  spec must stay above Opus 4.8's minimum cacheable prefix of 1,024 tokens
+  (ours is ~4.5k) or caching silently stops. Verify via the "Website
+  generation started" log line: `cache_read_tokens` > 0 means the cache hit.
 - **Streaming**: long generations run for minutes; streaming avoids HTTP
   timeouts. Refusals and `max_tokens` truncation are handled with clear
   user-facing errors and an automatic credit refund.
 - Model-written file paths are sanitised before writing (no traversal, must
   stay inside the site directory).
+- **Editable content markers**: the spec requires the model to annotate
+  business data in the HTML (`data-offering` items with `data-field`
+  name/description/price, plus `data-content` tagline/contact-email), so
+  customers can update offerings and prices later via a form —
+  `SiteContentUpdater` rewrites just those elements server-side. Free,
+  instant, no regeneration. Sites generated before this feature lack the
+  markers and need one regeneration to become editable.
 
 ## Tests
 
