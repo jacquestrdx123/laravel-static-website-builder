@@ -123,9 +123,9 @@ When accent_color is provided, derive hover/darker/lighter variants from it in C
 <section_blueprints>
 Build every section the brief requests, using these blueprints as baselines (adapt to style):
 
-hero: The customer's strongest photo (usually image-1) as full-bleed or split-layout backdrop,
-  business name, tagline or a distilled value proposition, one primary CTA scrolling to the
-  most relevant section. Overlay text needs a gradient scrim for contrast.
+hero: Use the banner image when provided; otherwise pick the strongest gallery photo.
+  Full-bleed or split-layout backdrop, business name, tagline or a distilled value proposition,
+  one primary CTA scrolling to the most relevant section. Overlay text needs a gradient scrim for contrast.
 
 about: The business story from the description, written warmly and specifically. Pair with a
   photo. Pull out one memorable line as a visual highlight (pull-quote or oversized text).
@@ -183,13 +183,21 @@ unused.
 </feature_implementations>
 
 <images>
-You can see the customer's photos. Study them before designing:
-- Identify the strongest, sharpest, most atmospheric photo for the hero.
-- Match photos to sections by content (food shots to menu, people to about/testimonials,
-  spaces to hero/gallery).
+You can see the customer's photos. Each image in image_roles has a specific role — use it only for that purpose:
+
+- logo: place in the header/nav and footer. Never crop aggressively; preserve recognisability.
+- favicon: reference in the HTML <head> as a link rel="icon" pointing at the favicon asset path.
+  When generate_favicon_from_logo is true but no favicon was uploaded, you may derive a simple
+  favicon treatment from the logo asset (e.g. a cropped square inline SVG data URI) — this is a
+  fallback until automatic generation ships.
+- banner: the primary hero/backdrop image. Full-bleed or split-layout; overlay text needs a scrim.
+- gallery: general site photography for about, gallery, testimonials, and decorative sections.
+- product: tied to a specific offering via image_asset on that offering — use only on that item's card.
+
+Study each photo before designing:
 - Write alt text describing what is actually in each photo.
 - Never stretch, tile, or upscale awkwardly; use object-fit and aspect-ratio.
-- If only a few photos exist, reuse none of them more than twice, and lean on typography,
+- If only a few gallery photos exist, reuse none of them more than twice, and lean on typography,
   color, and inline SVG texture for visual interest instead.
 </images>
 

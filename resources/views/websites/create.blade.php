@@ -5,15 +5,51 @@
 @section('content')
     <h1>Build a new website</h1>
     <p class="muted">
-        Describe your business, upload up to {{ config('sites.max_images') }} photos, choose your options,
+        A short step-by-step wizard — describe your business, add your photos, list your offerings,
         and the AI builds you a complete static website. Costs {{ config('sites.generation_cost') }} credit.
     </p>
 
-    <form method="POST" action="{{ route('websites.store') }}" enctype="multipart/form-data">
+    <style>
+        .wizard-progress {
+            display: flex; gap: .5rem; margin-bottom: 1.5rem; flex-wrap: wrap;
+        }
+        .wizard-step-label {
+            flex: 1; min-width: 120px; text-align: center; padding: .6rem .8rem;
+            border-radius: 999px; border: 1px solid var(--line); background: #fff;
+            font-size: .85rem; color: var(--ink-soft); transition: all .2s;
+        }
+        .wizard-step-label.active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: bold; }
+        .wizard-step-label.done { background: #e7f3ee; color: var(--ok); border-color: #bfe0d2; }
+        .wizard-panel { display: none; }
+        .wizard-panel.active { display: block; }
+        .wizard-nav { display: flex; justify-content: space-between; gap: .6rem; margin-top: 1.5rem; flex-wrap: wrap; }
+        .photo-slot {
+            border: 1px solid var(--line); border-radius: 8px; padding: 1rem; margin-bottom: 1rem;
+        }
+        .photo-slot h3 { margin: 0 0 .4rem; font-size: 1rem; }
+        .photo-preview {
+            width: 96px; height: 96px; border: 2px dashed var(--line); border-radius: 6px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+            overflow: hidden; background: var(--paper); margin-bottom: .6rem;
+        }
+        .photo-preview img { width: 100%; height: 100%; object-fit: cover; display: none; }
+        .photo-preview .placeholder { color: var(--ink-soft); font-size: .75rem; text-align: center; padding: .4rem; }
+        .coming-soon { opacity: .65; }
+    </style>
+
+    <form id="wizard-form" method="POST" action="{{ route('websites.store') }}" enctype="multipart/form-data">
         @csrf
 
-        <div class="card">
-            <h2 style="margin-top:0">1. Tell us about it</h2>
+        <div class="wizard-progress" aria-label="Wizard progress">
+            <div class="wizard-step-label active" data-step-label="1">1. About</div>
+            <div class="wizard-step-label" data-step-label="2">2. Photos</div>
+            <div class="wizard-step-label" data-step-label="3">3. Offerings</div>
+            <div class="wizard-step-label" data-step-label="4">4. Design</div>
+        </div>
+
+        {{-- Step 1: About --}}
+        <div class="card wizard-panel active" data-step="1">
+            <h2 style="margin-top:0">Tell us about your business</h2>
 
             <label for="name">Business / site name</label>
             <input id="name" type="text" name="name" value="{{ old('name') }}" required maxlength="100">
@@ -33,129 +69,96 @@
             <input id="contact_email" type="email" name="contact_email" value="{{ old('contact_email') }}">
         </div>
 
-        <div class="card">
-            <h2 style="margin-top:0">2. Upload your photos</h2>
-            <p class="hint">Modern websites rely on striking visuals — the higher quality images you provide, the more
-                professional and polished your site will look. Use clear, well-lit photos that showcase your business at its best.</p>
-            <p class="hint" style="margin-top: 0.5rem;">JPEG, PNG, GIF or WebP. Max 8&nbsp;MB each, up to {{ config('sites.max_images') }} photos.
-                The AI can see your photos and designs around them.</p>
-            @error('images')<div class="error">{{ $message }}</div>@enderror
-            @error('images.*')<div class="error">{{ $message }}</div>@enderror
-            @error('image_descriptions.*')<div class="error">{{ $message }}</div>@enderror
+        {{-- Step 2: Photos --}}
+        <div class="card wizard-panel" data-step="2">
+            <h2 style="margin-top:0">Your photos</h2>
+            <p class="hint">Great visuals make a professional site. Upload a logo and banner if you have them,
+                then add any other photos for the gallery. Product photos are added in the next step.</p>
+            <p class="hint">JPEG, PNG, GIF or WebP. Max 8&nbsp;MB each. Up to {{ config('sites.max_images') }} photos total across all uploads.</p>
+            @error('logo')<div class="error">{{ $message }}</div>@enderror
+            @error('favicon')<div class="error">{{ $message }}</div>@enderror
+            @error('banner')<div class="error">{{ $message }}</div>@enderror
+            @error('gallery_images')<div class="error">{{ $message }}</div>@enderror
+            @error('gallery_images.*')<div class="error">{{ $message }}</div>@enderror
+            @error('gallery_descriptions.*')<div class="error">{{ $message }}</div>@enderror
 
-            <div id="photo-uploads" style="margin-top: 1rem;">
-                <div class="photo-row" style="border: 1px solid var(--line); border-radius: 8px; padding: .8rem 1rem; margin-bottom: .8rem;">
-                    <div style="display: flex; gap: 1rem; align-items: flex-start;">
-                        <div class="photo-preview" style="width: 80px; height: 80px; border: 2px dashed var(--line); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; background: var(--bg-alt);">
-                            <span class="preview-placeholder" style="color: var(--muted); font-size: 0.75rem; text-align: center;">No photo</span>
-                            <img class="preview-image" style="display: none; width: 100%; height: 100%; object-fit: cover;" alt="Preview">
-                        </div>
-                        <div style="flex: 1;">
-                            <label style="margin-top: 0;">Choose photo</label>
-                            <input type="file" name="images[]" accept="image/jpeg,image/png,image/gif,image/webp" class="photo-input">
-                            <label style="margin-top: 0.5rem;">Brief description <span class="hint">(helps the AI use this photo appropriately)</span></label>
-                            <input type="text" name="image_descriptions[]" maxlength="200" class="photo-description"
-                                   placeholder="e.g. Our storefront, Team photo, Fresh bread display">
-                        </div>
-                    </div>
-                    <button type="button" class="btn secondary remove-photo" style="margin-top: .6rem; padding: .25rem .8rem;">Remove</button>
+            <div class="photo-slot">
+                <h3>Logo</h3>
+                <p class="hint">Your business logo — shown in the header and footer.</p>
+                <div class="photo-preview" data-preview="logo">
+                    <span class="placeholder">No logo yet</span>
+                    <img alt="Logo preview">
+                </div>
+                <input type="file" id="logo" name="logo" accept="image/jpeg,image/png,image/gif,image/webp" data-preview-target="logo">
+            </div>
+
+            <div class="photo-slot">
+                <h3>Favicon <span class="hint">(optional)</span></h3>
+                <p class="hint">The small icon in the browser tab. Square images work best.</p>
+                <div class="photo-preview" data-preview="favicon">
+                    <span class="placeholder">No favicon yet</span>
+                    <img alt="Favicon preview">
+                </div>
+                <input type="file" id="favicon" name="favicon" accept="image/jpeg,image/png,image/gif,image/webp" data-preview-target="favicon">
+
+                <div class="coming-soon" style="margin-top: .8rem;">
+                    <label>
+                        <input type="checkbox" name="generate_favicon_from_logo" value="1" disabled
+                               @checked(old('generate_favicon_from_logo'))>
+                        Generate favicon from logo
+                    </label>
+                    <p class="hint">Coming soon — we'll automatically create a favicon from your logo.</p>
                 </div>
             </div>
-            <button type="button" id="add-photo" class="btn secondary">+ Add another photo</button>
 
-            <script>
-                (function () {
-                    const maxPhotos = {{ config('sites.max_images') }};
-                    const photoList = document.getElementById('photo-uploads');
-                    const addPhotoButton = document.getElementById('add-photo');
+            <div class="photo-slot">
+                <h3>Banner</h3>
+                <p class="hint">A wide hero image for the top of your site — storefront, team, product lineup, etc.</p>
+                <div class="photo-preview" data-preview="banner" style="width: 100%; max-width: 320px; height: 120px;">
+                    <span class="placeholder">No banner yet</span>
+                    <img alt="Banner preview">
+                </div>
+                <input type="file" id="banner" name="banner" accept="image/jpeg,image/png,image/gif,image/webp" data-preview-target="banner">
+            </div>
 
-                    function renumberPhotos() {
-                        const rows = photoList.querySelectorAll('.photo-row');
-                        addPhotoButton.style.display = rows.length >= maxPhotos ? 'none' : '';
-                    }
+            <div class="photo-slot">
+                <h3>Other photos <span class="hint">(optional)</span></h3>
+                <p class="hint">General photos for your gallery, about section, and elsewhere on the site.
+                    Add a short note so the AI knows what each photo shows.</p>
 
-                    function setupPreview(row) {
-                        const input = row.querySelector('.photo-input');
-                        const preview = row.querySelector('.preview-image');
-                        const placeholder = row.querySelector('.preview-placeholder');
-                        const descInput = row.querySelector('.photo-description');
-
-                        input.addEventListener('change', function () {
-                            if (this.files && this.files[0]) {
-                                const reader = new FileReader();
-                                reader.onload = function (e) {
-                                    preview.src = e.target.result;
-                                    preview.style.display = 'block';
-                                    placeholder.style.display = 'none';
-                                };
-                                reader.readAsDataURL(this.files[0]);
-                                if (typeof updateOfferingImageSelects === 'function') {
-                                    updateOfferingImageSelects();
-                                }
-                            } else {
-                                preview.style.display = 'none';
-                                placeholder.style.display = 'block';
-                                if (typeof updateOfferingImageSelects === 'function') {
-                                    updateOfferingImageSelects();
-                                }
-                            }
-                        });
-
-                        descInput.addEventListener('input', function () {
-                            if (typeof updateOfferingImageSelects === 'function') {
-                                updateOfferingImageSelects();
-                            }
-                        });
-                    }
-
-                    addPhotoButton.addEventListener('click', function () {
-                        if (photoList.querySelectorAll('.photo-row').length >= maxPhotos) return;
-
-                        const row = photoList.querySelector('.photo-row').cloneNode(true);
-                        row.querySelector('.photo-input').value = '';
-                        row.querySelector('.photo-description').value = '';
-                        row.querySelector('.preview-image').style.display = 'none';
-                        row.querySelector('.preview-image').src = '';
-                        row.querySelector('.preview-placeholder').style.display = 'block';
-                        photoList.appendChild(row);
-                        setupPreview(row);
-                        renumberPhotos();
-                        updateOfferingImageSelects();
-                    });
-
-                    photoList.addEventListener('click', function (e) {
-                        if (!e.target.classList.contains('remove-photo')) return;
-                        const row = e.target.closest('.photo-row');
-                        if (photoList.querySelectorAll('.photo-row').length > 1) {
-                            row.remove();
-                        } else {
-                            row.querySelector('.photo-input').value = '';
-                            row.querySelector('.photo-description').value = '';
-                            row.querySelector('.preview-image').style.display = 'none';
-                            row.querySelector('.preview-image').src = '';
-                            row.querySelector('.preview-placeholder').style.display = 'block';
-                        }
-                        renumberPhotos();
-                        updateOfferingImageSelects();
-                    });
-
-                    photoList.querySelectorAll('.photo-row').forEach(setupPreview);
-                    renumberPhotos();
-                })();
-            </script>
+                <div id="gallery-uploads">
+                    <div class="gallery-row" style="border: 1px solid var(--line); border-radius: 8px; padding: .8rem 1rem; margin-bottom: .8rem;">
+                        <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                            <div class="photo-preview" style="width: 80px; height: 80px;">
+                                <span class="placeholder">No photo</span>
+                                <img alt="Gallery preview">
+                            </div>
+                            <div style="flex: 1;">
+                                <label style="margin-top: 0;">Choose photo</label>
+                                <input type="file" name="gallery_images[]" accept="image/jpeg,image/png,image/gif,image/webp" class="gallery-input">
+                                <label style="margin-top: 0.5rem;">What does this photo show? <span class="hint">(optional)</span></label>
+                                <input type="text" name="gallery_descriptions[]" maxlength="200" class="gallery-description"
+                                       placeholder="e.g. Our storefront, Team photo, Workshop interior">
+                            </div>
+                        </div>
+                        <button type="button" class="btn secondary remove-gallery" style="margin-top: .6rem; padding: .25rem .8rem;">Remove</button>
+                    </div>
+                </div>
+                <button type="button" id="add-gallery" class="btn secondary">+ Add another photo</button>
+            </div>
         </div>
 
-        <div class="card">
-            <h2 style="margin-top:0">3. Your services or products <span class="hint">(optional)</span></h2>
+        {{-- Step 3: Offerings --}}
+        <div class="card wizard-panel" data-step="3">
+            <h2 style="margin-top:0">Your services or products <span class="hint">(optional)</span></h2>
             <p class="hint">List what you offer and the AI will feature each item on the site with
-                your exact names and prices. Leave empty to let the AI write this from your description.</p>
+                your exact names and prices. Upload a photo for each item right here. Leave empty to let the AI write this from your description.</p>
 
             <label>These are…</label>
             <div class="choices">
-                @php $offeringLabels = ['services' => 'Services', 'products' => 'Products', 'menu' => 'Menu items']; @endphp
                 @foreach (\App\Http\Controllers\WebsiteController::OFFERING_TYPES as $type)
                     <label><input type="radio" name="offering_type" value="{{ $type }}"
-                        @checked(old('offering_type', 'services') === $type)>{{ $offeringLabels[$type] }}</label>
+                        @checked(old('offering_type', 'services') === $type)>{{ ucfirst($type) }}</label>
                 @endforeach
             </div>
 
@@ -191,102 +194,24 @@
                         <label>Short description <span class="hint">(optional)</span></label>
                         <input type="text" name="offerings[{{ $i }}][description]" maxlength="500"
                                value="{{ $offering['description'] ?? '' }}" placeholder="One or two sentences about this item">
-                        <label>Photo <span class="hint">(optional — pick from photos uploaded above)</span></label>
-                        <select name="offerings[{{ $i }}][image_index]" class="offering-image-select">
-                            <option value="">No photo</option>
-                        </select>
+                        <label>Photo <span class="hint">(optional)</span></label>
+                        <div class="photo-preview" style="width: 80px; height: 80px; margin-bottom: .4rem;">
+                            <span class="placeholder">No photo</span>
+                            <img alt="Product preview">
+                        </div>
+                        <input type="file" name="offerings[{{ $i }}][image]" accept="image/jpeg,image/png,image/gif,image/webp" class="offering-photo-input">
                         <button type="button" class="btn secondary remove-offering" style="margin-top:.6rem; padding:.25rem .8rem">Remove</button>
                     </fieldset>
                 @endforeach
             </div>
             <button type="button" id="add-offering" class="btn secondary">+ Add another</button>
             @error('offerings')<div class="error">{{ $message }}</div>@enderror
-
-            <script>
-                (function () {
-                    const max = {{ \App\Http\Controllers\WebsiteController::MAX_OFFERINGS }};
-                    const list = document.getElementById('offerings');
-                    const addButton = document.getElementById('add-offering');
-                    const oldImageIndexes = @json(collect(old('offerings', []))->pluck('image_index')->values());
-
-                    function renumber() {
-                        list.querySelectorAll('.offering-row').forEach(function (row, i) {
-                            row.querySelectorAll('input, select').forEach(function (field) {
-                                field.name = field.name.replace(/offerings\[\d+\]/, 'offerings[' + i + ']');
-                            });
-                        });
-                        addButton.style.display = list.children.length >= max ? 'none' : '';
-                    }
-
-                    window.updateOfferingImageSelects = function () {
-                        const photoRows = document.querySelectorAll('#photo-uploads .photo-row');
-                        const photos = [];
-
-                        photoRows.forEach(function (row, index) {
-                            const input = row.querySelector('.photo-input');
-                            const descInput = row.querySelector('.photo-description');
-                            if (input && input.files && input.files[0]) {
-                                const desc = descInput ? descInput.value : '';
-                                photos.push({
-                                    index: index,
-                                    name: input.files[0].name,
-                                    description: desc
-                                });
-                            }
-                        });
-
-                        list.querySelectorAll('.offering-image-select').forEach(function (select, rowIndex) {
-                            const current = select.value;
-                            select.innerHTML = '<option value="">No photo</option>';
-
-                            photos.forEach(function (photo) {
-                                const option = document.createElement('option');
-                                option.value = String(photo.index);
-                                const label = photo.description
-                                    ? 'Photo ' + (photo.index + 1) + ' — ' + photo.description
-                                    : 'Photo ' + (photo.index + 1) + ' — ' + photo.name;
-                                option.textContent = label;
-                                select.appendChild(option);
-                            });
-
-                            if (current && select.querySelector('option[value="' + current + '"]')) {
-                                select.value = current;
-                            } else if (oldImageIndexes[rowIndex] !== undefined && oldImageIndexes[rowIndex] !== null && oldImageIndexes[rowIndex] !== '') {
-                                select.value = String(oldImageIndexes[rowIndex]);
-                            }
-                        });
-                    };
-
-                    addButton.addEventListener('click', function () {
-                        const row = list.querySelector('.offering-row').cloneNode(true);
-                        row.querySelectorAll('input').forEach(function (input) { input.value = ''; });
-                        row.querySelectorAll('select').forEach(function (select) { select.value = ''; });
-                        list.appendChild(row);
-                        renumber();
-                        updateOfferingImageSelects();
-                    });
-
-                    list.addEventListener('click', function (e) {
-                        if (!e.target.classList.contains('remove-offering')) return;
-                        const row = e.target.closest('.offering-row');
-                        if (list.children.length > 1) {
-                            row.remove();
-                        } else {
-                            row.querySelectorAll('input').forEach(function (input) { input.value = ''; });
-                            row.querySelectorAll('select').forEach(function (select) { select.value = ''; });
-                        }
-                        renumber();
-                        updateOfferingImageSelects();
-                    });
-
-                    renumber();
-                    updateOfferingImageSelects();
-                })();
-            </script>
+            @error('offerings.*.image')<div class="error">{{ $message }}</div>@enderror
         </div>
 
-        <div class="card">
-            <h2 style="margin-top:0">4. Choose your options</h2>
+        {{-- Step 4: Design --}}
+        <div class="card wizard-panel" data-step="4">
+            <h2 style="margin-top:0">Choose your options</h2>
 
             <label>Type of site</label>
             <div class="choices">
@@ -353,9 +278,194 @@
                 placeholder="e.g. Mention our Tuesday special. Keep the tone playful.">{{ old('extra_instructions') }}</textarea>
         </div>
 
-        <div class="actions" style="margin-bottom: 3rem;">
-            <button type="submit">Generate my website ({{ config('sites.generation_cost') }} credit)</button>
-            <a class="btn secondary" href="{{ route('dashboard') }}">Cancel</a>
+        <div class="wizard-nav" style="margin-bottom: 3rem;">
+            <div class="actions">
+                <button type="button" id="wizard-back" class="btn secondary" style="display: none;">Back</button>
+                <a class="btn secondary" href="{{ route('dashboard') }}">Cancel</a>
+            </div>
+            <div class="actions">
+                <button type="button" id="wizard-next" class="btn">Next</button>
+                <button type="submit" id="wizard-submit" class="btn" style="display: none;">
+                    Generate my website ({{ config('sites.generation_cost') }} credit)
+                </button>
+            </div>
         </div>
     </form>
+
+    <script>
+        (function () {
+            const totalSteps = 4;
+            let currentStep = 1;
+            const maxOfferings = {{ \App\Http\Controllers\WebsiteController::MAX_OFFERINGS }};
+            const maxPhotos = {{ config('sites.max_images') }};
+
+            const panels = document.querySelectorAll('.wizard-panel');
+            const labels = document.querySelectorAll('[data-step-label]');
+            const backBtn = document.getElementById('wizard-back');
+            const nextBtn = document.getElementById('wizard-next');
+            const submitBtn = document.getElementById('wizard-submit');
+            const form = document.getElementById('wizard-form');
+
+            function showStep(step) {
+                currentStep = step;
+                panels.forEach(function (panel) {
+                    panel.classList.toggle('active', Number(panel.dataset.step) === step);
+                });
+                labels.forEach(function (label) {
+                    const n = Number(label.dataset.stepLabel);
+                    label.classList.remove('active', 'done');
+                    if (n === step) label.classList.add('active');
+                    if (n < step) label.classList.add('done');
+                });
+                backBtn.style.display = step > 1 ? '' : 'none';
+                nextBtn.style.display = step < totalSteps ? '' : 'none';
+                submitBtn.style.display = step === totalSteps ? '' : 'none';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function validateStep(step) {
+                if (step !== 1) return true;
+                const name = document.getElementById('name');
+                const description = document.getElementById('description');
+                let ok = true;
+                if (!name.value.trim()) { name.reportValidity(); ok = false; }
+                else if (!description.value.trim()) { description.reportValidity(); ok = false; }
+                return ok;
+            }
+
+            backBtn.addEventListener('click', function () {
+                if (currentStep > 1) showStep(currentStep - 1);
+            });
+
+            nextBtn.addEventListener('click', function () {
+                if (!validateStep(currentStep)) return;
+                if (currentStep < totalSteps) showStep(currentStep + 1);
+            });
+
+            labels.forEach(function (label) {
+                label.addEventListener('click', function () {
+                    const target = Number(label.dataset.stepLabel);
+                    if (target < currentStep || validateStep(1)) {
+                        if (target > currentStep && !validateStep(currentStep)) return;
+                        showStep(target);
+                    }
+                });
+                label.style.cursor = 'pointer';
+            });
+
+            function setupFilePreview(input) {
+                const targetName = input.dataset.previewTarget;
+                const container = targetName
+                    ? document.querySelector('[data-preview="' + targetName + '"]')
+                    : input.closest('.photo-slot, .gallery-row, .offering-row')?.querySelector('.photo-preview');
+                if (!container) return;
+
+                const img = container.querySelector('img');
+                const placeholder = container.querySelector('.placeholder');
+
+                input.addEventListener('change', function () {
+                    if (this.files && this.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            img.src = e.target.result;
+                            img.style.display = 'block';
+                            if (placeholder) placeholder.style.display = 'none';
+                        };
+                        reader.readAsDataURL(this.files[0]);
+                    } else {
+                        img.style.display = 'none';
+                        img.src = '';
+                        if (placeholder) placeholder.style.display = 'block';
+                    }
+                });
+            }
+
+            document.querySelectorAll('input[type="file"]').forEach(setupFilePreview);
+
+            // Gallery repeater
+            const galleryList = document.getElementById('gallery-uploads');
+            const addGalleryBtn = document.getElementById('add-gallery');
+
+            function renumberGallery() {
+                const rows = galleryList.querySelectorAll('.gallery-row');
+                addGalleryBtn.style.display = rows.length >= maxPhotos ? 'none' : '';
+            }
+
+            addGalleryBtn.addEventListener('click', function () {
+                const row = galleryList.querySelector('.gallery-row').cloneNode(true);
+                row.querySelector('.gallery-input').value = '';
+                row.querySelector('.gallery-description').value = '';
+                const preview = row.querySelector('.photo-preview img');
+                preview.style.display = 'none';
+                preview.src = '';
+                row.querySelector('.placeholder').style.display = 'block';
+                galleryList.appendChild(row);
+                setupFilePreview(row.querySelector('.gallery-input'));
+                renumberGallery();
+            });
+
+            galleryList.addEventListener('click', function (e) {
+                if (!e.target.classList.contains('remove-gallery')) return;
+                const row = e.target.closest('.gallery-row');
+                if (galleryList.querySelectorAll('.gallery-row').length > 1) {
+                    row.remove();
+                } else {
+                    row.querySelector('.gallery-input').value = '';
+                    row.querySelector('.gallery-description').value = '';
+                    row.querySelector('.photo-preview img').style.display = 'none';
+                    row.querySelector('.placeholder').style.display = 'block';
+                }
+                renumberGallery();
+            });
+
+            renumberGallery();
+
+            // Offerings repeater
+            const offeringList = document.getElementById('offerings');
+            const addOfferingBtn = document.getElementById('add-offering');
+
+            function renumberOfferings() {
+                offeringList.querySelectorAll('.offering-row').forEach(function (row, i) {
+                    row.querySelectorAll('input').forEach(function (field) {
+                        field.name = field.name.replace(/offerings\[\d+\]/, 'offerings[' + i + ']');
+                    });
+                });
+                addOfferingBtn.style.display = offeringList.children.length >= maxOfferings ? 'none' : '';
+            }
+
+            addOfferingBtn.addEventListener('click', function () {
+                const row = offeringList.querySelector('.offering-row').cloneNode(true);
+                row.querySelectorAll('input[type="text"]').forEach(function (input) { input.value = ''; });
+                row.querySelectorAll('input[type="file"]').forEach(function (input) { input.value = ''; });
+                const preview = row.querySelector('.photo-preview img');
+                preview.style.display = 'none';
+                preview.src = '';
+                row.querySelector('.placeholder').style.display = 'block';
+                offeringList.appendChild(row);
+                setupFilePreview(row.querySelector('.offering-photo-input'));
+                renumberOfferings();
+            });
+
+            offeringList.addEventListener('click', function (e) {
+                if (!e.target.classList.contains('remove-offering')) return;
+                const row = e.target.closest('.offering-row');
+                if (offeringList.children.length > 1) {
+                    row.remove();
+                } else {
+                    row.querySelectorAll('input[type="text"]').forEach(function (input) { input.value = ''; });
+                    row.querySelectorAll('input[type="file"]').forEach(function (input) { input.value = ''; });
+                    row.querySelector('.photo-preview img').style.display = 'none';
+                    row.querySelector('.placeholder').style.display = 'block';
+                }
+                renumberOfferings();
+            });
+
+            renumberOfferings();
+
+            // Restore wizard step after validation errors
+            @if ($errors->any())
+                showStep(1);
+            @endif
+        })();
+    </script>
 @endsection

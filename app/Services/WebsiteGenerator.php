@@ -249,7 +249,9 @@ class WebsiteGenerator
             'ai_elaborate_offerings' => (bool) ($settings['ai_elaborate_offerings'] ?? false),
             'offerings' => $this->offeringsForBrief($settings['offerings'] ?? [], $imagesById, $assetNames),
             'extra_instructions' => $settings['extra_instructions'] ?? null,
+            'generate_favicon_from_logo' => (bool) ($settings['generate_favicon_from_logo'] ?? false),
             'image_assets' => $assetNames,
+            'image_roles' => $this->imageRolesForBrief($website, $assetNames),
             // Fresh per generation so regenerating the same brief commits to
             // a different art direction (the model has no sampling params).
             'design_seed' => random_int(1, 9999),
@@ -259,15 +261,23 @@ class WebsiteGenerator
             'type' => 'text',
             'text' => "Build a static website from this brief:\n\n"
                 .json_encode($brief, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
-                ."\n\nThe customer's photos follow, in the same order as image_assets. "
-                .'Use them where they fit best (hero, gallery, about, etc.).',
+                ."\n\nThe customer's photos follow. Each is labelled with its role (logo, favicon, banner, gallery, product) "
+                .'and asset path. Use each image only for its intended role.',
         ]];
 
         foreach ($website->images as $index => $image) {
+            $role = $image->type ?? 'gallery';
+            $label = ucfirst($role);
+            $details = 'available at '.$assetNames[$index]
+                .' (original filename: '.$image->original_name.')';
+
+            if (filled($image->description)) {
+                $details .= ' — customer note: '.$image->description;
+            }
+
             $content[] = [
                 'type' => 'text',
-                'text' => 'Photo '.($index + 1).' — available at '.$assetNames[$index]
-                    .' (original filename: '.$image->original_name.')',
+                'text' => $label.' — '.$details,
             ];
             $content[] = $this->imageBlock($image);
         }
@@ -295,6 +305,22 @@ class WebsiteGenerator
 
             return $briefOffering;
         }, $offerings);
+    }
+
+    private function imageRolesForBrief(Website $website, array $assetNames): array
+    {
+        $roles = [];
+
+        foreach ($website->images as $index => $image) {
+            $roles[] = [
+                'asset' => $assetNames[$index],
+                'role' => $image->type ?? 'gallery',
+                'description' => $image->description,
+                'original_name' => $image->original_name,
+            ];
+        }
+
+        return $roles;
     }
 
     private function imageBlock(WebsiteImage $image): array

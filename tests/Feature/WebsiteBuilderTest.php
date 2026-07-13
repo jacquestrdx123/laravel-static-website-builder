@@ -47,12 +47,14 @@ class WebsiteBuilderTest extends TestCase
             'offering_type' => 'products',
             'offering_label' => 'Our Bakes',
             'ai_elaborate_offerings' => '1',
+            'banner' => UploadedFile::fake()->image('banner.jpg', 1200, 400),
             'offerings' => [
-                ['name' => 'Sourdough loaf', 'description' => 'Naturally leavened', 'price' => 'R65', 'image_index' => '0'],
-                ['name' => '', 'description' => '', 'price' => ''], // empty repeater row
+                ['name' => 'Sourdough loaf', 'description' => 'Naturally leavened', 'price' => 'R65', 'image' => UploadedFile::fake()->image('loaf.jpg', 400, 400)],
+                ['name' => '', 'description' => '', 'price' => ''],
                 ['name' => 'Wedding cake', 'description' => '', 'price' => 'from R2,500'],
             ],
-            'images' => [UploadedFile::fake()->image('shop.jpg', 640, 480)],
+            'gallery_images' => [UploadedFile::fake()->image('shop.jpg', 640, 480)],
+            'gallery_descriptions' => ['Our storefront'],
         ]);
 
         $website = Website::first();
@@ -60,7 +62,7 @@ class WebsiteBuilderTest extends TestCase
 
         $this->assertSame(1, $user->fresh()->ai_credits);
         $this->assertSame(Website::STATUS_QUEUED, $website->status);
-        $this->assertCount(1, $website->images);
+        $this->assertCount(3, $website->images);
 
         // Offerings are stored with empty rows filtered out.
         $this->assertSame('products', $website->settings['offering_type']);
@@ -69,8 +71,13 @@ class WebsiteBuilderTest extends TestCase
         $this->assertCount(2, $website->settings['offerings']);
         $this->assertSame('Sourdough loaf', $website->settings['offerings'][0]['name']);
         $this->assertSame('from R2,500', $website->settings['offerings'][1]['price']);
-        $this->assertSame($website->images->first()->id, $website->settings['offerings'][0]['image_id']);
+        $this->assertNotNull($website->settings['offerings'][0]['image_id']);
         $this->assertNull($website->settings['offerings'][1]['image_id']);
+
+        $types = $website->images->pluck('type')->all();
+        $this->assertContains('banner', $types);
+        $this->assertContains('gallery', $types);
+        $this->assertContains('product', $types);
 
         Queue::assertPushed(GenerateWebsiteJob::class);
     }

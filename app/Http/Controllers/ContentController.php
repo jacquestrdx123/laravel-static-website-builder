@@ -13,7 +13,7 @@ use Illuminate\View\View;
 
 /**
  * Free, instant edits to the business data of an already-generated site:
- * offerings (services/products/menu), tagline, and contact email. Rewrites
+ * offerings (services/products), tagline, and contact email. Rewrites
  * the annotated elements in the static HTML - no AI call, no credits.
  */
 class ContentController extends Controller
@@ -59,12 +59,6 @@ class ContentController extends Controller
         foreach ($offerings as $index => $offering) {
             $imageId = filled($offering['image_id'] ?? null) ? (int) $offering['image_id'] : null;
 
-            if ($imageId !== null && ! in_array($imageId, $validImageIds, true)) {
-                return redirect()->route('websites.content.edit', $website)
-                    ->withErrors(['offerings.'.$index.'.image_id' => 'Please choose a photo that belongs to this website.'])
-                    ->withInput();
-            }
-
             if ($request->hasFile("offerings.$index.image")) {
                 if ($website->images()->count() >= config('sites.max_images')) {
                     return redirect()->route('websites.content.edit', $website)
@@ -78,6 +72,7 @@ class ContentController extends Controller
                 $image = $website->images()->create([
                     'path' => $path,
                     'original_name' => $upload->getClientOriginalName(),
+                    'type' => WebsiteImage::TYPE_PRODUCT,
                     'mime_type' => $upload->getMimeType(),
                     'sort' => $nextSort,
                 ]);
