@@ -52,6 +52,11 @@ return [
             'ns1' => env('HOSTAFRICA_NS1', 'ns1.hostafrica.com'),
             'ns2' => env('HOSTAFRICA_NS2', 'ns2.hostafrica.com'),
         ],
+        // TLDs checked when the customer does not pick specific extensions.
+        'default_tlds' => array_values(array_filter(array_map(
+            trim(...),
+            explode(',', (string) env('HOSTAFRICA_DEFAULT_TLDS', 'co.za,com,net,org,africa'))
+        ))),
     ],
 
 ];

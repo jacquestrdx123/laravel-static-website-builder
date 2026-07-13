@@ -12,9 +12,7 @@ class HostAfricaClient
      */
     public function lookup(string $searchTerm, array $options = []): array
     {
-        return $this->request('POST', '/domains/lookup', array_merge([
-            'searchTerm' => $searchTerm,
-        ], $options));
+        return $this->request('POST', '/domains/lookup', $this->lookupParams($searchTerm, $options));
     }
 
     /**
@@ -22,9 +20,7 @@ class HostAfricaClient
      */
     public function suggestions(string $searchTerm, array $options = []): array
     {
-        return $this->request('POST', '/domains/lookup/suggestions', array_merge([
-            'searchTerm' => $searchTerm,
-        ], $options));
+        return $this->request('POST', '/domains/lookup/suggestions', $this->lookupParams($searchTerm, $options));
     }
 
     /**
@@ -323,6 +319,29 @@ class HostAfricaClient
     private function domainPath(string $domain, string $suffix): string
     {
         return '/domains/'.rawurlencode(strtolower($domain)).$suffix;
+    }
+
+    /**
+     * HostAfrica requires array params (e.g. tldsToInclude) — never null.
+     *
+     * @param  array<string, mixed>  $options
+     * @return array<string, mixed>
+     */
+    private function lookupParams(string $searchTerm, array $options = []): array
+    {
+        $tlds = $options['tldsToInclude'] ?? null;
+        unset($options['tldsToInclude']);
+
+        if (! is_array($tlds) || $tlds === []) {
+            $tlds = config('services.hostafrica.default_tlds', ['co.za', 'com', 'net', 'org']);
+        }
+
+        return array_merge([
+            'searchTerm' => $searchTerm,
+            'tldsToInclude' => array_values($tlds),
+            'isIdnDomain' => (bool) ($options['isIdnDomain'] ?? false),
+            'premiumEnabled' => (bool) ($options['premiumEnabled'] ?? false),
+        ], $options);
     }
 
     /**

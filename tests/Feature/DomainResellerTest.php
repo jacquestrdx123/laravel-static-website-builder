@@ -53,6 +53,12 @@ class DomainResellerTest extends TestCase
         $this->assertTrue($results[0]['available']);
         $this->assertSame('R99.00', $results[0]['price']);
         $this->assertFalse($results[1]['available']);
+
+        Http::assertSent(function ($request) {
+            return str_contains($request->url(), '/domains/lookup')
+                && is_array($request['tldsToInclude'])
+                && $request['tldsToInclude'] !== [];
+        });
     }
 
     public function test_domain_registration_creates_domain_and_stub_order(): void

@@ -28,9 +28,13 @@ class DomainSearchController extends Controller
         ]);
 
         try {
-            $lookup = $client->lookup($data['searchTerm'], array_filter([
-                'tldsToInclude' => $data['tldsToInclude'] ?? null,
-            ]));
+            $lookupOptions = [];
+
+            if (! empty($data['tldsToInclude'])) {
+                $lookupOptions['tldsToInclude'] = $data['tldsToInclude'];
+            }
+
+            $lookup = $client->lookup($data['searchTerm'], $lookupOptions);
 
             $results = $this->normalizeLookupResults($lookup, $data['searchTerm']);
 
