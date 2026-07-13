@@ -231,6 +231,7 @@ class WebsiteGenerator
     private function userContent(Website $website, array $assetNames): array
     {
         $settings = $website->settings;
+        $imagesById = $website->images->keyBy('id');
 
         $brief = [
             'business_name' => $website->name,
@@ -244,7 +245,9 @@ class WebsiteGenerator
             'accent_color' => $settings['accent_color'] ?? null,
             'features' => $settings['features'] ?? [],
             'offering_type' => $settings['offering_type'] ?? 'services',
-            'offerings' => $settings['offerings'] ?? [],
+            'offering_label' => $settings['offering_label'] ?? null,
+            'ai_elaborate_offerings' => (bool) ($settings['ai_elaborate_offerings'] ?? false),
+            'offerings' => $this->offeringsForBrief($settings['offerings'] ?? [], $imagesById, $assetNames),
             'extra_instructions' => $settings['extra_instructions'] ?? null,
             'image_assets' => $assetNames,
             // Fresh per generation so regenerating the same brief commits to
@@ -270,6 +273,28 @@ class WebsiteGenerator
         }
 
         return $content;
+    }
+
+    /** @param  \Illuminate\Support\Collection<int, WebsiteImage>  $imagesById */
+    private function offeringsForBrief(array $offerings, $imagesById, array $assetNames): array
+    {
+        return array_map(function (array $offering) use ($imagesById, $assetNames) {
+            $briefOffering = [
+                'name' => $offering['name'] ?? '',
+                'description' => $offering['description'] ?? null,
+                'price' => $offering['price'] ?? null,
+            ];
+
+            $imageId = $offering['image_id'] ?? null;
+            if ($imageId && $imagesById->has($imageId)) {
+                $assetName = 'assets/'.$imagesById->get($imageId)->assetName();
+                if (in_array($assetName, $assetNames, true)) {
+                    $briefOffering['image_asset'] = $assetName;
+                }
+            }
+
+            return $briefOffering;
+        }, $offerings);
     }
 
     private function imageBlock(WebsiteImage $image): array

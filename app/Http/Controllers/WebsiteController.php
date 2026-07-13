@@ -52,12 +52,17 @@ class WebsiteController extends Controller
             'features.*' => ['in:'.implode(',', self::FEATURES)],
             'extra_instructions' => ['nullable', 'string', 'max:2000'],
             'offering_type' => ['required', 'in:'.implode(',', self::OFFERING_TYPES)],
+            'offering_label' => ['nullable', 'string', 'max:50'],
+            'ai_elaborate_offerings' => ['nullable', 'boolean'],
             'offerings' => ['nullable', 'array', 'max:'.self::MAX_OFFERINGS],
             'offerings.*.name' => ['nullable', 'string', 'max:100'],
             'offerings.*.description' => ['nullable', 'string', 'max:500'],
             'offerings.*.price' => ['nullable', 'string', 'max:50'],
+            'offerings.*.image_index' => ['nullable', 'integer', 'min:0'],
             'images' => ['nullable', 'array', 'max:'.config('sites.max_images')],
             'images.*' => ['image', 'mimes:jpeg,png,gif,webp', 'max:8192'],
+            'image_descriptions' => ['nullable', 'array', 'max:'.config('sites.max_images')],
+            'image_descriptions.*' => ['nullable', 'string', 'max:200'],
         ]);
 
         // Drop repeater rows the customer left empty.
@@ -93,24 +98,48 @@ class WebsiteController extends Controller
                 'accent_color' => $data['accent_color'] ?? null,
                 'features' => array_values($data['features'] ?? []),
                 'offering_type' => $data['offering_type'],
+                'offering_label' => filled($data['offering_label'] ?? null) ? $data['offering_label'] : null,
+                'ai_elaborate_offerings' => (bool) ($data['ai_elaborate_offerings'] ?? false),
                 'offerings' => array_map(fn ($offering) => [
                     'name' => $offering['name'],
                     'description' => $offering['description'] ?? null,
                     'price' => $offering['price'] ?? null,
+                    'image_id' => null,
                 ], $offerings),
                 'extra_instructions' => $data['extra_instructions'] ?? null,
             ],
         ]);
 
+        $imageIdsByIndex = [];
+        $descriptions = $data['image_descriptions'] ?? [];
         foreach ($request->file('images', []) as $index => $upload) {
             $path = $upload->store('uploads/'.$website->id, 'local');
 
-            $website->images()->create([
+            $image = $website->images()->create([
                 'path' => $path,
                 'original_name' => $upload->getClientOriginalName(),
+                'description' => $descriptions[$index] ?? null,
                 'mime_type' => $upload->getMimeType(),
                 'sort' => $index,
             ]);
+
+            $imageIdsByIndex[$index] = $image->id;
+        }
+
+        if ($offerings !== []) {
+            $settings = $website->settings;
+            $settings['offerings'] = array_map(function ($offering) use ($imageIdsByIndex) {
+                $imageIndex = $offering['image_index'] ?? null;
+
+                return [
+                    'name' => $offering['name'],
+                    'description' => $offering['description'] ?? null,
+                    'price' => $offering['price'] ?? null,
+                    'image_id' => isset($imageIdsByIndex[$imageIndex]) ? $imageIdsByIndex[$imageIndex] : null,
+                ];
+            }, $offerings);
+
+            $website->update(['settings' => $settings]);
         }
 
         GenerateWebsiteJob::dispatch($website);

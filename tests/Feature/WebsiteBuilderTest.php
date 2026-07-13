@@ -45,8 +45,10 @@ class WebsiteBuilderTest extends TestCase
             'color_scheme' => 'light',
             'features' => ['seo_meta'],
             'offering_type' => 'products',
+            'offering_label' => 'Our Bakes',
+            'ai_elaborate_offerings' => '1',
             'offerings' => [
-                ['name' => 'Sourdough loaf', 'description' => 'Naturally leavened', 'price' => 'R65'],
+                ['name' => 'Sourdough loaf', 'description' => 'Naturally leavened', 'price' => 'R65', 'image_index' => '0'],
                 ['name' => '', 'description' => '', 'price' => ''], // empty repeater row
                 ['name' => 'Wedding cake', 'description' => '', 'price' => 'from R2,500'],
             ],
@@ -62,9 +64,13 @@ class WebsiteBuilderTest extends TestCase
 
         // Offerings are stored with empty rows filtered out.
         $this->assertSame('products', $website->settings['offering_type']);
+        $this->assertSame('Our Bakes', $website->settings['offering_label']);
+        $this->assertTrue($website->settings['ai_elaborate_offerings']);
         $this->assertCount(2, $website->settings['offerings']);
         $this->assertSame('Sourdough loaf', $website->settings['offerings'][0]['name']);
         $this->assertSame('from R2,500', $website->settings['offerings'][1]['price']);
+        $this->assertSame($website->images->first()->id, $website->settings['offerings'][0]['image_id']);
+        $this->assertNull($website->settings['offerings'][1]['image_id']);
 
         Queue::assertPushed(GenerateWebsiteJob::class);
     }

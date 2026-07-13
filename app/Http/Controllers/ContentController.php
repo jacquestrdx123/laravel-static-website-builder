@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Website;
+use App\Models\WebsiteImage;
 use App\Services\SiteContentUpdater;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 /**
@@ -35,10 +38,13 @@ class ContentController extends Controller
             'tagline' => ['nullable', 'string', 'max:200'],
             'contact_email' => ['nullable', 'email', 'max:255'],
             'offering_type' => ['required', 'in:'.implode(',', WebsiteController::OFFERING_TYPES)],
+            'offering_label' => ['nullable', 'string', 'max:50'],
             'offerings' => ['nullable', 'array', 'max:'.WebsiteController::MAX_OFFERINGS],
             'offerings.*.name' => ['nullable', 'string', 'max:100'],
             'offerings.*.description' => ['nullable', 'string', 'max:500'],
             'offerings.*.price' => ['nullable', 'string', 'max:50'],
+            'offerings.*.image_id' => ['nullable', 'integer'],
+            'offerings.*.image' => ['nullable', 'image', 'mimes:jpeg,png,gif,webp', 'max:8192'],
         ]);
 
         $offerings = array_values(array_filter(
@@ -46,16 +52,58 @@ class ContentController extends Controller
             fn ($offering) => filled($offering['name'] ?? null)
         ));
 
+        $validImageIds = $website->images()->pluck('id')->all();
+        $nextSort = (int) $website->images()->max('sort') + 1;
+
+        $normalizedOfferings = [];
+        foreach ($offerings as $index => $offering) {
+            $imageId = filled($offering['image_id'] ?? null) ? (int) $offering['image_id'] : null;
+
+            if ($imageId !== null && ! in_array($imageId, $validImageIds, true)) {
+                return redirect()->route('websites.content.edit', $website)
+                    ->withErrors(['offerings.'.$index.'.image_id' => 'Please choose a photo that belongs to this website.'])
+                    ->withInput();
+            }
+
+            if ($request->hasFile("offerings.$index.image")) {
+                if ($website->images()->count() >= config('sites.max_images')) {
+                    return redirect()->route('websites.content.edit', $website)
+                        ->withErrors(['offerings.'.$index.'.image' => 'This website already has the maximum number of photos.'])
+                        ->withInput();
+                }
+
+                $upload = $request->file("offerings.$index.image");
+                $path = $upload->store('uploads/'.$website->id, 'local');
+
+                $image = $website->images()->create([
+                    'path' => $path,
+                    'original_name' => $upload->getClientOriginalName(),
+                    'mime_type' => $upload->getMimeType(),
+                    'sort' => $nextSort,
+                ]);
+
+                $this->syncImageToSiteAssets($website, $image);
+
+                $nextSort++;
+                $validImageIds[] = $image->id;
+                $imageId = $image->id;
+            }
+
+            $normalizedOfferings[] = [
+                'name' => $offering['name'],
+                'description' => $offering['description'] ?? null,
+                'price' => $offering['price'] ?? null,
+                'image_id' => $imageId,
+            ];
+        }
+
         $website->update([
             'settings' => array_merge($website->settings, [
                 'tagline' => $data['tagline'] ?? null,
                 'contact_email' => $data['contact_email'] ?? null,
                 'offering_type' => $data['offering_type'],
-                'offerings' => array_map(fn ($offering) => [
-                    'name' => $offering['name'],
-                    'description' => $offering['description'] ?? null,
-                    'price' => $offering['price'] ?? null,
-                ], $offerings),
+                'offering_label' => filled($data['offering_label'] ?? null) ? $data['offering_label'] : null,
+                'offerings' => $normalizedOfferings,
             ]),
         ]);
 
@@ -68,5 +116,20 @@ class ContentController extends Controller
 
         return redirect()->route('websites.show', $website)
             ->with('status', 'Content updated on your site - no credits used.');
+    }
+
+    private function syncImageToSiteAssets(Website $website, WebsiteImage $image): void
+    {
+        $sitePath = $website->sitePath();
+
+        if (! File::isDirectory($sitePath)) {
+            return;
+        }
+
+        File::ensureDirectoryExists($sitePath.'/assets');
+        File::copy(
+            Storage::disk('local')->path($image->path),
+            $sitePath.'/assets/'.$image->assetName()
+        );
     }
 }

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class WebsiteImage extends Model
 {
-    protected $fillable = ['website_id', 'path', 'original_name', 'mime_type', 'sort'];
+    protected $fillable = ['website_id', 'path', 'original_name', 'description', 'mime_type', 'sort'];
 
     public function website(): BelongsTo
     {

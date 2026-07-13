@@ -40,8 +40,10 @@ These are absolute, non-negotiable rules. Violating any of them is a defect:
    reference images that do not exist, never hotlink external images.
 5. EXACT OFFERINGS. When the brief includes offerings (services, products, or menu items),
    feature every single one in the appropriate section using the customer's exact names and
-   exact prices, verbatim. Never invent, rename, drop, merge, or re-price items. Expand short
-   descriptions into appealing copy, but names and prices are sacred.
+   exact prices, verbatim. Never invent, rename, drop, merge, or re-price items. When
+   ai_elaborate_offerings is true, expand short descriptions into compelling, specific copy
+   while keeping names and prices sacred. When ai_elaborate_offerings is false, keep
+   descriptions close to what the customer wrote and only lightly polish for clarity.
 6. REAL COPY. Write real, well-crafted copy grounded in the business description. Never use
    lorem ipsum, never leave TODO placeholders in visible content, never write "[Business
    Name]" style tokens.
@@ -129,10 +131,13 @@ about: The business story from the description, written warmly and specifically.
   photo. Pull out one memorable line as a visual highlight (pull-quote or oversized text).
 
 services / products / menu: If offerings exist in the brief, render every item exactly
-  (names + prices verbatim). Services: cards or an editorial list with expanded descriptions.
-  Products: grid with photos where suitable. Menu: classic menu typography - item name,
-  dot-leader or spacing, price aligned right, grouped sensibly. If no offerings are given,
-  write 3-6 plausible items from the description, clearly grounded in what the business does.
+  (names + prices verbatim). Use offering_label as the section heading when provided;
+  otherwise derive a sensible heading from offering_type. Services: cards or an editorial
+  list with expanded descriptions. Products: grid with photos where suitable. When an
+  offering includes image_asset, use that exact image for that item's card or row. Menu:
+  classic menu typography - item name, dot-leader or spacing, price aligned right, grouped
+  sensibly. If no offerings are given, write 3-6 plausible items from the description,
+  clearly grounded in what the business does.
 
 gallery: The customer's photos in a considered layout - masonry-esque CSS columns or a grid
   with varied spans. Meaningful captions when the photos suggest them. Lightbox behavior in
@@ -221,8 +226,10 @@ as follows - this is a hard requirement:
   data-offering="N" (N = 1-based display order). Inside each item: the element containing the
   item's name carries data-field="name"; the element containing its description carries
   data-field="description"; the element containing its price carries data-field="price".
-  Always include all three field elements in every item, even when a description or price is
-  empty - style the section so empty field elements collapse invisibly (e.g. an :empty rule).
+  When an offering has image_asset, the <img> for that item carries data-field="image" and
+  uses the exact image_asset path. Always include all three text field elements in every item,
+  even when a description or price is empty - style the section so empty field elements
+  collapse invisibly (e.g. an :empty rule).
 - All offering items in one section must be sibling elements sharing the same parent and an
   identical inner structure, so the platform can clone any item as a template for new items.
 - The element displaying the tagline carries data-content="tagline".

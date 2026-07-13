@@ -27,12 +27,14 @@ class SiteContentUpdater
 
         $changed = 0;
 
+        $imageAssets = $this->imageAssetsById($website);
+
         foreach (File::allFiles($sitePath) as $file) {
             if (! in_array(strtolower($file->getExtension()), ['html', 'htm'], true)) {
                 continue;
             }
 
-            if ($this->updateHtmlFile($file->getPathname(), $website->settings)) {
+            if ($this->updateHtmlFile($file->getPathname(), $website->settings, $imageAssets)) {
                 $changed++;
             }
         }
@@ -57,7 +59,7 @@ class SiteContentUpdater
                 || str_contains(File::get($index), 'data-content'));
     }
 
-    private function updateHtmlFile(string $path, array $settings): bool
+    private function updateHtmlFile(string $path, array $settings, array $imageAssets): bool
     {
         $html = File::get($path);
 
@@ -74,7 +76,7 @@ class SiteContentUpdater
 
         $xpath = new DOMXPath($doc);
 
-        $dirty = $this->rebuildOfferings($xpath, $settings['offerings'] ?? []);
+        $dirty = $this->rebuildOfferings($xpath, $settings['offerings'] ?? [], $imageAssets);
         $dirty = $this->updateSimpleFields($xpath, $settings) || $dirty;
 
         if (! $dirty) {
@@ -92,7 +94,7 @@ class SiteContentUpdater
      * removed. An empty offerings list leaves the section untouched (a blank
      * section would look broken).
      */
-    private function rebuildOfferings(DOMXPath $xpath, array $offerings): bool
+    private function rebuildOfferings(DOMXPath $xpath, array $offerings, array $imageAssets): bool
     {
         if ($offerings === []) {
             return false;
@@ -124,6 +126,7 @@ class SiteContentUpdater
                 $this->setField($xpath, $clone, 'name', $offering['name'] ?? '');
                 $this->setField($xpath, $clone, 'description', $offering['description'] ?? '');
                 $this->setField($xpath, $clone, 'price', $offering['price'] ?? '');
+                $this->setImageField($xpath, $clone, $offering['image_id'] ?? null, $imageAssets);
                 $parent->insertBefore($clone, $anchor);
             }
 
@@ -133,6 +136,36 @@ class SiteContentUpdater
         }
 
         return true;
+    }
+
+    private function imageAssetsById(Website $website): array
+    {
+        $assets = [];
+
+        foreach ($website->images as $image) {
+            $assets[$image->id] = 'assets/'.$image->assetName();
+        }
+
+        return $assets;
+    }
+
+    private function setImageField(DOMXPath $xpath, DOMElement $item, mixed $imageId, array $imageAssets): void
+    {
+        if ($imageId === null || $imageId === '') {
+            return;
+        }
+
+        $src = $imageAssets[(int) $imageId] ?? null;
+
+        if ($src === null) {
+            return;
+        }
+
+        foreach ($xpath->query('.//*[@data-field="image"]', $item) as $element) {
+            if (strtolower($element->tagName) === 'img') {
+                $element->setAttribute('src', $src);
+            }
+        }
     }
 
     private function setField(DOMXPath $xpath, DOMElement $item, string $field, ?string $value): void

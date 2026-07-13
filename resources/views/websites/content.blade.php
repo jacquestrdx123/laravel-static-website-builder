@@ -5,7 +5,7 @@
 @section('content')
     <h1>Edit content</h1>
     <p class="muted">
-        Update your {{ $website->settings['offering_type'] ?? 'services' }}, prices, tagline, and contact
+        Update your {{ $website->settings['offering_label'] ?? $website->settings['offering_type'] ?? 'services' }}, prices, tagline, and contact
         email directly on <strong>{{ $website->name }}</strong> — free and instant, no AI credits used.
         The design stays exactly as it is.
     </p>
@@ -17,7 +17,7 @@
         </div>
     @endunless
 
-    <form method="POST" action="{{ route('websites.content.update', $website) }}">
+    <form method="POST" action="{{ route('websites.content.update', $website) }}" enctype="multipart/form-data">
         @csrf
 
         <div class="card">
@@ -44,7 +44,15 @@
                 @endforeach
             </div>
 
+            <label for="offering_label">What should this section be called? <span class="hint">(optional)</span></label>
+            <input id="offering_label" type="text" name="offering_label" maxlength="50"
+                   placeholder="e.g. Our Treatments, Packages, Offerings"
+                   value="{{ old('offering_label', $website->settings['offering_label'] ?? '') }}">
+            @error('offering_label')<div class="error">{{ $message }}</div>@enderror
+
             @php
+                $websiteImages = $website->images()->orderBy('sort')->get();
+            @endphp
                 $current = old('offerings', $website->settings['offerings'] ?? []);
                 if (empty($current)) {
                     $current = [['name' => '', 'description' => '', 'price' => '']];
@@ -69,6 +77,18 @@
                         <label>Short description <span class="hint">(optional)</span></label>
                         <input type="text" name="offerings[{{ $i }}][description]" maxlength="500"
                                value="{{ $offering['description'] ?? '' }}">
+                        <label>Photo <span class="hint">(optional)</span></label>
+                        <select name="offerings[{{ $i }}][image_id]">
+                            <option value="">No photo</option>
+                            @foreach ($websiteImages as $image)
+                                <option value="{{ $image->id }}"
+                                    @selected((string) old('offerings.'.$i.'.image_id', $offering['image_id'] ?? '') === (string) $image->id)>
+                                    {{ $image->original_name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <label>Or upload a new photo <span class="hint">(optional)</span></label>
+                        <input type="file" name="offerings[{{ $i }}][image]" accept="image/jpeg,image/png,image/gif,image/webp">
                         <button type="button" class="btn secondary remove-offering" style="margin-top:.6rem; padding:.25rem .8rem">Remove</button>
                     </fieldset>
                 @endforeach
@@ -84,8 +104,12 @@
 
                     function renumber() {
                         list.querySelectorAll('.offering-row').forEach(function (row, i) {
-                            row.querySelectorAll('input').forEach(function (input) {
-                                input.name = input.name.replace(/offerings\[\d+\]/, 'offerings[' + i + ']');
+                            row.querySelectorAll('input, select').forEach(function (field) {
+                                if (field.type === 'file') {
+                                    field.name = field.name.replace(/offerings\[\d+\]/, 'offerings[' + i + ']');
+                                } else {
+                                    field.name = field.name.replace(/offerings\[\d+\]/, 'offerings[' + i + ']');
+                                }
                             });
                         });
                         addButton.style.display = list.children.length >= max ? 'none' : '';
@@ -93,7 +117,14 @@
 
                     addButton.addEventListener('click', function () {
                         const row = list.querySelector('.offering-row').cloneNode(true);
-                        row.querySelectorAll('input').forEach(function (input) { input.value = ''; });
+                        row.querySelectorAll('input').forEach(function (input) {
+                            if (input.type === 'file') {
+                                input.value = '';
+                            } else {
+                                input.value = '';
+                            }
+                        });
+                        row.querySelectorAll('select').forEach(function (select) { select.value = ''; });
                         list.appendChild(row);
                         renumber();
                     });
@@ -104,7 +135,14 @@
                         if (list.children.length > 1) {
                             row.remove();
                         } else {
-                            row.querySelectorAll('input').forEach(function (input) { input.value = ''; });
+                            row.querySelectorAll('input').forEach(function (input) {
+                                if (input.type !== 'file') {
+                                    input.value = '';
+                                } else {
+                                    input.value = '';
+                                }
+                            });
+                            row.querySelectorAll('select').forEach(function (select) { select.value = ''; });
                         }
                         renumber();
                     });
