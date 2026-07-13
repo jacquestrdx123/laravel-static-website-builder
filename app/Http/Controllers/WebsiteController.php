@@ -207,7 +207,6 @@ class WebsiteController extends Controller
                 'posters' => count($vault->listPosters()),
                 'snapshots' => count($vault->listProductSnapshots()),
             ],
-            'hasEditingSubscription' => $website->hasActiveEditingSubscription(),
         ]);
     }
 

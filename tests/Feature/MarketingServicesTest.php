@@ -8,7 +8,6 @@ use App\Mail\WebsiteNewsletter;
 use App\Models\NewsletterSubscriber;
 use App\Models\User;
 use App\Models\Website;
-use App\Models\WebsiteSubscription;
 use App\Services\NewsletterGenerator;
 use App\Services\PosterExporter;
 use App\Services\PosterGenerator;
@@ -48,7 +47,7 @@ class MarketingServicesTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_content_edit_requires_active_subscription(): void
+    public function test_content_edit_is_available_without_subscription(): void
     {
         $owner = User::factory()->create();
         $website = $this->readyWebsite($owner);
@@ -58,17 +57,12 @@ class MarketingServicesTest extends TestCase
 
         $this->actingAs($owner)
             ->get(route('websites.content.edit', $website))
-            ->assertRedirect(route('websites.subscription.show', $website));
-
-        $this->actingAs($owner)->post(route('websites.content.update', $website), [
-            'offering_type' => 'products',
-            'offerings' => [['name' => 'New', 'description' => '', 'price' => 'R10']],
-        ])->assertRedirect(route('websites.subscription.show', $website));
+            ->assertOk();
 
         File::deleteDirectory($website->sitePath());
     }
 
-    public function test_stub_subscription_unlocks_content_editing_and_records_vault_snapshot(): void
+    public function test_content_edit_records_vault_snapshot(): void
     {
         $owner = User::factory()->create();
         $website = $this->readyWebsite($owner);
@@ -77,12 +71,6 @@ class MarketingServicesTest extends TestCase
         File::put($website->sitePath().'/index.html',
             '<html><body><ul><li data-offering="1"><span data-field="name">Old</span>'
             .'<span data-field="description"></span><span data-field="price">R1</span></li></ul></body></html>');
-
-        $this->actingAs($owner)
-            ->post(route('websites.subscription.purchase', $website))
-            ->assertRedirect(route('websites.subscription.show', $website));
-
-        $this->assertTrue($website->fresh()->hasActiveEditingSubscription());
 
         $this->actingAs($owner)->post(route('websites.content.update', $website), [
             'offering_type' => 'products',

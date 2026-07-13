@@ -16,20 +16,15 @@ use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Edits to the business data of an already-generated site (requires active
- * manual-editing subscription): offerings, tagline, and contact email.
+ * Edits to the business data of an already-generated site: offerings, tagline,
+ * and contact email.
  */
 class ContentController extends Controller
 {
-    public function edit(Request $request, Website $website, SiteContentUpdater $updater): View|RedirectResponse
+    public function edit(Request $request, Website $website, SiteContentUpdater $updater): View
     {
         abort_unless($website->user_id === $request->user()->id, 403);
         abort_unless($website->isGenerated(), 404);
-
-        if (! $website->hasActiveEditingSubscription()) {
-            return redirect()->route('websites.subscription.show', $website)
-                ->with('error', 'Manual content editing requires an active yearly subscription.');
-        }
 
         $website->load('images');
 
@@ -58,11 +53,6 @@ class ContentController extends Controller
     {
         abort_unless($website->user_id === $request->user()->id, 403);
         abort_unless($website->isGenerated(), 404);
-
-        if (! $website->hasActiveEditingSubscription()) {
-            return redirect()->route('websites.subscription.show', $website)
-                ->with('error', 'Manual content editing requires an active yearly subscription.');
-        }
 
         $settingsBefore = [
             'product_catalog' => WebsiteProductCatalog::forWebsite($website)->get(),

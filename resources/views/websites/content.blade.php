@@ -26,8 +26,7 @@
     <h1>Edit content</h1>
     <p class="muted">
         Update your {{ $website->settings['offering_label'] ?? $website->settings['offering_type'] ?? 'services' }}, prices, tagline, and contact
-        email directly on <strong>{{ $website->name }}</strong> — included with your manual-editing subscription.
-        The design stays exactly as it is.
+        email directly on <strong>{{ $website->name }}</strong>. The design stays exactly as it is.
     </p>
 
     @unless ($editable)

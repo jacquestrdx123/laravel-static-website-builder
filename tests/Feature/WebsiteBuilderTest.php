@@ -169,19 +169,16 @@ class WebsiteBuilderTest extends TestCase
             'settings' => ['offering_type' => 'products', 'offerings' => []],
         ]);
 
-        $website->subscriptions()->create([
-            'user_id' => $owner->id,
-            'type' => \App\Models\WebsiteSubscription::TYPE_MANUAL_EDITING,
-            'status' => \App\Models\WebsiteSubscription::STATUS_ACTIVE,
-            'starts_at' => now(),
-            'expires_at' => now()->addYear(),
-            'note' => '[test]',
-        ]);
-
         File::ensureDirectoryExists($website->sitePath());
         File::put($website->sitePath().'/index.html',
             '<html><body><ul><li data-offering="1"><span data-field="name">Old</span>'
             .'<span data-field="description"></span><span data-field="price">R1</span></li></ul></body></html>');
+
+        \App\Services\WebsiteProductCatalog::forWebsite($website)->save(
+            \App\Services\WebsiteProductCatalog::forWebsite($website)->buildFromOfferings(
+                [['name' => 'Old', 'description' => '', 'price' => 'R1', 'image_id' => null]],
+            )
+        );
 
         $response = $this->actingAs($owner)->post(route('websites.content.update', $website), [
             'offering_type' => 'products',
@@ -218,15 +215,6 @@ class WebsiteBuilderTest extends TestCase
                     ['name' => 'Mug', 'description' => 'Stored short note', 'price' => 'R120', 'image_id' => null],
                 ],
             ],
-        ]);
-
-        $website->subscriptions()->create([
-            'user_id' => $owner->id,
-            'type' => \App\Models\WebsiteSubscription::TYPE_MANUAL_EDITING,
-            'status' => \App\Models\WebsiteSubscription::STATUS_ACTIVE,
-            'starts_at' => now(),
-            'expires_at' => now()->addYear(),
-            'note' => '[test]',
         ]);
 
         $galleryPath = UploadedFile::fake()->image('gallery.jpg')->store('uploads/'.$website->id, 'local');

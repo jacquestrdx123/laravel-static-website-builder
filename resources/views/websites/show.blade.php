@@ -43,11 +43,7 @@
             <div class="actions" style="justify-content: space-between; margin-bottom: .8rem;">
                 <strong>Preview</strong>
                 <span class="actions">
-                    @if ($hasEditingSubscription)
-                        <a class="btn secondary" href="{{ route('websites.content.edit', $website) }}">✏ Edit content</a>
-                    @else
-                        <a class="btn secondary" href="{{ route('websites.subscription.show', $website) }}">✏ Edit content (subscription)</a>
-                    @endif
+                    <a class="btn secondary" href="{{ route('websites.content.edit', $website) }}">✏ Edit content</a>
                     <a class="btn secondary" target="_blank" href="{{ $website->previewUrl() }}">Open full screen ↗</a>
                 </span>
             </div>
@@ -80,9 +76,6 @@
             <strong>Marketing services</strong>
             <p class="hint">Newsletters and posters use prepaid credits. Content history is stored in your private website vault.</p>
             <div class="actions">
-                <a class="btn secondary" href="{{ route('websites.subscription.show', $website) }}">
-                    Subscription {{ $hasEditingSubscription ? '(active)' : '' }}
-                </a>
                 <a class="btn secondary" href="{{ route('websites.newsletters.index', $website) }}">
                     Newsletters ({{ $vaultCounts['newsletters'] }})
                 </a>
