@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Free, instant edits to the business data of an already-generated site:
@@ -23,9 +24,25 @@ class ContentController extends Controller
         abort_unless($website->user_id === $request->user()->id, 403);
         abort_unless($website->isGenerated(), 404);
 
+        $website->load('images');
+
         return view('websites.content', [
             'website' => $website,
             'editable' => $updater->supportsEditing($website),
+            'images' => $website->images,
+            'imagesById' => $website->images->keyBy('id'),
+            'offerings' => $this->offeringsForForm($website, $updater),
+        ]);
+    }
+
+    public function image(Request $request, Website $website, WebsiteImage $image): Response
+    {
+        abort_unless($website->user_id === $request->user()->id, 403);
+        abort_unless($image->website_id === $website->id, 404);
+        abort_unless($image->existsOnDisk(), 404);
+
+        return response()->file(Storage::disk('local')->path($image->path), [
+            'Content-Type' => $image->mime_type,
         ]);
     }
 
@@ -126,5 +143,42 @@ class ContentController extends Controller
             Storage::disk('local')->path($image->path),
             $sitePath.'/assets/'.$image->assetName()
         );
+    }
+
+    /**
+     * Merge stored offerings with the live copy on the generated site so the form
+     * shows AI-elaborated descriptions and linked photos.
+     *
+     * @return list<array{name: string, description: ?string, price: ?string, image_id: ?int}>
+     */
+    private function offeringsForForm(Website $website, SiteContentUpdater $updater): array
+    {
+        if (old('offerings') !== null) {
+            return old('offerings', []);
+        }
+
+        $stored = $website->settings['offerings'] ?? [];
+        $live = $updater->readOfferingsFromSite($website);
+
+        if ($stored === [] && $live === []) {
+            return [['name' => '', 'description' => '', 'price' => '', 'image_id' => null]];
+        }
+
+        $count = max(count($stored), count($live));
+        $offerings = [];
+
+        for ($index = 0; $index < $count; $index++) {
+            $storedOffering = $stored[$index] ?? [];
+            $liveOffering = $live[$index] ?? [];
+
+            $offerings[] = [
+                'name' => $liveOffering['name'] ?? $storedOffering['name'] ?? '',
+                'description' => $liveOffering['description'] ?? $storedOffering['description'] ?? '',
+                'price' => $liveOffering['price'] ?? $storedOffering['price'] ?? '',
+                'image_id' => $storedOffering['image_id'] ?? $liveOffering['image_id'] ?? null,
+            ];
+        }
+
+        return $offerings;
     }
 }

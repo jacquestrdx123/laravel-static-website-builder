@@ -59,6 +59,89 @@ class SiteContentUpdater
                 || str_contains(File::get($index), 'data-content'));
     }
 
+    /**
+     * Read the live offering copy from the generated site. When the AI elaborated
+     * descriptions during generation, that text lives in the HTML — not in settings.
+     *
+     * @return list<array{name: string, description: ?string, price: ?string, image_id: ?int}>
+     */
+    public function readOfferingsFromSite(Website $website): array
+    {
+        $index = $website->sitePath().'/index.html';
+
+        if (! File::exists($index) || ! str_contains(File::get($index), 'data-offering')) {
+            return [];
+        }
+
+        libxml_use_internal_errors(true);
+
+        $doc = new DOMDocument;
+        $doc->loadHTML(mb_encode_numericentity(File::get($index), [0x80, 0x10FFFF, 0, ~0], 'UTF-8'));
+        libxml_clear_errors();
+
+        $xpath = new DOMXPath($doc);
+        $assetToImageId = array_flip($this->imageAssetsById($website));
+        $offerings = [];
+
+        foreach ($xpath->query('//*[@data-offering]') as $item) {
+            if (! $item instanceof DOMElement) {
+                continue;
+            }
+
+            $imageId = null;
+
+            foreach ($xpath->query('.//*[@data-field="image"]', $item) as $element) {
+                if (! $element instanceof DOMElement || strtolower($element->tagName) !== 'img') {
+                    continue;
+                }
+
+                $src = $element->getAttribute('src');
+
+                if ($src !== '' && isset($assetToImageId[$src])) {
+                    $imageId = $assetToImageId[$src];
+                    break;
+                }
+            }
+
+            $offerings[] = [
+                'name' => $this->fieldText($xpath, $item, 'name'),
+                'description' => $this->fieldText($xpath, $item, 'description') ?: null,
+                'price' => $this->fieldText($xpath, $item, 'price') ?: null,
+                'image_id' => $imageId,
+            ];
+        }
+
+        // The first offerings group is authoritative; additional groups are duplicates.
+        $seen = [];
+        $unique = [];
+
+        foreach ($offerings as $offering) {
+            $key = ($offering['name'] ?? '').'|'.($offering['price'] ?? '');
+
+            if (isset($seen[$key])) {
+                continue;
+            }
+
+            $seen[$key] = true;
+            $unique[] = $offering;
+        }
+
+        return $unique;
+    }
+
+    private function fieldText(DOMXPath $xpath, DOMElement $item, string $field): string
+    {
+        foreach ($xpath->query('.//*[@data-field="'.$field.'"]', $item) as $element) {
+            return trim($element->textContent ?? '');
+        }
+
+        if ($item->getAttribute('data-field') === $field) {
+            return trim($item->textContent ?? '');
+        }
+
+        return '';
+    }
+
     private function updateHtmlFile(string $path, array $settings, array $imageAssets): bool
     {
         $html = File::get($path);
@@ -69,7 +152,7 @@ class SiteContentUpdater
 
         libxml_use_internal_errors(true);
 
-        $doc = new DOMDocument();
+        $doc = new DOMDocument;
         // Entity-encode non-ASCII so loadHTML doesn't mangle UTF-8.
         $doc->loadHTML(mb_encode_numericentity($html, [0x80, 0x10FFFF, 0, ~0], 'UTF-8'));
         libxml_clear_errors();

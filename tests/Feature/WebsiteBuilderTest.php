@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Jobs\GenerateWebsiteJob;
 use App\Models\User;
 use App\Models\Website;
+use App\Models\WebsiteImage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
@@ -188,6 +189,86 @@ class WebsiteBuilderTest extends TestCase
         // Settings updated, and no credits were involved at any point.
         $this->assertSame('New product', $website->fresh()->settings['offerings'][0]['name']);
         $this->assertSame(0, $owner->fresh()->ai_credits);
+
+        File::deleteDirectory($website->sitePath());
+    }
+
+    public function test_content_edit_page_shows_photos_and_live_descriptions(): void
+    {
+        Storage::fake('local');
+
+        $owner = User::factory()->create();
+
+        $website = $owner->websites()->create([
+            'name' => 'Gallery Shop',
+            'slug' => 'gallery-shop',
+            'status' => Website::STATUS_READY,
+            'settings' => [
+                'offering_type' => 'products',
+                'offerings' => [
+                    ['name' => 'Mug', 'description' => 'Stored short note', 'price' => 'R120', 'image_id' => null],
+                ],
+            ],
+        ]);
+
+        $galleryPath = UploadedFile::fake()->image('gallery.jpg')->store('uploads/'.$website->id, 'local');
+        $productPath = UploadedFile::fake()->image('product.jpg')->store('uploads/'.$website->id, 'local');
+
+        $galleryImage = $website->images()->create([
+            'path' => $galleryPath,
+            'original_name' => 'gallery.jpg',
+            'type' => WebsiteImage::TYPE_GALLERY,
+            'description' => 'Our storefront at sunset',
+            'mime_type' => 'image/jpeg',
+            'sort' => 0,
+        ]);
+
+        $productImage = $website->images()->create([
+            'path' => $productPath,
+            'original_name' => 'product.jpg',
+            'type' => WebsiteImage::TYPE_PRODUCT,
+            'description' => 'Handmade ceramic mug',
+            'mime_type' => 'image/jpeg',
+            'sort' => 1,
+        ]);
+
+        $website->update([
+            'settings' => array_merge($website->settings, [
+                'offerings' => [
+                    [
+                        'name' => 'Mug',
+                        'description' => 'Stored short note',
+                        'price' => 'R120',
+                        'image_id' => $productImage->id,
+                    ],
+                ],
+            ]),
+        ]);
+
+        File::ensureDirectoryExists($website->sitePath());
+        File::put($website->sitePath().'/index.html', <<<'HTML'
+            <html><body><ul>
+                <li data-offering="1">
+                    <span data-field="name">Mug</span>
+                    <span data-field="description">AI-crafted description for the handmade mug</span>
+                    <span data-field="price">R120</span>
+                    <img data-field="image" src="assets/image-2.jpg" alt="Mug">
+                </li>
+            </ul></body></html>
+            HTML);
+
+        $this->actingAs($owner)
+            ->get(route('websites.content.edit', $website))
+            ->assertOk()
+            ->assertSee('Your photos')
+            ->assertSee('Our storefront at sunset')
+            ->assertSee('Handmade ceramic mug')
+            ->assertSee('AI-crafted description for the handmade mug')
+            ->assertSee(route('websites.images.show', [$website, $galleryImage]), false);
+
+        $this->actingAs($owner)
+            ->get(route('websites.images.show', [$website, $galleryImage]))
+            ->assertOk();
 
         File::deleteDirectory($website->sitePath());
     }

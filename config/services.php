@@ -44,4 +44,14 @@ return [
         ],
     ],
 
+    'hostafrica' => [
+        'endpoint' => env('HOSTAFRICA_ENDPOINT', 'https://my.hostafrica.com/modules/addons/DomainsReseller/api/index.php'),
+        'username' => env('HOSTAFRICA_USERNAME'),
+        'api_key' => env('HOSTAFRICA_API_KEY'),
+        'default_nameservers' => [
+            'ns1' => env('HOSTAFRICA_NS1', 'ns1.hostafrica.com'),
+            'ns2' => env('HOSTAFRICA_NS2', 'ns2.hostafrica.com'),
+        ],
+    ],
+
 ];

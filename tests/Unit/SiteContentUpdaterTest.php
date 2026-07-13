@@ -131,4 +131,20 @@ class SiteContentUpdaterTest extends TestCase
         $this->assertStringNotContainsString('<script>alert(1)</script>', $html);
         $this->assertStringContainsString('Fish &amp; chips', $html);
     }
+
+    public function test_read_offerings_from_site_returns_live_copy(): void
+    {
+        $website = $this->makeWebsite([
+            'offerings' => [
+                ['name' => 'Flat white', 'description' => 'Short note', 'price' => 'R38'],
+            ],
+        ]);
+
+        $live = app(SiteContentUpdater::class)->readOfferingsFromSite($website);
+
+        $this->assertCount(2, $live);
+        $this->assertSame('Flat white', $live[0]['name']);
+        $this->assertSame('Silky espresso and milk', $live[0]['description']);
+        $this->assertSame('R38', $live[0]['price']);
+    }
 }

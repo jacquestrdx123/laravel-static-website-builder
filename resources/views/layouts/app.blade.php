@@ -88,6 +88,7 @@
     <a class="brand" href="{{ url('/') }}">Site<span>Forge</span></a>
     @auth
         <a class="link" href="{{ route('dashboard') }}">My websites</a>
+        <a class="link" href="{{ route('domains.index') }}">Domains</a>
         <a class="link" href="{{ route('websites.create') }}">New website</a>
         <span class="spacer"></span>
         <a class="credits-pill" href="{{ route('billing.index') }}">{{ auth()->user()->ai_credits }} credits</a>

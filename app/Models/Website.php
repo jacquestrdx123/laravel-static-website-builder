@@ -10,10 +10,15 @@ use Illuminate\Support\Facades\Storage;
 class Website extends Model
 {
     public const STATUS_DRAFT = 'draft';
+
     public const STATUS_QUEUED = 'queued';
+
     public const STATUS_GENERATING = 'generating';
+
     public const STATUS_READY = 'ready';
+
     public const STATUS_FAILED = 'failed';
+
     public const STATUS_PUBLISHED = 'published';
 
     protected $fillable = [
@@ -38,6 +43,11 @@ class Website extends Model
     public function images(): HasMany
     {
         return $this->hasMany(WebsiteImage::class)->orderBy('sort');
+    }
+
+    public function domains(): HasMany
+    {
+        return $this->hasMany(Domain::class);
     }
 
     /**
