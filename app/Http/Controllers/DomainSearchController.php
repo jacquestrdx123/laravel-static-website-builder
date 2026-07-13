@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\DomainCreditPricing;
 use App\Services\HostAfricaClient;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -19,7 +20,7 @@ class DomainSearchController extends Controller
         ]);
     }
 
-    public function search(Request $request, HostAfricaClient $client): RedirectResponse
+    public function search(Request $request, HostAfricaClient $client, DomainCreditPricing $creditPricing): RedirectResponse
     {
         $data = $request->validate([
             'searchTerm' => ['required', 'string', 'max:255'],
@@ -43,8 +44,10 @@ class DomainSearchController extends Controller
                     try {
                         $pricing = $client->pricing('register', $result['domain']);
                         $result['price'] = $this->extractRegisterPrice($pricing);
+                        $result['credits'] = $creditPricing->creditsFor($pricing, 'register');
                     } catch (RuntimeException) {
                         $result['price'] = null;
+                        $result['credits'] = $creditPricing->creditsFromPriceString(null);
                     }
                 }
             }

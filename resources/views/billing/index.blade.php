@@ -3,9 +3,27 @@
 @section('title', 'Billing')
 
 @section('content')
-    <h1>AI credits</h1>
+    <h1>Credits</h1>
     <p class="muted">You have <strong>{{ $user->ai_credits }}</strong> credit{{ $user->ai_credits === 1 ? '' : 's' }}.
-        Each website generation costs {{ config('sites.generation_cost') }}.</p>
+        All services are prepaid from your credit balance.</p>
+
+    <div class="card">
+        <h2 style="margin-top:0">Service costs</h2>
+        <table>
+            <thead><tr><th>Service</th><th>Cost</th></tr></thead>
+            <tbody>
+            <tr>
+                <td>AI website generation</td>
+                <td>{{ config('sites.generation_cost') }} credit{{ config('sites.generation_cost') === 1 ? '' : 's' }}</td>
+            </tr>
+            <tr>
+                <td>Domain registration / transfer / renewal</td>
+                <td>Based on registrar price (shown before checkout)</td>
+            </tr>
+            </tbody>
+        </table>
+        <p class="hint">Domain prices are converted to credits using a {{ number_format(config('sites.credit_unit_cents') / 100, 2) }} currency unit per credit.</p>
+    </div>
 
     <div class="card">
         <h2 style="margin-top:0">Buy credits</h2>

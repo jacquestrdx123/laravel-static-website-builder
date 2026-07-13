@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Domain;
 use App\Models\DomainOrder;
+use App\Models\User;
 use App\Models\Website;
+use App\Services\DomainCreditPricing;
 use App\Services\HostAfricaClient;
 use App\Support\DomainContactBuilder;
 use Illuminate\Http\RedirectResponse;
@@ -15,20 +17,31 @@ use RuntimeException;
 
 class DomainTransferController extends Controller
 {
-    public function create(Request $request): View
+    public function create(Request $request, HostAfricaClient $client, DomainCreditPricing $pricing): View
     {
-        $defaultContact = DomainContactBuilder::fromUser($request->user());
+        $domain = strtolower((string) $request->query('domain', ''));
+        $creditCost = null;
+
+        if (filled($domain)) {
+            try {
+                $apiPricing = $client->pricing('transfer', $domain);
+                $creditCost = $pricing->creditsFor($apiPricing, 'transfer');
+            } catch (RuntimeException) {
+                $creditCost = $pricing->creditsFromPriceString(null);
+            }
+        }
 
         return view('domains.register', [
-            'domain' => strtolower((string) $request->query('domain', '')),
+            'domain' => $domain,
             'mode' => 'transfer',
-            'defaultContact' => $defaultContact,
+            'creditCost' => $creditCost,
+            'defaultContact' => DomainContactBuilder::fromUser($request->user()),
             'defaultNameservers' => DomainContactBuilder::defaultNameservers(),
             'websites' => $request->user()->websites()->latest()->get(),
         ]);
     }
 
-    public function store(Request $request, HostAfricaClient $client): RedirectResponse
+    public function store(Request $request, HostAfricaClient $client, DomainCreditPricing $pricing): RedirectResponse
     {
         $data = $request->validate([
             'domain' => ['required', 'string', 'max:255', 'regex:/^[a-z0-9.-]+$/i'],
@@ -68,12 +81,24 @@ class DomainTransferController extends Controller
             'ns5' => $data['nameservers']['ns5'] ?? null,
         ]);
 
-        try {
-            $pricing = $client->pricing('transfer', $data['domain']);
-            $price = isset($pricing['transfer'])
-                ? (string) (is_array($pricing['transfer']) ? reset($pricing['transfer']) : $pricing['transfer'])
-                : ((string) ($pricing['price'] ?? null));
+        $user = $request->user();
 
+        try {
+            $apiPricing = $client->pricing('transfer', $data['domain']);
+            $price = isset($apiPricing['transfer'])
+                ? (string) (is_array($apiPricing['transfer']) ? reset($apiPricing['transfer']) : $apiPricing['transfer'])
+                : ((string) ($apiPricing['price'] ?? null));
+            $credits = $pricing->creditsFor($apiPricing, 'transfer', (int) $data['regperiod'], $data['addons'] ?? []);
+        } catch (RuntimeException $e) {
+            return back()->withInput()->with('error', $e->getMessage());
+        }
+
+        if (! $this->chargeCredits($user, $credits, 'Domain transfer: '.$data['domain'])) {
+            return redirect()->route('billing.index')
+                ->with('error', 'You need '.$credits.' credits to transfer this domain. You have '.$user->ai_credits.'.');
+        }
+
+        try {
             $response = $client->transfer([
                 'domain' => strtolower($data['domain']),
                 'eppcode' => $data['eppcode'],
@@ -87,12 +112,14 @@ class DomainTransferController extends Controller
                 ],
             ]);
         } catch (RuntimeException $e) {
+            $user->addCredits($credits, 'Refund: domain transfer failed ('.$data['domain'].')');
+
             return back()->withInput()->with('error', $e->getMessage());
         }
 
-        $domainRecord = DB::transaction(function () use ($request, $data, $contact, $nameservers, $price, $response) {
+        $domainRecord = DB::transaction(function () use ($user, $data, $contact, $nameservers, $price, $credits, $response) {
             $domainRecord = Domain::create([
-                'user_id' => $request->user()->id,
+                'user_id' => $user->id,
                 'website_id' => $data['website_id'] ?? null,
                 'domain' => strtolower($data['domain']),
                 'status' => Domain::STATUS_PENDING,
@@ -103,19 +130,20 @@ class DomainTransferController extends Controller
             ]);
 
             DomainOrder::create([
-                'user_id' => $request->user()->id,
+                'user_id' => $user->id,
                 'domain_id' => $domainRecord->id,
                 'type' => DomainOrder::TYPE_TRANSFER,
                 'domain' => $domainRecord->domain,
                 'regperiod' => $data['regperiod'],
+                'credits' => $credits,
                 'price' => $price,
                 'status' => DomainOrder::STATUS_COMPLETED,
-                'note' => '[stub - no payment taken]',
+                'note' => 'Paid with '.$credits.' credits',
             ]);
 
             if ($domainRecord->website_id) {
                 Website::whereKey($domainRecord->website_id)
-                    ->where('user_id', $request->user()->id)
+                    ->where('user_id', $user->id)
                     ->update(['custom_domain' => $domainRecord->domain]);
             }
 
@@ -124,6 +152,17 @@ class DomainTransferController extends Controller
 
         return redirect()
             ->route('domains.show', $domainRecord)
-            ->with('status', 'Domain transfer initiated.');
+            ->with('status', 'Domain transfer initiated. '.$credits.' credits were deducted.');
+    }
+
+    private function chargeCredits(User $user, int $credits, string $description): bool
+    {
+        try {
+            $user->spendCredits($credits, $description);
+
+            return true;
+        } catch (RuntimeException) {
+            return false;
+        }
     }
 }

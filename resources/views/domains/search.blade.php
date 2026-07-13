@@ -4,7 +4,7 @@
 
 @section('content')
     <h1>Search domains</h1>
-    <p class="muted">Check availability and register a custom domain for your website.</p>
+    <p class="muted">Check availability and register a custom domain using your prepaid credits.</p>
 
     <div class="card">
         <form method="POST" action="{{ route('domains.search.perform') }}">
@@ -29,7 +29,7 @@
                 <tr>
                     <th>Domain</th>
                     <th>Status</th>
-                    <th>Price</th>
+                    <th>Credits</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -44,7 +44,7 @@
                                 <span class="status-badge status-failed">Taken</span>
                             @endif
                         </td>
-                        <td>{{ $result['price'] ?? '—' }}</td>
+                        <td>{{ isset($result['credits']) ? $result['credits'].' credit'.($result['credits'] === 1 ? '' : 's') : '—' }}</td>
                         <td>
                             @if ($result['available'])
                                 <a class="btn" style="padding:.35rem .9rem" href="{{ route('domains.register', ['domain' => $result['domain']]) }}">Register</a>

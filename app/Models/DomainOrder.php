@@ -25,6 +25,7 @@ class DomainOrder extends Model
         'type',
         'domain',
         'regperiod',
+        'credits',
         'price',
         'status',
         'note',

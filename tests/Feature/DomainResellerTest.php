@@ -25,6 +25,8 @@ class DomainResellerTest extends TestCase
                 'ns1' => 'ns1.hostafrica.com',
                 'ns2' => 'ns2.hostafrica.com',
             ],
+            'sites.credit_unit_cents' => 2000,
+            'sites.domain_default_credits' => 5,
         ]);
     }
 
@@ -51,7 +53,7 @@ class DomainResellerTest extends TestCase
         $results = session('domain_search_results');
         $this->assertSame('myshop.co.za', $results[0]['domain']);
         $this->assertTrue($results[0]['available']);
-        $this->assertSame('R99.00', $results[0]['price']);
+        $this->assertSame(5, $results[0]['credits']);
         $this->assertFalse($results[1]['available']);
 
         Http::assertSent(function ($request) {
@@ -61,7 +63,7 @@ class DomainResellerTest extends TestCase
         });
     }
 
-    public function test_domain_registration_creates_domain_and_stub_order(): void
+    public function test_domain_registration_deducts_credits_and_records_order(): void
     {
         Http::fake([
             'hostafrica.test/*' => Http::sequence()
@@ -69,7 +71,7 @@ class DomainResellerTest extends TestCase
                 ->push(['result' => 'success']),
         ]);
 
-        $user = User::factory()->create();
+        $user = User::factory()->create(['ai_credits' => 10]);
 
         $response = $this->actingAs($user)->post(route('domains.register.store'), [
             'domain' => 'myshop.co.za',
@@ -99,18 +101,48 @@ class DomainResellerTest extends TestCase
         $this->assertSame('myshop.co.za', $domain->domain);
         $this->assertSame(Domain::STATUS_ACTIVE, $domain->status);
         $this->assertSame($user->id, $domain->user_id);
+        $this->assertSame(5, $user->fresh()->ai_credits);
 
         $order = DomainOrder::first();
         $this->assertSame(DomainOrder::TYPE_REGISTER, $order->type);
         $this->assertSame(DomainOrder::STATUS_COMPLETED, $order->status);
-        $this->assertSame('[stub - no payment taken]', $order->note);
+        $this->assertSame(5, $order->credits);
+        $this->assertSame('Paid with 5 credits', $order->note);
+    }
 
-        Http::assertSent(function ($request) {
-            return str_contains($request->url(), '/order/domains/register')
-                && $request->hasHeader('username', 'reseller@example.com')
-                && $request->hasHeader('token')
-                && $request['domain'] === 'myshop.co.za';
-        });
+    public function test_domain_registration_requires_sufficient_credits(): void
+    {
+        Http::fake([
+            'hostafrica.test/*' => Http::response(['register' => 'R99.00']),
+        ]);
+
+        $user = User::factory()->create(['ai_credits' => 1]);
+
+        $response = $this->actingAs($user)->post(route('domains.register.store'), [
+            'domain' => 'myshop.co.za',
+            'regperiod' => 1,
+            'nameservers' => [
+                'ns1' => 'ns1.hostafrica.com',
+                'ns2' => 'ns2.hostafrica.com',
+            ],
+            'contact' => [
+                'firstname' => 'Jacques',
+                'lastname' => 'Tredoux',
+                'companyname' => 'SiteForge',
+                'email' => 'jacques@example.com',
+                'address1' => '1 Main Road',
+                'address2' => '',
+                'city' => 'Cape Town',
+                'state' => 'WC',
+                'postcode' => '8001',
+                'country' => 'ZA',
+                'phonenumber' => '+27210000000',
+            ],
+        ]);
+
+        $response->assertRedirect(route('billing.index'));
+        $this->assertNull(Domain::first());
+        $this->assertSame(1, $user->fresh()->ai_credits);
     }
 
     public function test_user_cannot_manage_someone_elses_domain(): void

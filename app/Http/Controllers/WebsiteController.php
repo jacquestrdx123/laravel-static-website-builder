@@ -18,11 +18,17 @@ use RuntimeException;
 class WebsiteController extends Controller
 {
     public const SITE_TYPES = ['business', 'portfolio', 'restaurant', 'landing', 'personal', 'event'];
+
     public const OFFERING_TYPES = ['services', 'products'];
+
     public const MAX_OFFERINGS = 12;
+
     public const SECTIONS = ['hero', 'about', 'services', 'gallery', 'testimonials', 'pricing', 'faq', 'contact'];
+
     public const STYLES = ['minimal', 'bold', 'elegant', 'playful', 'corporate'];
+
     public const COLOR_SCHEMES = ['light', 'dark', 'auto'];
+
     public const FEATURES = ['smooth_scroll', 'animations', 'sticky_header', 'back_to_top', 'seo_meta', 'contact_form'];
 
     public function index(Request $request): View
@@ -93,7 +99,7 @@ class WebsiteController extends Controller
             );
         } catch (RuntimeException) {
             return redirect()->route('billing.index')
-                ->with('error', 'You need more AI credits to generate a website.');
+                ->with('error', 'You need more credits to generate a website.');
         }
 
         $website = $user->websites()->create([
@@ -207,7 +213,7 @@ class WebsiteController extends Controller
             );
         } catch (RuntimeException) {
             return redirect()->route('billing.index')
-                ->with('error', 'You need more AI credits to regenerate this website.');
+                ->with('error', 'You need more credits to regenerate this website.');
         }
 
         $website->update(['status' => Website::STATUS_QUEUED, 'error' => null]);

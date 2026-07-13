@@ -4,7 +4,10 @@
 
 @section('content')
     <h1>{{ $mode === 'transfer' ? 'Transfer domain' : 'Register domain' }}</h1>
-    <p class="hint">⚠ Payments are not wired up yet — orders are recorded immediately (development stub).</p>
+    <p class="muted">You have <strong>{{ auth()->user()->ai_credits }}</strong> credit{{ auth()->user()->ai_credits === 1 ? '' : 's' }}.</p>
+    @if ($creditCost)
+        <p class="muted">This order costs <strong>{{ $creditCost }} credit{{ $creditCost === 1 ? '' : 's' }}</strong> for 1 year (add-ons and extra years may increase the total).</p>
+    @endif
 
     <div class="card">
         <form method="POST" action="{{ $mode === 'transfer' ? route('domains.transfer.store') : route('domains.register.store') }}">
@@ -52,7 +55,7 @@
             </div>
 
             <div class="actions" style="margin-top:1.5rem">
-                <button type="submit">{{ $mode === 'transfer' ? 'Start transfer' : 'Register domain' }}</button>
+                <button type="submit">{{ $mode === 'transfer' ? 'Start transfer' : 'Register domain' }}@if($creditCost) (from {{ $creditCost }} credits)@endif</button>
                 <a class="btn secondary" href="{{ route('domains.search') }}">Back to search</a>
             </div>
         </form>

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Concerns\AuthorizesDomainAccess;
 use App\Models\Domain;
 use App\Models\DomainOrder;
+use App\Models\User;
 use App\Models\Website;
+use App\Services\DomainCreditPricing;
 use App\Services\HostAfricaClient;
 use App\Support\DomainContactBuilder;
 use Illuminate\Http\RedirectResponse;
@@ -25,7 +27,7 @@ class DomainController extends Controller
         ]);
     }
 
-    public function create(Request $request): View|RedirectResponse
+    public function create(Request $request, HostAfricaClient $client, DomainCreditPricing $pricing): View|RedirectResponse
     {
         $domain = strtolower((string) $request->query('domain', ''));
 
@@ -34,27 +36,39 @@ class DomainController extends Controller
                 ->with('error', 'Choose a domain from search results first.');
         }
 
-        $defaultContact = DomainContactBuilder::fromUser($request->user());
+        $creditCost = $this->quoteCredits($client, $pricing, 'register', $domain);
 
         return view('domains.register', [
             'domain' => $domain,
             'mode' => 'register',
-            'defaultContact' => $defaultContact,
+            'creditCost' => $creditCost,
+            'defaultContact' => DomainContactBuilder::fromUser($request->user()),
             'defaultNameservers' => DomainContactBuilder::defaultNameservers(),
             'websites' => $request->user()->websites()->latest()->get(),
         ]);
     }
 
-    public function store(Request $request, HostAfricaClient $client): RedirectResponse
+    public function store(Request $request, HostAfricaClient $client, DomainCreditPricing $pricing): RedirectResponse
     {
         $data = $this->validatedOrderRequest($request);
         $contact = DomainContactBuilder::contactFromValidated($data['contact']);
         $nameservers = $this->validatedNameservers($data['nameservers']);
+        $user = $request->user();
 
         try {
-            $pricing = $client->pricing('register', $data['domain']);
-            $price = $this->extractPrice($pricing, 'register');
+            $apiPricing = $client->pricing('register', $data['domain']);
+            $price = $this->extractPrice($apiPricing, 'register');
+            $credits = $pricing->creditsFor($apiPricing, 'register', (int) $data['regperiod'], $data['addons'] ?? []);
+        } catch (RuntimeException $e) {
+            return back()->withInput()->with('error', $e->getMessage());
+        }
 
+        if (! $this->chargeCredits($user, $credits, 'Domain registration: '.$data['domain'])) {
+            return redirect()->route('billing.index')
+                ->with('error', 'You need '.$credits.' credits to register this domain. You have '.$user->ai_credits.'.');
+        }
+
+        try {
             $response = $client->register([
                 'domain' => $data['domain'],
                 'regperiod' => $data['regperiod'],
@@ -67,12 +81,14 @@ class DomainController extends Controller
                 ],
             ]);
         } catch (RuntimeException $e) {
+            $user->addCredits($credits, 'Refund: domain registration failed ('.$data['domain'].')');
+
             return back()->withInput()->with('error', $e->getMessage());
         }
 
-        $domainRecord = DB::transaction(function () use ($request, $data, $contact, $nameservers, $price, $response) {
+        $domainRecord = DB::transaction(function () use ($user, $data, $contact, $nameservers, $price, $credits, $response) {
             $domainRecord = Domain::create([
-                'user_id' => $request->user()->id,
+                'user_id' => $user->id,
                 'website_id' => $data['website_id'] ?? null,
                 'domain' => strtolower($data['domain']),
                 'status' => Domain::STATUS_ACTIVE,
@@ -86,19 +102,20 @@ class DomainController extends Controller
             ]);
 
             DomainOrder::create([
-                'user_id' => $request->user()->id,
+                'user_id' => $user->id,
                 'domain_id' => $domainRecord->id,
                 'type' => DomainOrder::TYPE_REGISTER,
                 'domain' => $domainRecord->domain,
                 'regperiod' => $data['regperiod'],
+                'credits' => $credits,
                 'price' => $price,
                 'status' => DomainOrder::STATUS_COMPLETED,
-                'note' => '[stub - no payment taken]',
+                'note' => 'Paid with '.$credits.' credits',
             ]);
 
             if ($domainRecord->website_id) {
                 Website::whereKey($domainRecord->website_id)
-                    ->where('user_id', $request->user()->id)
+                    ->where('user_id', $user->id)
                     ->update(['custom_domain' => $domainRecord->domain]);
             }
 
@@ -107,19 +124,21 @@ class DomainController extends Controller
 
         return redirect()
             ->route('domains.show', $domainRecord)
-            ->with('status', 'Domain registered successfully.');
+            ->with('status', 'Domain registered successfully. '.$credits.' credits were deducted.');
     }
 
-    public function show(Request $request, Domain $domain, HostAfricaClient $client): View
+    public function show(Request $request, Domain $domain, HostAfricaClient $client, DomainCreditPricing $pricing): View
     {
         $this->authorizeDomain($request, $domain);
 
         $information = null;
         $lock = null;
+        $renewCredits = null;
 
         try {
             $information = $client->information($domain->domain);
             $lock = $client->getLock($domain->domain);
+            $renewCredits = $this->quoteCredits($client, $pricing, 'renew', $domain->domain);
         } catch (RuntimeException) {
             // Keep the page usable when the upstream API is unavailable.
         }
@@ -128,11 +147,12 @@ class DomainController extends Controller
             'domain' => $domain->load('website'),
             'information' => $information,
             'lock' => $lock,
+            'renewCredits' => $renewCredits,
             'websites' => $request->user()->websites()->latest()->get(),
         ]);
     }
 
-    public function renew(Request $request, Domain $domain, HostAfricaClient $client): RedirectResponse
+    public function renew(Request $request, Domain $domain, HostAfricaClient $client, DomainCreditPricing $pricing): RedirectResponse
     {
         $this->authorizeDomain($request, $domain);
 
@@ -140,10 +160,22 @@ class DomainController extends Controller
             'regperiod' => ['required', 'integer', 'min:1', 'max:10'],
         ]);
 
-        try {
-            $pricing = $client->pricing('renew', $domain->domain);
-            $price = $this->extractPrice($pricing, 'renew');
+        $user = $request->user();
 
+        try {
+            $apiPricing = $client->pricing('renew', $domain->domain);
+            $price = $this->extractPrice($apiPricing, 'renew');
+            $credits = $pricing->creditsFor($apiPricing, 'renew', (int) $data['regperiod']);
+        } catch (RuntimeException $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
+        if (! $this->chargeCredits($user, $credits, 'Domain renewal: '.$domain->domain)) {
+            return redirect()->route('billing.index')
+                ->with('error', 'You need '.$credits.' credits to renew this domain. You have '.$user->ai_credits.'.');
+        }
+
+        try {
             $response = $client->renew([
                 'domain' => $domain->domain,
                 'regperiod' => $data['regperiod'],
@@ -154,6 +186,8 @@ class DomainController extends Controller
                 ],
             ]);
         } catch (RuntimeException $e) {
+            $user->addCredits($credits, 'Refund: domain renewal failed ('.$domain->domain.')');
+
             return back()->with('error', $e->getMessage());
         }
 
@@ -164,17 +198,18 @@ class DomainController extends Controller
         ]);
 
         DomainOrder::create([
-            'user_id' => $request->user()->id,
+            'user_id' => $user->id,
             'domain_id' => $domain->id,
             'type' => DomainOrder::TYPE_RENEW,
             'domain' => $domain->domain,
             'regperiod' => $data['regperiod'],
+            'credits' => $credits,
             'price' => $price,
             'status' => DomainOrder::STATUS_COMPLETED,
-            'note' => '[stub - no payment taken]',
+            'note' => 'Paid with '.$credits.' credits',
         ]);
 
-        return back()->with('status', 'Domain renewed successfully.');
+        return back()->with('status', 'Domain renewed successfully. '.$credits.' credits were deducted.');
     }
 
     public function link(Request $request, Domain $domain): RedirectResponse
@@ -302,5 +337,33 @@ class DomainController extends Controller
         }
 
         return null;
+    }
+
+    private function chargeCredits(User $user, int $credits, string $description): bool
+    {
+        try {
+            $user->spendCredits($credits, $description);
+
+            return true;
+        } catch (RuntimeException) {
+            return false;
+        }
+    }
+
+    private function quoteCredits(
+        HostAfricaClient $client,
+        DomainCreditPricing $pricing,
+        string $type,
+        string $domain,
+        int $regperiod = 1,
+        array $addons = [],
+    ): int {
+        try {
+            $apiPricing = $client->pricing($type, $domain);
+
+            return $pricing->creditsFor($apiPricing, $type, $regperiod, $addons);
+        } catch (RuntimeException) {
+            return $pricing->creditsFromPriceString(null) * $regperiod;
+        }
     }
 }

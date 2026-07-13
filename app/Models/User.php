@@ -65,7 +65,7 @@ class User extends Authenticatable implements FilamentUser
                 ->decrement('ai_credits', $amount);
 
             if ($affected === 0) {
-                throw new RuntimeException('Insufficient AI credits.');
+                throw new RuntimeException('Insufficient credits.');
             }
 
             $this->creditTransactions()->create([

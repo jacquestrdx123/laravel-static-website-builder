@@ -50,6 +50,9 @@
 
     <div class="card">
         <h2 style="margin-top:0">Renew domain</h2>
+        @if ($renewCredits)
+            <p class="muted">Renewal costs from <strong>{{ $renewCredits }} credit{{ $renewCredits === 1 ? '' : 's' }}</strong> per year.</p>
+        @endif
         <form method="POST" action="{{ route('domains.renew', $domain) }}" class="actions">
             @csrf
             <select name="regperiod">
@@ -57,7 +60,7 @@
                     <option value="{{ $year }}">{{ $year }} year(s)</option>
                 @endfor
             </select>
-            <button type="submit">Renew (stub)</button>
+            <button type="submit">Renew with credits</button>
         </form>
     </div>
 
