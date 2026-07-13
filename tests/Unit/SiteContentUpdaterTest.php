@@ -163,4 +163,35 @@ class SiteContentUpdaterTest extends TestCase
         $this->assertSame('Silky espresso and milk', $live[0]['description']);
         $this->assertSame('R38', $live[0]['price']);
     }
+
+    public function test_read_offerings_resolves_image_from_site_asset_path(): void
+    {
+        $website = $this->makeWebsite(['offerings' => []]);
+
+        $image = $website->images()->create([
+            'path' => 'uploads/'.$website->id.'/mug.jpg',
+            'original_name' => 'mug.jpg',
+            'type' => \App\Models\WebsiteImage::TYPE_PRODUCT,
+            'mime_type' => 'image/jpeg',
+            'sort' => 0,
+        ]);
+
+        File::put($website->sitePath().'/index.html', <<<HTML
+        <html><body><ul>
+            <li data-offering="1">
+                <span data-field="name">Mug</span>
+                <span data-field="description">Nice mug</span>
+                <span data-field="price">R120</span>
+                <img data-field="image" src="assets/{$image->assetName()}" alt="Mug">
+            </li>
+        </ul></body></html>
+        HTML);
+
+        \Illuminate\Support\Facades\Storage::disk('local')->put('uploads/'.$website->id.'/mug.jpg', 'bytes');
+
+        $live = app(SiteContentUpdater::class)->readOfferingsFromSite($website->fresh(['images']));
+
+        $this->assertSame($image->id, $live[0]['image_id']);
+        $this->assertSame($image->asset_key, $live[0]['image_asset_key']);
+    }
 }

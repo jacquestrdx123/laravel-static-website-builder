@@ -28,6 +28,18 @@ class ContentController extends Controller
 
         $website->load('images');
 
+        $cdn = WebsiteAssetCdn::forWebsite($website);
+        foreach ($website->images as $image) {
+            if ($image->existsOnDisk()) {
+                try {
+                    $cdn->publish($image);
+                } catch (\Throwable) {
+                    // Preview still works via authenticated image route.
+                }
+            }
+        }
+        $website->load('images');
+
         return view('websites.content', [
             'website' => $website,
             'editable' => $updater->supportsEditing($website),
@@ -176,19 +188,28 @@ class ContentController extends Controller
             $live = $updater->readOfferingsFromSite($website);
             $liveById = collect($live)->keyBy('id');
             $liveByKey = collect($live)->keyBy(fn ($row) => strtolower($row['name']).'|'.($row['price'] ?? ''));
+            $storedByKey = collect($website->settings['offerings'] ?? [])->keyBy(
+                fn ($row) => strtolower($row['name'] ?? '').'|'.($row['price'] ?? '')
+            );
 
-            return array_map(function (array $item) use ($imagesByKey, $liveById, $liveByKey) {
+            return array_map(function (array $item) use ($website, $imagesByKey, $liveById, $liveByKey, $storedByKey) {
                 $liveOffering = $liveById->get($item['id'])
                     ?? $liveByKey->get(strtolower($item['name']).'|'.($item['price'] ?? ''));
+                $storedOffering = $storedByKey->get(strtolower($item['name']).'|'.($item['price'] ?? ''));
 
-                $imageId = null;
-                if (filled($item['image_asset_key'] ?? null) && $imagesByKey->has($item['image_asset_key'])) {
-                    $imageId = $imagesByKey->get($item['image_asset_key'])->id;
-                }
+                $imageId = $this->resolveOfferingImageId(
+                    $website,
+                    $imagesByKey,
+                    $item,
+                    is_array($liveOffering) ? $liveOffering : null,
+                    is_array($storedOffering) ? $storedOffering : null,
+                );
 
                 return [
                     'name' => $item['name'],
-                    'description' => $liveOffering['description'] ?? $item['description'] ?? '',
+                    'description' => (is_array($liveOffering) ? $liveOffering['description'] : null)
+                        ?? $item['description']
+                        ?? '',
                     'price' => $item['price'] ?? '',
                     'image_id' => $imageId,
                 ];
@@ -213,6 +234,9 @@ class ContentController extends Controller
             if ($imageId === null && filled($liveOffering['image_asset_key'] ?? null)) {
                 $imageId = $website->images->firstWhere('asset_key', $liveOffering['image_asset_key'])?->id;
             }
+            if ($imageId === null && filled($liveOffering['image_id'] ?? null)) {
+                $imageId = (int) $liveOffering['image_id'];
+            }
 
             $offerings[] = [
                 'name' => $liveOffering['name'] ?? $storedOffering['name'] ?? '',
@@ -223,5 +247,39 @@ class ContentController extends Controller
         }
 
         return $offerings;
+    }
+
+    /**
+     * @param  \Illuminate\Support\Collection<string, WebsiteImage>  $imagesByKey
+     * @param  array<string, mixed>  $catalogItem
+     * @param  array<string, mixed>|null  $liveOffering
+     * @param  array<string, mixed>|null  $storedOffering
+     */
+    private function resolveOfferingImageId(
+        Website $website,
+        $imagesByKey,
+        array $catalogItem,
+        ?array $liveOffering,
+        ?array $storedOffering,
+    ): ?int {
+        foreach ([
+            $catalogItem['image_asset_key'] ?? null,
+            $liveOffering['image_asset_key'] ?? null,
+        ] as $assetKey) {
+            if (filled($assetKey) && $imagesByKey->has($assetKey)) {
+                return $imagesByKey->get($assetKey)->id;
+            }
+        }
+
+        foreach ([
+            $storedOffering['image_id'] ?? null,
+            $liveOffering['image_id'] ?? null,
+        ] as $imageId) {
+            if (filled($imageId) && $website->images->contains('id', (int) $imageId)) {
+                return (int) $imageId;
+            }
+        }
+
+        return null;
     }
 }

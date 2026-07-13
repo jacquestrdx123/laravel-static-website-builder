@@ -79,6 +79,8 @@ class SiteContentUpdater
      */
     public function readOfferingsFromSite(Website $website): array
     {
+        $website->loadMissing('images');
+
         $index = $website->sitePath().'/index.html';
 
         if (! File::exists($index)) {
@@ -100,6 +102,7 @@ class SiteContentUpdater
         $xpath = new DOMXPath($doc);
         $cdn = WebsiteAssetCdn::forWebsite($website);
         $assetKeyByUrl = array_flip($cdn->urlMap());
+        $imageIdBySiteAssetPath = $this->imageIdBySiteAssetPath($website);
         $offerings = [];
 
         $nodes = $xpath->query('//*[@data-catalog-item]');
@@ -113,15 +116,40 @@ class SiteContentUpdater
             }
 
             $imageAssetKey = null;
+            $imageId = null;
 
             foreach ($xpath->query('.//*[@data-field="image"]', $item) as $element) {
                 if (! $element instanceof DOMElement || strtolower($element->tagName) !== 'img') {
                     continue;
                 }
 
-                $src = $element->getAttribute('src');
-                if ($src !== '' && isset($assetKeyByUrl[$src])) {
+                $src = trim($element->getAttribute('src'));
+                if ($src === '') {
+                    continue;
+                }
+
+                if (isset($assetKeyByUrl[$src])) {
                     $imageAssetKey = $assetKeyByUrl[$src];
+                    break;
+                }
+
+                $path = ltrim(str_replace('\\', '/', parse_url($src, PHP_URL_PATH) ?? $src), '/');
+                $path = preg_replace('#^(\.\./)+#', '', $path) ?? $path;
+
+                if (isset($assetKeyByUrl[$path])) {
+                    $imageAssetKey = $assetKeyByUrl[$path];
+                    break;
+                }
+
+                if (preg_match('#/cdn/\d+/([0-9a-f-]{36})$#i', $path, $matches)) {
+                    $imageAssetKey = $matches[1];
+                    break;
+                }
+
+                if (isset($imageIdBySiteAssetPath[$path])) {
+                    $imageId = $imageIdBySiteAssetPath[$path];
+                    $image = $website->images->firstWhere('id', $imageId);
+                    $imageAssetKey = $image?->asset_key;
                     break;
                 }
             }
@@ -132,6 +160,7 @@ class SiteContentUpdater
                 'description' => $this->fieldText($xpath, $item, 'description') ?: null,
                 'price' => $this->fieldText($xpath, $item, 'price') ?: null,
                 'image_asset_key' => $imageAssetKey,
+                'image_id' => $imageId,
             ];
         }
 
@@ -348,5 +377,17 @@ class SiteContentUpdater
         }
 
         return $unique;
+    }
+
+    /** @return array<string, int> site-relative asset path => website_images.id */
+    private function imageIdBySiteAssetPath(Website $website): array
+    {
+        $map = [];
+
+        foreach ($website->images as $image) {
+            $map['assets/'.$image->assetName()] = $image->id;
+        }
+
+        return $map;
     }
 }

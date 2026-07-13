@@ -21,6 +21,22 @@
         .photo-type { font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-soft); }
         .offering-photo { display: flex; gap: .8rem; align-items: flex-start; margin-top: .5rem; }
         .offering-photo .caption { font-size: .85rem; color: var(--ink-soft); margin-top: .25rem; }
+        .offering-row-layout {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 1rem;
+            align-items: start;
+        }
+        @media (max-width: 640px) {
+            .offering-row-layout { grid-template-columns: 1fr; }
+        }
+        .offering-photo-col .photo-preview { width: 120px; height: 120px; }
+        .offering-photo-col .photo-preview.placeholder-box {
+            color: var(--ink-soft);
+            font-size: .8rem;
+            text-align: center;
+            padding: .5rem;
+        }
     </style>
 
     <h1>Edit content</h1>
@@ -109,23 +125,25 @@
                             : null;
                     @endphp
                     <fieldset class="offering-row" style="border: 1px solid var(--line); border-radius: 8px; padding: .8rem 1rem; margin-bottom: .8rem;">
-                        @if ($linkedImage)
-                            <div class="offering-photo">
-                                @if ($linkedImage->existsOnDisk())
+                        <div class="offering-row-layout">
+                            <div class="offering-photo-col">
+                                @if ($linkedImage && $linkedImage->displayUrl())
                                     <div class="photo-preview">
-                                        <img src="{{ $linkedImage->previewUrl() }}" alt="{{ $linkedImage->original_name }}">
+                                        <img src="{{ $linkedImage->displayUrl() }}" alt="{{ $linkedImage->original_name }}">
                                     </div>
-                                @endif
-                                <div>
-                                    <div class="photo-type">{{ $linkedImage->typeLabel() }} photo</div>
-                                    <div style="font-size:.9rem">{{ $linkedImage->original_name }}</div>
+                                    <div class="photo-type" style="margin-top:.4rem">{{ $linkedImage->typeLabel() }} photo</div>
+                                    <div style="font-size:.85rem">{{ $linkedImage->original_name }}</div>
                                     @if (filled($linkedImage->description))
                                         <div class="caption">{{ $linkedImage->description }}</div>
                                     @endif
-                                </div>
+                                @else
+                                    <div class="photo-preview placeholder-box">
+                                        <span>No product photo yet</span>
+                                    </div>
+                                @endif
                             </div>
-                        @endif
 
+                            <div class="offering-fields-col">
                         <div class="grid-2">
                             <div>
                                 <label style="margin-top:0">Name</label>
@@ -142,9 +160,11 @@
                         <textarea name="offerings[{{ $i }}][description]" maxlength="500" rows="3"
                                   style="min-height:4rem">{{ $offering['description'] ?? '' }}</textarea>
                         <input type="hidden" name="offerings[{{ $i }}][image_id]" value="{{ $offering['image_id'] ?? '' }}">
-                        <label>Replace photo <span class="hint">(optional)</span></label>
+                        <label>{{ $linkedImage ? 'Replace photo' : 'Add photo' }} <span class="hint">(optional)</span></label>
                         <input type="file" name="offerings[{{ $i }}][image]" accept="image/jpeg,image/png,image/gif,image/webp" class="offering-photo-input">
                         <button type="button" class="btn secondary remove-offering" style="margin-top:.6rem; padding:.25rem .8rem">Remove</button>
+                            </div>
+                        </div>
                     </fieldset>
                 @endforeach
             </div>
@@ -177,8 +197,8 @@
                                 input.value = '';
                             }
                         });
-                        row.querySelectorAll('.offering-photo').forEach(function (block) {
-                            block.remove();
+                        row.querySelectorAll('.offering-photo-col').forEach(function (block) {
+                            block.innerHTML = '<div class="photo-preview placeholder-box"><span>No product photo yet</span></div>';
                         });
                         list.appendChild(row);
                         renumber();
@@ -199,8 +219,8 @@
                                     input.value = '';
                                 }
                             });
-                            row.querySelectorAll('.offering-photo').forEach(function (block) {
-                                block.remove();
+                            row.querySelectorAll('.offering-photo-col').forEach(function (block) {
+                                block.innerHTML = '<div class="photo-preview placeholder-box"><span>No product photo yet</span></div>';
                             });
                         }
                         renumber();

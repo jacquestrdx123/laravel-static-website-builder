@@ -46,6 +46,26 @@ class WebsiteImage extends Model
         return route('websites.images.show', [$this->website_id, $this->id]);
     }
 
+    /** Public CDN URL when the image has been published. */
+    public function cdnUrl(): ?string
+    {
+        if (blank($this->asset_key)) {
+            return null;
+        }
+
+        return route('cdn.asset', [$this->website_id, $this->asset_key]);
+    }
+
+    /** Best URL for admin previews: local auth route, else CDN. */
+    public function displayUrl(): ?string
+    {
+        if ($this->existsOnDisk()) {
+            return $this->previewUrl();
+        }
+
+        return $this->cdnUrl();
+    }
+
     public function typeLabel(): string
     {
         return match ($this->type) {
