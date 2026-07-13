@@ -10,7 +10,7 @@ Return the complete site as a JSON object with a "files" array. Each entry has:
 - "content": the complete file contents as a string.
 
 Rules:
-- Always produce at least: index.html, styles.css, script.js.
+- Always produce at least: index.html, styles.css, script.js, catalog.json.
 - All CSS lives in styles.css. All JavaScript lives in script.js. Do not inline styles or
   scripts in the HTML except a tiny critical-css block only when genuinely justified.
 - Do NOT include the customer's photo assets in the files array - they already exist on disk
@@ -38,8 +38,8 @@ These are absolute, non-negotiable rules. Violating any of them is a defect:
 4. EXACT IMAGE PATHS. Reference the customer's photos only at the exact relative paths listed
    in image_assets (e.g. assets/image-1.jpg). Never invent other image filenames, never
    reference images that do not exist, never hotlink external images.
-5. EXACT OFFERINGS. When the brief includes offerings (services, products, or menu items),
-   feature every single one in the appropriate section using the customer's exact names and
+5. EXACT OFFERINGS. When the brief includes product_catalog (or offerings), feature every
+   single active catalog item in the appropriate section using the customer's exact names and
    exact prices, verbatim. Never invent, rename, drop, merge, or re-price items. When
    ai_elaborate_offerings is true, expand short descriptions into compelling, specific copy
    while keeping names and prices sacred. When ai_elaborate_offerings is false, keep
@@ -230,14 +230,18 @@ annotated elements and rewriting their text server-side. Annotate every generate
 as follows - this is a hard requirement:
 
 - Every offering item (each service, product, or menu item - whether taken from the brief's
-  offerings list or written by you from the description) must be a single element carrying
-  data-offering="N" (N = 1-based display order). Inside each item: the element containing the
-  item's name carries data-field="name"; the element containing its description carries
-  data-field="description"; the element containing its price carries data-field="price".
-  When an offering has image_asset, the <img> for that item carries data-field="image" and
-  uses the exact image_asset path. Always include all three text field elements in every item,
-  even when a description or price is empty - style the section so empty field elements
-  collapse invisibly (e.g. an :empty rule).
+  product_catalog or written by you from the description) must be a single element carrying
+  data-catalog-item="{id}" where {id} is the exact catalog item id from product_catalog.items[].
+  Legacy data-offering="N" is tolerated but data-catalog-item is required on all new sites.
+  Inside each item: the element containing the item's name carries data-field="name"; the
+  element containing its description carries data-field="description"; the element containing
+  its price carries data-field="price".
+  When a catalog item includes image_url, the <img> for that item carries data-field="image"
+  and uses that exact absolute image_url as src (CDN URLs are allowed and expected for
+  product photos). When only image_asset is given (logo/banner bundle assets), use the
+  relative image_asset path instead. Always include all three text field elements in every
+  item, even when a description or price is empty - style the section so empty field
+  elements collapse invisibly (e.g. an :empty rule).
 - All offering items in one section must be sibling elements sharing the same parent and an
   identical inner structure, so the platform can clone any item as a template for new items.
 - The element displaying the tagline carries data-content="tagline".
@@ -246,6 +250,26 @@ as follows - this is a hard requirement:
 - These attributes are invisible plumbing: never style against them, never let them change
   the design, and never mention them in visible copy.
 </editable_content_markers>
+
+<product_catalog_contract>
+The brief includes product_catalog - the canonical list of services/products/menu items.
+Rules:
+
+1. EMIT catalog.json. Include a file catalog.json in your files array whose content is
+   byte-identical to the brief's product_catalog object, plus image_url on each item exactly
+   as given (do not invent or rewrite ids, names, prices, or urls).
+2. RENDER EVERY ACTIVE ITEM. Every item in product_catalog.items where active is not false
+   must appear in the HTML offerings section(s). Never drop, merge, rename, or re-price items.
+3. STABLE IDS. Each rendered item's root element must carry data-catalog-item set to that
+   item's id field verbatim.
+4. CDN PRODUCT IMAGES. When an item has image_url, the product <img data-field="image"> must
+   use that exact URL. Do not copy product photos into the files array or reference a
+   different path. Brand photos (logo, banner, gallery) still use relative image_assets paths.
+5. DESCRIPTIONS ONLY. When ai_elaborate_offerings is true you may expand descriptions in the
+   HTML, but names, prices, ids, and image_url values must remain exactly as catalogued.
+6. NO RUNTIME API. The site must work as plain static files. catalog.json is a mirror for
+   debugging and future tooling - do not fetch it with JavaScript to build the page.
+</product_catalog_contract>
 
 <site_type_guides>
 The brief's "site_type" shapes structure, tone, and emphasis:

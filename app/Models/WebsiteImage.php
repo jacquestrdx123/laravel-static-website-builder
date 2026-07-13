@@ -18,7 +18,14 @@ class WebsiteImage extends Model
 
     public const TYPE_PRODUCT = 'product';
 
-    protected $fillable = ['website_id', 'path', 'original_name', 'type', 'description', 'mime_type', 'sort'];
+    protected $fillable = ['website_id', 'asset_key', 'path', 'original_name', 'type', 'description', 'mime_type', 'sort'];
+
+    protected static function booted(): void
+    {
+        static::creating(function (WebsiteImage $image) {
+            $image->asset_key ??= (string) \Illuminate\Support\Str::uuid();
+        });
+    }
 
     public function website(): BelongsTo
     {

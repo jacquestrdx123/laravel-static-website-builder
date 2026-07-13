@@ -14,6 +14,8 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use App\Services\WebsiteContentVault;
+use App\Services\WebsiteAssetCdn;
+use App\Services\WebsiteProductCatalog;
 use RuntimeException;
 
 class WebsiteController extends Controller
@@ -177,7 +179,16 @@ class WebsiteController extends Controller
             $website->update(['settings' => $settings]);
         }
 
-        GenerateWebsiteJob::dispatch($website, $website->settings);
+        $website->refresh()->load('images');
+        WebsiteProductCatalog::forWebsite($website)->save(
+            WebsiteProductCatalog::forWebsite($website)->buildFromOfferings(
+                $website->settings['offerings'] ?? [],
+                $website->settings['offering_type'] ?? 'products',
+                $website->settings['offering_label'] ?? null,
+            )
+        );
+
+        GenerateWebsiteJob::dispatch($website->fresh(), $website->settings);
 
         return redirect()->route('websites.show', $website)
             ->with('status', 'Your website is being generated.');
@@ -293,7 +304,7 @@ class WebsiteController extends Controller
     ): WebsiteImage {
         $path = $upload->store('uploads/'.$website->id, 'local');
 
-        return $website->images()->create([
+        $image = $website->images()->create([
             'path' => $path,
             'original_name' => $upload->getClientOriginalName(),
             'type' => $type,
@@ -301,5 +312,9 @@ class WebsiteController extends Controller
             'mime_type' => $upload->getMimeType(),
             'sort' => $sort,
         ]);
+
+        WebsiteAssetCdn::forWebsite($website)->publish($image);
+
+        return $image;
     }
 }

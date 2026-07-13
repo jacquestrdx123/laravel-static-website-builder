@@ -40,6 +40,28 @@ return [
     // Private per-website vault (SQLite + files). Never web-accessible.
     'website_data_path' => env('WEBSITE_DATA_PATH', storage_path('app/website-data')),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Asset CDN
+    |--------------------------------------------------------------------------
+    |
+    | Customer uploads are published here with stable URLs so generated static
+    | sites can reference images that survive product edits without copying
+    | files into each site rebuild. CDN_BASE_URL is usually the builder app
+    | origin (app.example.com); customer sites on other hostnames load assets
+    | from it cross-origin.
+    |
+    */
+
+    'cdn_url' => rtrim(env('CDN_BASE_URL', env('APP_URL', 'http://localhost')), '/'),
+
+    'cdn_disk' => env('CDN_DISK', 'public'),
+
+    'cdn_path_prefix' => 'cdn',
+
+    // Browser cache for immutable CDN assets (asset_key never changes).
+    'cdn_cache_max_age' => (int) env('CDN_CACHE_MAX_AGE', 31536000),
+
     'editing_subscription_price' => env('EDITING_SUBSCRIPTION_PRICE', 'R299/year'),
     'editing_subscription_years' => (int) env('EDITING_SUBSCRIPTION_YEARS', 1),
     'newsletter_generation_cost' => (int) env('NEWSLETTER_GENERATION_COST', 2),

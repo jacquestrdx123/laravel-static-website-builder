@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Models\User;
 use App\Models\Website;
 use App\Services\SiteContentUpdater;
+use App\Services\WebsiteProductCatalog;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\File;
 use Tests\TestCase;
@@ -55,6 +56,17 @@ class SiteContentUpdaterTest extends TestCase
         return $website;
     }
 
+    private function saveCatalog(Website $website): void
+    {
+        WebsiteProductCatalog::forWebsite($website)->save(
+            WebsiteProductCatalog::forWebsite($website)->buildFromOfferings(
+                $website->settings['offerings'] ?? [],
+                $website->settings['offering_type'] ?? 'products',
+                $website->settings['offering_label'] ?? null,
+            )
+        );
+    }
+
     protected function tearDown(): void
     {
         File::deleteDirectory(storage_path('app/public/sites/cafe-test'));
@@ -71,7 +83,9 @@ class SiteContentUpdaterTest extends TestCase
             ],
         ]);
 
-        $changed = app(SiteContentUpdater::class)->apply($website);
+        $this->saveCatalog($website);
+
+        $changed = app(SiteContentUpdater::class)->apply($website->fresh());
         $this->assertSame(1, $changed);
 
         $html = File::get($website->sitePath().'/index.html');
@@ -80,7 +94,7 @@ class SiteContentUpdaterTest extends TestCase
         $this->assertStringContainsString('R42', $html);
         $this->assertStringContainsString('Pain au chocolat', $html);
         $this->assertStringContainsString('New this week', $html);
-        $this->assertSame(3, substr_count($html, 'data-offering'));
+        $this->assertSame(3, substr_count($html, 'data-catalog-item'));
         $this->assertStringNotContainsString('R38', $html);
     }
 
@@ -92,10 +106,11 @@ class SiteContentUpdaterTest extends TestCase
             ],
         ]);
 
-        app(SiteContentUpdater::class)->apply($website);
+        $this->saveCatalog($website);
+        app(SiteContentUpdater::class)->apply($website->fresh());
 
         $html = File::get($website->sitePath().'/index.html');
-        $this->assertSame(1, substr_count($html, 'data-offering'));
+        $this->assertSame(1, substr_count($html, 'data-catalog-item'));
         $this->assertStringNotContainsString('Croissant', $html);
     }
 
@@ -113,7 +128,7 @@ class SiteContentUpdaterTest extends TestCase
         $this->assertStringContainsString('Fresh every morning', $html);
         $this->assertStringContainsString('mailto:hello@cafe.test', $html);
         $this->assertStringContainsString('>hello@cafe.test<', $html);
-        // Empty offerings list leaves the menu untouched.
+        // Empty catalog leaves the menu untouched.
         $this->assertStringContainsString('Flat white', $html);
     }
 
@@ -125,7 +140,8 @@ class SiteContentUpdaterTest extends TestCase
             ],
         ]);
 
-        app(SiteContentUpdater::class)->apply($website);
+        $this->saveCatalog($website);
+        app(SiteContentUpdater::class)->apply($website->fresh());
 
         $html = File::get($website->sitePath().'/index.html');
         $this->assertStringNotContainsString('<script>alert(1)</script>', $html);

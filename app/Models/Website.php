@@ -22,7 +22,7 @@ class Website extends Model
     public const STATUS_PUBLISHED = 'published';
 
     protected $fillable = [
-        'user_id', 'name', 'slug', 'status', 'settings', 'error',
+        'user_id', 'name', 'slug', 'status', 'settings', 'product_catalog', 'error',
         'custom_domain', 'generated_at', 'published_at',
     ];
 
@@ -30,6 +30,7 @@ class Website extends Model
     {
         return [
             'settings' => 'array',
+            'product_catalog' => 'array',
             'generated_at' => 'datetime',
             'published_at' => 'datetime',
         ];

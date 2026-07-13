@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AssetCdnController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\CaddyController;
 use App\Http\Controllers\ContentController;
@@ -20,6 +21,11 @@ use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('home');
+
+// Stable, cacheable URLs for customer website assets (photos referenced by static sites).
+Route::get('/cdn/{website}/{assetKey}', [AssetCdnController::class, 'show'])
+    ->where('assetKey', '[0-9a-fA-F-]{36}')
+    ->name('cdn.asset');
 
 // Caddy on_demand_tls "ask" endpoint (called server-to-server, no session).
 Route::get('/caddy/allowed', [CaddyController::class, 'allowed'])->name('caddy.allowed');

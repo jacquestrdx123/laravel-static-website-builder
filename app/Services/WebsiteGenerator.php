@@ -9,6 +9,8 @@ use Anthropic\Messages\RawMessageStartEvent;
 use Anthropic\Messages\TextDelta;
 use App\Models\Website;
 use App\Models\WebsiteImage;
+use App\Services\WebsiteAssetCdn;
+use App\Services\WebsiteProductCatalog;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -45,6 +47,12 @@ class WebsiteGenerator
         if (! File::exists($sitePath.'/index.html')) {
             throw new RuntimeException('The model did not produce an index.html file.');
         }
+
+        // MySQL catalog is canonical — never trust the model to keep catalog.json in sync.
+        WebsiteProductCatalog::forWebsite($website)->writeToSite(
+            $sitePath,
+            WebsiteAssetCdn::forWebsite($website)
+        );
     }
 
     /** Copy the customer's uploaded images into the site's assets directory. */
@@ -232,6 +240,8 @@ class WebsiteGenerator
     {
         $settings = $website->settings;
         $imagesById = $website->images->keyBy('id');
+        $cdn = WebsiteAssetCdn::forWebsite($website);
+        $catalogExport = WebsiteProductCatalog::forWebsite($website)->forSiteExport($cdn);
 
         $brief = [
             'business_name' => $website->name,
@@ -247,7 +257,8 @@ class WebsiteGenerator
             'offering_type' => $settings['offering_type'] ?? 'services',
             'offering_label' => $settings['offering_label'] ?? null,
             'ai_elaborate_offerings' => (bool) ($settings['ai_elaborate_offerings'] ?? false),
-            'offerings' => $this->offeringsForBrief($settings['offerings'] ?? [], $imagesById, $assetNames),
+            'product_catalog' => $catalogExport['catalog'],
+            'offerings' => $this->offeringsForBrief($catalogExport['catalog']['items'], $imagesById, $assetNames),
             'extra_instructions' => $settings['extra_instructions'] ?? null,
             'generate_favicon_from_logo' => (bool) ($settings['generate_favicon_from_logo'] ?? false),
             'image_assets' => $assetNames,
@@ -285,26 +296,34 @@ class WebsiteGenerator
         return $content;
     }
 
-    /** @param  \Illuminate\Support\Collection<int, WebsiteImage>  $imagesById */
-    private function offeringsForBrief(array $offerings, $imagesById, array $assetNames): array
+    /** @param  list<array<string, mixed>>  $catalogItems */
+    private function offeringsForBrief(array $catalogItems, $imagesById, array $assetNames): array
     {
-        return array_map(function (array $offering) use ($imagesById, $assetNames) {
+        return array_map(function (array $item) use ($imagesById, $assetNames) {
             $briefOffering = [
-                'name' => $offering['name'] ?? '',
-                'description' => $offering['description'] ?? null,
-                'price' => $offering['price'] ?? null,
+                'catalog_id' => $item['id'] ?? null,
+                'name' => $item['name'] ?? '',
+                'description' => $item['description'] ?? null,
+                'price' => $item['price'] ?? null,
+                'image_url' => $item['image_url'] ?? null,
             ];
 
-            $imageId = $offering['image_id'] ?? null;
-            if ($imageId && $imagesById->has($imageId)) {
-                $assetName = 'assets/'.$imagesById->get($imageId)->assetName();
-                if (in_array($assetName, $assetNames, true)) {
-                    $briefOffering['image_asset'] = $assetName;
+            // Non-product brand photos still ship inside the site bundle.
+            if (blank($briefOffering['image_url'])) {
+                $assetKey = $item['image_asset_key'] ?? null;
+                if ($assetKey) {
+                    $image = $imagesById->first(fn ($img) => $img->asset_key === $assetKey);
+                    if ($image) {
+                        $assetName = 'assets/'.$image->assetName();
+                        if (in_array($assetName, $assetNames, true)) {
+                            $briefOffering['image_asset'] = $assetName;
+                        }
+                    }
                 }
             }
 
             return $briefOffering;
-        }, $offerings);
+        }, $catalogItems);
     }
 
     private function imageRolesForBrief(Website $website, array $assetNames): array

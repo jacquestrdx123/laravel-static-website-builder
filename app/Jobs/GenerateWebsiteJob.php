@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\Website;
 use App\Services\SiteContentUpdater;
 use App\Services\WebsiteContentVault;
+use App\Services\WebsiteProductCatalog;
 use App\Services\WebsiteGenerator;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -48,8 +49,10 @@ class GenerateWebsiteJob implements ShouldQueue
         try {
             $vault = WebsiteContentVault::forWebsite($this->website);
             $vault->recordProductSnapshot('website_generation', [
+                'product_catalog' => $this->settingsBefore['product_catalog'] ?? [],
                 'settings' => $this->settingsBefore ?? [],
             ], [
+                'product_catalog' => WebsiteProductCatalog::forWebsite($this->website)->get(),
                 'settings' => $this->website->settings,
                 'offerings_live' => $updater->readOfferingsFromSite($this->website),
             ]);

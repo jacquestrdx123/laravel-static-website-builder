@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Website;
 use App\Models\WebsiteImage;
 use App\Services\SiteContentUpdater;
+use App\Services\WebsiteAssetCdn;
 use App\Services\WebsiteContentVault;
+use App\Services\WebsiteProductCatalog;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -37,6 +39,7 @@ class ContentController extends Controller
             'images' => $website->images,
             'imagesById' => $website->images->keyBy('id'),
             'offerings' => $this->offeringsForForm($website, $updater),
+            'catalog' => WebsiteProductCatalog::forWebsite($website)->get(),
         ]);
     }
 
@@ -62,6 +65,7 @@ class ContentController extends Controller
         }
 
         $settingsBefore = [
+            'product_catalog' => WebsiteProductCatalog::forWebsite($website)->get(),
             'settings' => $website->settings,
             'offerings_live' => $updater->readOfferingsFromSite($website),
         ];
@@ -86,6 +90,8 @@ class ContentController extends Controller
 
         $validImageIds = $website->images()->pluck('id')->all();
         $nextSort = (int) $website->images()->max('sort') + 1;
+        $cdn = WebsiteAssetCdn::forWebsite($website);
+        $existingCatalog = WebsiteProductCatalog::forWebsite($website)->get();
 
         $normalizedOfferings = [];
         foreach ($offerings as $index => $offering) {
@@ -109,11 +115,15 @@ class ContentController extends Controller
                     'sort' => $nextSort,
                 ]);
 
-                $this->syncImageToSiteAssets($website, $image);
+                $cdn->publish($image);
 
                 $nextSort++;
                 $validImageIds[] = $image->id;
                 $imageId = $image->id;
+            }
+
+            if ($imageId !== null && ! in_array($imageId, $validImageIds, true)) {
+                $imageId = null;
             }
 
             $normalizedOfferings[] = [
@@ -124,17 +134,25 @@ class ContentController extends Controller
             ];
         }
 
+        $catalog = WebsiteProductCatalog::forWebsite($website)->buildFromOfferings(
+            $normalizedOfferings,
+            $data['offering_type'],
+            filled($data['offering_label'] ?? null) ? $data['offering_label'] : null,
+            $existingCatalog,
+        );
+
+        WebsiteProductCatalog::forWebsite($website)->save($catalog);
+
+        $website->refresh();
+
         $website->update([
             'settings' => array_merge($website->settings, [
                 'tagline' => $data['tagline'] ?? null,
                 'contact_email' => $data['contact_email'] ?? null,
-                'offering_type' => $data['offering_type'],
-                'offering_label' => filled($data['offering_label'] ?? null) ? $data['offering_label'] : null,
-                'offerings' => $normalizedOfferings,
             ]),
         ]);
 
-        $changed = $updater->apply($website);
+        $changed = $updater->apply($website->fresh(['images']));
 
         if ($changed === 0) {
             return redirect()->route('websites.content.edit', $website)
@@ -143,6 +161,7 @@ class ContentController extends Controller
 
         try {
             WebsiteContentVault::forWebsite($website)->recordProductSnapshot('content_edit', $settingsBefore, [
+                'product_catalog' => WebsiteProductCatalog::forWebsite($website)->get(),
                 'settings' => $website->fresh()->settings,
                 'offerings_live' => $updater->readOfferingsFromSite($website),
             ]);
@@ -154,31 +173,36 @@ class ContentController extends Controller
             ->with('status', 'Content updated on your site.');
     }
 
-    private function syncImageToSiteAssets(Website $website, WebsiteImage $image): void
-    {
-        $sitePath = $website->sitePath();
-
-        if (! File::isDirectory($sitePath)) {
-            return;
-        }
-
-        File::ensureDirectoryExists($sitePath.'/assets');
-        File::copy(
-            Storage::disk('local')->path($image->path),
-            $sitePath.'/assets/'.$image->assetName()
-        );
-    }
-
-    /**
-     * Merge stored offerings with the live copy on the generated site so the form
-     * shows AI-elaborated descriptions and linked photos.
-     *
-     * @return list<array{name: string, description: ?string, price: ?string, image_id: ?int}>
-     */
     private function offeringsForForm(Website $website, SiteContentUpdater $updater): array
     {
         if (old('offerings') !== null) {
             return old('offerings', []);
+        }
+
+        $catalog = WebsiteProductCatalog::forWebsite($website)->get();
+        $imagesByKey = $website->images->keyBy('asset_key');
+
+        if ($catalog['items'] !== []) {
+            $live = $updater->readOfferingsFromSite($website);
+            $liveById = collect($live)->keyBy('id');
+            $liveByKey = collect($live)->keyBy(fn ($row) => strtolower($row['name']).'|'.($row['price'] ?? ''));
+
+            return array_map(function (array $item) use ($imagesByKey, $liveById, $liveByKey) {
+                $liveOffering = $liveById->get($item['id'])
+                    ?? $liveByKey->get(strtolower($item['name']).'|'.($item['price'] ?? ''));
+
+                $imageId = null;
+                if (filled($item['image_asset_key'] ?? null) && $imagesByKey->has($item['image_asset_key'])) {
+                    $imageId = $imagesByKey->get($item['image_asset_key'])->id;
+                }
+
+                return [
+                    'name' => $item['name'],
+                    'description' => $liveOffering['description'] ?? $item['description'] ?? '',
+                    'price' => $item['price'] ?? '',
+                    'image_id' => $imageId,
+                ];
+            }, $catalog['items']);
         }
 
         $stored = $website->settings['offerings'] ?? [];
@@ -195,11 +219,16 @@ class ContentController extends Controller
             $storedOffering = $stored[$index] ?? [];
             $liveOffering = $live[$index] ?? [];
 
+            $imageId = $storedOffering['image_id'] ?? null;
+            if ($imageId === null && filled($liveOffering['image_asset_key'] ?? null)) {
+                $imageId = $website->images->firstWhere('asset_key', $liveOffering['image_asset_key'])?->id;
+            }
+
             $offerings[] = [
                 'name' => $liveOffering['name'] ?? $storedOffering['name'] ?? '',
                 'description' => $liveOffering['description'] ?? $storedOffering['description'] ?? '',
                 'price' => $liveOffering['price'] ?? $storedOffering['price'] ?? '',
-                'image_id' => $storedOffering['image_id'] ?? $liveOffering['image_id'] ?? null,
+                'image_id' => $imageId,
             ];
         }
 
