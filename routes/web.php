@@ -11,7 +11,11 @@ use App\Http\Controllers\DomainNameserverController;
 use App\Http\Controllers\DomainSearchController;
 use App\Http\Controllers\DomainSettingsController;
 use App\Http\Controllers\DomainTransferController;
-use App\Http\Controllers\PublishController;
+use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\NewsletterSubscriberController;
+use App\Http\Controllers\PosterController;
+use App\Http\Controllers\PublicNewsletterController;
+use App\Http\Controllers\WebsiteSubscriptionController;
 use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +23,11 @@ Route::view('/', 'welcome')->name('home');
 
 // Caddy on_demand_tls "ask" endpoint (called server-to-server, no session).
 Route::get('/caddy/allowed', [CaddyController::class, 'allowed'])->name('caddy.allowed');
+
+Route::post('/sites/{slug}/newsletter/subscribe', [PublicNewsletterController::class, 'subscribe'])
+    ->name('public.newsletter.subscribe');
+Route::get('/sites/{slug}/newsletter/unsubscribe/{token}', [PublicNewsletterController::class, 'unsubscribe'])
+    ->name('public.newsletter.unsubscribe');
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
@@ -42,6 +51,25 @@ Route::middleware('auth')->group(function () {
     Route::get('/websites/{website}/content', [ContentController::class, 'edit'])->name('websites.content.edit');
     Route::post('/websites/{website}/content', [ContentController::class, 'update'])->name('websites.content.update');
     Route::get('/websites/{website}/images/{image}', [ContentController::class, 'image'])->name('websites.images.show');
+
+    Route::get('/websites/{website}/subscription', [WebsiteSubscriptionController::class, 'show'])->name('websites.subscription.show');
+    Route::post('/websites/{website}/subscription', [WebsiteSubscriptionController::class, 'purchase'])->name('websites.subscription.purchase');
+
+    Route::get('/websites/{website}/subscribers', [NewsletterSubscriberController::class, 'index'])->name('websites.subscribers.index');
+    Route::post('/websites/{website}/subscribers', [NewsletterSubscriberController::class, 'store'])->name('websites.subscribers.store');
+    Route::delete('/websites/{website}/subscribers/{subscriber}', [NewsletterSubscriberController::class, 'destroy'])->name('websites.subscribers.destroy');
+
+    Route::get('/websites/{website}/newsletters', [NewsletterController::class, 'index'])->name('websites.newsletters.index');
+    Route::get('/websites/{website}/newsletters/create', [NewsletterController::class, 'create'])->name('websites.newsletters.create');
+    Route::post('/websites/{website}/newsletters', [NewsletterController::class, 'store'])->name('websites.newsletters.store');
+    Route::get('/websites/{website}/newsletters/{uuid}', [NewsletterController::class, 'show'])->name('websites.newsletters.show');
+    Route::post('/websites/{website}/newsletters/{uuid}/send', [NewsletterController::class, 'send'])->name('websites.newsletters.send');
+
+    Route::get('/websites/{website}/posters', [PosterController::class, 'index'])->name('websites.posters.index');
+    Route::get('/websites/{website}/posters/create', [PosterController::class, 'create'])->name('websites.posters.create');
+    Route::post('/websites/{website}/posters', [PosterController::class, 'store'])->name('websites.posters.store');
+    Route::get('/websites/{website}/posters/{uuid}', [PosterController::class, 'show'])->name('websites.posters.show');
+    Route::get('/websites/{website}/posters/{uuid}/download', [PosterController::class, 'download'])->name('websites.posters.download');
 
     Route::post('/websites/{website}/publish', [PublishController::class, 'store'])->name('websites.publish');
     Route::delete('/websites/{website}/publish', [PublishController::class, 'destroy'])->name('websites.unpublish');

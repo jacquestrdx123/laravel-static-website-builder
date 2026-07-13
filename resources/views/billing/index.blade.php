@@ -20,6 +20,18 @@
                 <td>Domain registration / transfer / renewal</td>
                 <td>Based on registrar price (shown before checkout)</td>
             </tr>
+            <tr>
+                <td>Manual content editing</td>
+                <td>{{ config('sites.editing_subscription_price') }} (yearly per website, stub checkout)</td>
+            </tr>
+            <tr>
+                <td>AI newsletter generation</td>
+                <td>{{ config('sites.newsletter_generation_cost') }} credit{{ config('sites.newsletter_generation_cost') === 1 ? '' : 's' }}</td>
+            </tr>
+            <tr>
+                <td>AI marketing poster generation</td>
+                <td>{{ config('sites.poster_generation_cost') }} credit{{ config('sites.poster_generation_cost') === 1 ? '' : 's' }}</td>
+            </tr>
             </tbody>
         </table>
         <p class="hint">Domain prices are converted to credits using a {{ number_format(config('sites.credit_unit_cents') / 100, 2) }} currency unit per credit.</p>

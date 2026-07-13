@@ -3,28 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Website;
+use App\Services\PublishedSiteHost;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 
 class PublishController extends Controller
 {
+    public function __construct(private PublishedSiteHost $host)
+    {
+    }
+
     /**
      * Publish the generated site: copy it into the Caddy-served web root.
-     *
-     * TODO: gate this behind a hosting subscription/payment once the
-     * billing provider is integrated.
      */
     public function store(Request $request, Website $website): RedirectResponse
     {
         abort_unless($website->user_id === $request->user()->id, 403);
         abort_unless($website->isGenerated(), 409);
 
-        $target = config('sites.publish_path').'/'.$website->slug;
-
-        File::deleteDirectory($target);
-        File::ensureDirectoryExists(dirname($target));
-        File::copyDirectory($website->sitePath(), $target);
+        $this->host->publish($website);
 
         $website->update([
             'status' => Website::STATUS_PUBLISHED,
@@ -39,7 +36,7 @@ class PublishController extends Controller
     {
         abort_unless($website->user_id === $request->user()->id, 403);
 
-        File::deleteDirectory(config('sites.publish_path').'/'.$website->slug);
+        $this->host->unpublish($website);
 
         $website->update([
             'status' => Website::STATUS_READY,

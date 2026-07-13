@@ -1,0 +1,58 @@
+# nginx equivalent of deploy/Caddyfile for SiteForge customer static hosting.
+#
+# Assumptions:
+#   - Laravel app at app.example.com (separate server block, PHP-FPM)
+#   - Published sites at /srv/websites/{slug}
+#   - Custom domains symlinked to /srv/websites/domains/{host}
+#   - TLS: certbot with a pre-issue hook calling GET /caddy/allowed?domain=
+
+# Builder application
+server {
+    listen 443 ssl http2;
+    server_name app.example.com;
+
+    root /var/www/builder/public;
+    index index.php;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        include fastcgi_params;
+        fastcgi_pass unix:/run/php/php8.4-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+    }
+}
+
+# Wildcard customer subdomains: {slug}.sites.example.com
+server {
+    listen 443 ssl http2;
+    server_name ~^(?<slug>[a-z0-9-]+)\.sites\.example\.com$;
+
+    root /srv/websites/$slug;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    add_header X-Content-Type-Options nosniff always;
+    add_header Referrer-Policy strict-origin-when-cross-origin always;
+}
+
+# Custom domains (symlink created by PublishedSiteHost on publish/domain-link)
+server {
+    listen 443 ssl http2;
+    server_name www.customer.com;
+
+    root /srv/websites/domains/www.customer.com;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    add_header X-Content-Type-Options nosniff always;
+    add_header Referrer-Policy strict-origin-when-cross-origin always;
+}

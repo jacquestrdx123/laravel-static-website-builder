@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Website;
 use App\Models\WebsiteImage;
 use App\Services\SiteContentUpdater;
+use App\Services\WebsiteContentVault;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -13,16 +14,20 @@ use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Free, instant edits to the business data of an already-generated site:
- * offerings (services/products), tagline, and contact email. Rewrites
- * the annotated elements in the static HTML - no AI call, no credits.
+ * Edits to the business data of an already-generated site (requires active
+ * manual-editing subscription): offerings, tagline, and contact email.
  */
 class ContentController extends Controller
 {
-    public function edit(Request $request, Website $website, SiteContentUpdater $updater): View
+    public function edit(Request $request, Website $website, SiteContentUpdater $updater): View|RedirectResponse
     {
         abort_unless($website->user_id === $request->user()->id, 403);
         abort_unless($website->isGenerated(), 404);
+
+        if (! $website->hasActiveEditingSubscription()) {
+            return redirect()->route('websites.subscription.show', $website)
+                ->with('error', 'Manual content editing requires an active yearly subscription.');
+        }
 
         $website->load('images');
 
@@ -50,6 +55,16 @@ class ContentController extends Controller
     {
         abort_unless($website->user_id === $request->user()->id, 403);
         abort_unless($website->isGenerated(), 404);
+
+        if (! $website->hasActiveEditingSubscription()) {
+            return redirect()->route('websites.subscription.show', $website)
+                ->with('error', 'Manual content editing requires an active yearly subscription.');
+        }
+
+        $settingsBefore = [
+            'settings' => $website->settings,
+            'offerings_live' => $updater->readOfferingsFromSite($website),
+        ];
 
         $data = $request->validate([
             'tagline' => ['nullable', 'string', 'max:200'],
@@ -126,8 +141,17 @@ class ContentController extends Controller
                 ->with('error', 'Saved, but this site was generated before content editing existed - regenerate it once to enable live updates.');
         }
 
+        try {
+            WebsiteContentVault::forWebsite($website)->recordProductSnapshot('content_edit', $settingsBefore, [
+                'settings' => $website->fresh()->settings,
+                'offerings_live' => $updater->readOfferingsFromSite($website),
+            ]);
+        } catch (\Throwable) {
+            // Non-fatal: content was still updated on the live site.
+        }
+
         return redirect()->route('websites.show', $website)
-            ->with('status', 'Content updated on your site - no credits used.');
+            ->with('status', 'Content updated on your site.');
     }
 
     private function syncImageToSiteAssets(Website $website, WebsiteImage $image): void

@@ -43,7 +43,11 @@
             <div class="actions" style="justify-content: space-between; margin-bottom: .8rem;">
                 <strong>Preview</strong>
                 <span class="actions">
-                    <a class="btn secondary" href="{{ route('websites.content.edit', $website) }}">✏ Edit content (free)</a>
+                    @if ($hasEditingSubscription)
+                        <a class="btn secondary" href="{{ route('websites.content.edit', $website) }}">✏ Edit content</a>
+                    @else
+                        <a class="btn secondary" href="{{ route('websites.subscription.show', $website) }}">✏ Edit content (subscription)</a>
+                    @endif
                     <a class="btn secondary" target="_blank" href="{{ $website->previewUrl() }}">Open full screen ↗</a>
                 </span>
             </div>
@@ -70,6 +74,23 @@
                     <button type="submit">Publish website</button>
                 </form>
             @endif
+        </div>
+
+        <div class="card">
+            <strong>Marketing services</strong>
+            <p class="hint">Newsletters and posters use prepaid credits. Content history is stored in your private website vault.</p>
+            <div class="actions">
+                <a class="btn secondary" href="{{ route('websites.subscription.show', $website) }}">
+                    Subscription {{ $hasEditingSubscription ? '(active)' : '' }}
+                </a>
+                <a class="btn secondary" href="{{ route('websites.newsletters.index', $website) }}">
+                    Newsletters ({{ $vaultCounts['newsletters'] }})
+                </a>
+                <a class="btn secondary" href="{{ route('websites.posters.index', $website) }}">
+                    Posters ({{ $vaultCounts['posters'] }})
+                </a>
+            </div>
+            <p class="hint" style="margin-top:.8rem;">Vault history: {{ $vaultCounts['snapshots'] }} product snapshot(s)</p>
         </div>
     @endif
 

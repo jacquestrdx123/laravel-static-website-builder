@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use App\Services\WebsiteContentVault;
 use RuntimeException;
 
 class WebsiteController extends Controller
@@ -176,7 +177,7 @@ class WebsiteController extends Controller
             $website->update(['settings' => $settings]);
         }
 
-        GenerateWebsiteJob::dispatch($website);
+        GenerateWebsiteJob::dispatch($website, $website->settings);
 
         return redirect()->route('websites.show', $website)
             ->with('status', 'Your website is being generated.');
@@ -186,7 +187,17 @@ class WebsiteController extends Controller
     {
         abort_unless($website->user_id === $request->user()->id, 403);
 
-        return view('websites.show', ['website' => $website]);
+        $vault = WebsiteContentVault::forWebsite($website);
+
+        return view('websites.show', [
+            'website' => $website,
+            'vaultCounts' => [
+                'newsletters' => count($vault->listNewsletters()),
+                'posters' => count($vault->listPosters()),
+                'snapshots' => count($vault->listProductSnapshots()),
+            ],
+            'hasEditingSubscription' => $website->hasActiveEditingSubscription(),
+        ]);
     }
 
     /** Lightweight status endpoint the show page polls while a generation runs. */
@@ -217,7 +228,7 @@ class WebsiteController extends Controller
         }
 
         $website->update(['status' => Website::STATUS_QUEUED, 'error' => null]);
-        GenerateWebsiteJob::dispatch($website);
+        GenerateWebsiteJob::dispatch($website, $website->settings);
 
         return redirect()->route('websites.show', $website)
             ->with('status', 'Your website is being regenerated.');

@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Website;
 use App\Services\DomainCreditPricing;
 use App\Services\HostAfricaClient;
+use App\Services\PublishedSiteHost;
 use App\Support\DomainContactBuilder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -212,7 +213,7 @@ class DomainController extends Controller
         return back()->with('status', 'Domain renewed successfully. '.$credits.' credits were deducted.');
     }
 
-    public function link(Request $request, Domain $domain): RedirectResponse
+    public function link(Request $request, Domain $domain, PublishedSiteHost $host): RedirectResponse
     {
         $this->authorizeDomain($request, $domain);
 
@@ -224,25 +225,39 @@ class DomainController extends Controller
             ->where('user_id', $request->user()->id)
             ->firstOrFail();
 
-        Website::where('user_id', $request->user()->id)
+        $host->removeCustomDomainSymlink($website->custom_domain);
+
+        $others = Website::where('user_id', $request->user()->id)
             ->where('custom_domain', $domain->domain)
             ->whereKeyNot($website->id)
-            ->update(['custom_domain' => null]);
+            ->get();
+
+        foreach ($others as $other) {
+            $host->removeCustomDomainSymlink($other->custom_domain);
+            $other->update(['custom_domain' => null]);
+        }
 
         $domain->update(['website_id' => $website->id]);
         $website->update(['custom_domain' => $domain->domain]);
 
+        $host->syncCustomDomainSymlink($website->fresh());
+
         return back()->with('status', 'Domain linked to '.$website->name.'.');
     }
 
-    public function unlink(Request $request, Domain $domain): RedirectResponse
+    public function unlink(Request $request, Domain $domain, PublishedSiteHost $host): RedirectResponse
     {
         $this->authorizeDomain($request, $domain);
 
         if ($domain->website_id) {
-            Website::whereKey($domain->website_id)
+            $website = Website::whereKey($domain->website_id)
                 ->where('user_id', $request->user()->id)
-                ->update(['custom_domain' => null]);
+                ->first();
+
+            if ($website) {
+                $host->removeCustomDomainSymlink($website->custom_domain);
+                $website->update(['custom_domain' => null]);
+            }
         }
 
         $domain->update(['website_id' => null]);

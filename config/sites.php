@@ -37,4 +37,18 @@ return [
     // Maximum number of images a customer may attach to one website.
     'max_images' => (int) env('SITES_MAX_IMAGES', 10),
 
+    // Private per-website vault (SQLite + files). Never web-accessible.
+    'website_data_path' => env('WEBSITE_DATA_PATH', storage_path('app/website-data')),
+
+    'editing_subscription_price' => env('EDITING_SUBSCRIPTION_PRICE', 'R299/year'),
+    'editing_subscription_years' => (int) env('EDITING_SUBSCRIPTION_YEARS', 1),
+    'newsletter_generation_cost' => (int) env('NEWSLETTER_GENERATION_COST', 2),
+    'poster_generation_cost' => (int) env('POSTER_GENERATION_COST', 3),
+
+    'poster_formats' => [
+        'instagram_square' => ['label' => 'Instagram square', 'width' => 1080, 'height' => 1080],
+        'facebook_landscape' => ['label' => 'Facebook landscape', 'width' => 1200, 'height' => 630],
+        'story' => ['label' => 'Story', 'width' => 1080, 'height' => 1920],
+    ],
+
 ];

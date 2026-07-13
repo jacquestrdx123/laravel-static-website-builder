@@ -50,6 +50,25 @@ class Website extends Model
         return $this->hasMany(Domain::class);
     }
 
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(WebsiteSubscription::class);
+    }
+
+    public function newsletterSubscribers(): HasMany
+    {
+        return $this->hasMany(NewsletterSubscriber::class);
+    }
+
+    public function hasActiveEditingSubscription(): bool
+    {
+        return $this->subscriptions()
+            ->where('type', WebsiteSubscription::TYPE_MANUAL_EDITING)
+            ->where('status', WebsiteSubscription::STATUS_ACTIVE)
+            ->where('expires_at', '>', now())
+            ->exists();
+    }
+
     /**
      * Directory holding the generated static site. Lives on the public disk
      * so the web server serves previews directly (via the storage:link
