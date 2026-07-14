@@ -3,44 +3,37 @@
 @section('title', 'Sign up')
 
 @section('content')
-    <style>
-        .signup-wrap {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem;
-            align-items: start; max-width: 900px; margin: 2rem auto;
-        }
-        @media (max-width: 760px) { .signup-wrap { grid-template-columns: 1fr; } }
-        .signup-pitch h1 { font-size: 2.2rem; line-height: 1.2; }
-        .signup-pitch .perk { display: flex; gap: .7rem; margin: 1.1rem 0; }
-        .signup-pitch .perk .tick {
-            flex: 0 0 auto; width: 1.5rem; height: 1.5rem; border-radius: 50%;
-            background: var(--accent); color: var(--accent-ink);
-            display: grid; place-items: center; font-size: .85rem;
-        }
-        .free-credit-banner {
-            background: #e7f3ee; border: 1px solid #bfe0d2; color: var(--ok);
-            border-radius: var(--radius); padding: .7rem 1rem; margin-bottom: 1rem;
-            font-size: .95rem;
-        }
-    </style>
+    <div class="auth-split">
+        <div class="reveal reveal-d1">
+            <p class="eyebrow">Get started</p>
+            <h1 style="font-size: clamp(1.85rem, 4vw, 2.4rem); margin-bottom:.75rem;">
+                Get your business online today.
+            </h1>
+            <p class="muted" style="font-size:1.05rem; margin-bottom:1.75rem;">
+                No designers, no developers, no monthly page builders.
+                Describe your business, add your photos, and our AI builds you a real website.
+            </p>
 
-    <div class="signup-wrap">
-        <div class="signup-pitch">
-            <h1>Get your business online today.</h1>
-            <p class="muted">No designers, no developers, no monthly page builders.
-                Describe your business, add your photos, and our AI builds you a real website.</p>
-
-            <div class="perk"><span class="tick">✓</span>
-                <span><strong>Your first site is on us.</strong> Sign up and get 1 free AI credit — enough to generate a complete website.</span></div>
-            <div class="perk"><span class="tick">✓</span>
-                <span><strong>Designed around your photos.</strong> The AI actually looks at your images and builds the design to fit them.</span></div>
-            <div class="perk"><span class="tick">✓</span>
-                <span><strong>Fast, clean, and yours.</strong> Pure HTML, CSS and JavaScript — no bloat, loads instantly, great for SEO.</span></div>
-            <div class="perk"><span class="tick">✓</span>
-                <span><strong>Live in one click.</strong> Publish to your own subdomain with automatic HTTPS. Custom domains supported.</span></div>
+            <div style="display:flex; gap:.7rem; margin:1.1rem 0;">
+                <span class="step-num" style="margin:0; flex:0 0 auto;">✓</span>
+                <span><strong>Your first site is on us.</strong> Sign up and get 1 free AI credit — enough to generate a complete website.</span>
+            </div>
+            <div style="display:flex; gap:.7rem; margin:1.1rem 0;">
+                <span class="step-num" style="margin:0; flex:0 0 auto;">✓</span>
+                <span><strong>Designed around your photos.</strong> The AI looks at your images and builds the design to fit them.</span>
+            </div>
+            <div style="display:flex; gap:.7rem; margin:1.1rem 0;">
+                <span class="step-num" style="margin:0; flex:0 0 auto;">✓</span>
+                <span><strong>Fast, clean, and yours.</strong> Pure HTML, CSS and JavaScript — no bloat, great for SEO.</span>
+            </div>
+            <div style="display:flex; gap:.7rem; margin:1.1rem 0;">
+                <span class="step-num" style="margin:0; flex:0 0 auto;">✓</span>
+                <span><strong>Live in one click.</strong> Publish to your subdomain with automatic HTTPS.</span>
+            </div>
         </div>
 
-        <div class="card">
-            <div class="free-credit-banner">🎁 Includes 1 free website generation</div>
+        <div class="card reveal reveal-d3">
+            <div class="flash ok" style="margin-bottom:1rem;">Includes 1 free website generation</div>
             <h2 style="margin-top:0">Create your account</h2>
 
             <form method="POST" action="{{ route('register') }}">

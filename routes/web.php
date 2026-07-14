@@ -15,6 +15,7 @@ use App\Http\Controllers\DomainTransferController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\NewsletterSubscriberController;
 use App\Http\Controllers\PosterController;
+use App\Http\Controllers\PricingController;
 use App\Http\Controllers\PublicNewsletterController;
 use App\Http\Controllers\WebsiteSubscriptionController;
 use App\Http\Controllers\WebsiteController;
@@ -46,6 +47,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/dashboard', [WebsiteController::class, 'index'])->name('dashboard');
+    Route::get('/websites', [WebsiteController::class, 'index'])->name('websites.index');
+    Route::get('/pricing', PricingController::class)->name('pricing');
 
     Route::get('/websites/create', [WebsiteController::class, 'create'])->name('websites.create');
     Route::post('/websites', [WebsiteController::class, 'store'])->name('websites.store');

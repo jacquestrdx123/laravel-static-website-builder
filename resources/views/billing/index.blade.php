@@ -3,38 +3,34 @@
 @section('title', 'Billing')
 
 @section('content')
+    @php $catalog = app(\App\Support\CreditsPricing::class)->catalog(); @endphp
+
     <h1>Credits</h1>
     <p class="muted">You have <strong>{{ $user->ai_credits }}</strong> credit{{ $user->ai_credits === 1 ? '' : 's' }}.
-        All services are prepaid from your credit balance.</p>
+        All services are prepaid from your credit balance.
+        1 credit = {{ $catalog['currency_symbol'] }}{{ number_format($catalog['credit_value_zar'], 0) }}.</p>
 
     <div class="card">
-        <h2 style="margin-top:0">Service costs</h2>
+        <div class="actions" style="justify-content: space-between;">
+            <h2 style="margin:0">Locked service rates</h2>
+            <a class="btn secondary" href="{{ route('pricing') }}">Full pricing</a>
+        </div>
         <table>
-            <thead><tr><th>Service</th><th>Cost</th></tr></thead>
+            <thead><tr><th>Service</th><th>Cost</th><th>ZAR</th></tr></thead>
             <tbody>
-            <tr>
-                <td>AI website generation</td>
-                <td>{{ config('sites.generation_cost') }} credit{{ config('sites.generation_cost') === 1 ? '' : 's' }}</td>
-            </tr>
+            @foreach ($catalog['items'] as $item)
+                <tr>
+                    <td>{{ $item['label'] }}</td>
+                    <td>{{ $item['credits_label'] }}</td>
+                    <td>{{ $item['zar_label'] }}</td>
+                </tr>
+            @endforeach
             <tr>
                 <td>Domain registration / transfer / renewal</td>
-                <td>Based on registrar price (shown before checkout)</td>
-            </tr>
-            <tr>
-                <td>Manual content editing</td>
-                <td>{{ config('sites.editing_subscription_price') }} (yearly per website, stub checkout)</td>
-            </tr>
-            <tr>
-                <td>AI newsletter generation</td>
-                <td>{{ config('sites.newsletter_generation_cost') }} credit{{ config('sites.newsletter_generation_cost') === 1 ? '' : 's' }}</td>
-            </tr>
-            <tr>
-                <td>AI marketing poster generation</td>
-                <td>{{ config('sites.poster_generation_cost') }} credit{{ config('sites.poster_generation_cost') === 1 ? '' : 's' }}</td>
+                <td colspan="2">Based on registrar price (shown before checkout)</td>
             </tr>
             </tbody>
         </table>
-        <p class="hint">Domain prices are converted to credits using a {{ number_format(config('sites.credit_unit_cents') / 100, 2) }} currency unit per credit.</p>
     </div>
 
     <div class="card">

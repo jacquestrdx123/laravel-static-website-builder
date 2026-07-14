@@ -3,8 +3,9 @@
 @section('title', 'New website')
 
 @section('content')
+    <p class="eyebrow">Create</p>
     <h1>Build a new website</h1>
-    <p class="muted">
+    <p class="muted" style="max-width:40rem; margin-bottom:1.5rem;">
         A short step-by-step wizard — describe your business, add your photos, list your offerings,
         and the AI builds you a complete static website. Costs {{ config('sites.generation_cost') }} credit.
     </p>
@@ -15,11 +16,11 @@
         }
         .wizard-step-label {
             flex: 1; min-width: 120px; text-align: center; padding: .6rem .8rem;
-            border-radius: 999px; border: 1px solid var(--line); background: #fff;
-            font-size: .85rem; color: var(--ink-soft); transition: all .2s;
+            border-radius: 999px; border: 1px solid var(--line); background: var(--surface);
+            font-size: .85rem; color: var(--muted); transition: all .2s;
         }
-        .wizard-step-label.active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: bold; }
-        .wizard-step-label.done { background: #e7f3ee; color: var(--ok); border-color: #bfe0d2; }
+        .wizard-step-label.active { background: var(--foreground); color: var(--background); border-color: var(--foreground); font-weight: 600; }
+        .wizard-step-label.done { background: var(--brand-soft); color: var(--brand); border-color: color-mix(in srgb, var(--brand) 35%, var(--line)); }
         .wizard-panel { display: none; }
         .wizard-panel.active { display: block; }
         .wizard-nav { display: flex; justify-content: space-between; gap: .6rem; margin-top: 1.5rem; flex-wrap: wrap; }

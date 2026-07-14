@@ -3,15 +3,19 @@
 @section('title', 'My websites')
 
 @section('content')
-    <div class="actions" style="justify-content: space-between; margin-bottom: 1rem;">
-        <h1 style="margin:0">My websites</h1>
+    <div class="actions" style="justify-content: space-between; margin-bottom: 1.25rem;">
+        <div>
+            <p class="eyebrow" style="margin-bottom:.35rem;">Dashboard</p>
+            <h1 style="margin:0">My websites</h1>
+        </div>
         <a class="btn" href="{{ route('websites.create') }}">+ New website</a>
     </div>
 
     @if ($websites->isEmpty())
-        <div class="card" style="text-align:center; padding: 3rem;">
-            <p style="font-size:1.2rem">You haven't built a website yet.</p>
-            <p class="muted">Upload a few photos, flip some toggles, and let the AI do the rest.</p>
+        <div class="card" style="text-align:center; padding: 3rem 1.5rem;">
+            <p class="eyebrow">Get started</p>
+            <p style="font-size:1.25rem; font-weight:600; margin:.25rem 0 .5rem;">You haven't built a website yet.</p>
+            <p class="muted" style="max-width:28rem; margin:0 auto 1.5rem;">Upload a few photos, flip some toggles, and let the AI do the rest.</p>
             <a class="btn" href="{{ route('websites.create') }}">Build my first website</a>
         </div>
     @else
