@@ -63,7 +63,7 @@ Generated customer websites are **static files** on disk — not rendered by Lar
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                         Customer (authenticated)                        │
-│   Blade UI: dashboard, website CRUD, content edit, marketing, billing   │
+│   Livewire UI: dashboard, builder wizard, site show/edit; Blade elsewhere│
 └───────────────────────────────┬─────────────────────────────────────────┘
                                 │
         ┌───────────────────────┼───────────────────────┐
@@ -114,6 +114,7 @@ Generated customer websites are **static files** on disk — not rendered by Lar
   "tagline": "...",
   "contact_email": "...",
   "site_type": "business|portfolio|restaurant|landing|personal|event",
+  "_site_type_note": "Each value has a structural blueprint in resources/prompts/blueprints/{type}.md",
   "sections": ["hero", "about", "contact"],
   "style": "minimal|bold|elegant|playful|corporate",
   "color_scheme": "light|dark|auto",

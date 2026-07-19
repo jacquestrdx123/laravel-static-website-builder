@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Livewire\Websites;
 
 use App\Models\Website;
 use App\Models\WebsiteImage;
@@ -9,26 +9,36 @@ use App\Services\WebsiteAssetCdn;
 use App\Services\WebsiteContentVault;
 use App\Services\WebsiteProductCatalog;
 use App\WebsiteBuilder\WebsiteOptions;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\View\View;
-use Symfony\Component\HttpFoundation\Response;
+use Livewire\Attributes\Locked;
+use Livewire\Component;
+use Livewire\WithFileUploads;
 
-/**
- * Edits to the business data of an already-generated site: offerings, tagline,
- * and contact email.
- */
-class ContentController extends Controller
+class EditContent extends Component
 {
-    public function edit(Request $request, Website $website, SiteContentUpdater $updater): View
+    use WithFileUploads;
+
+    #[Locked]
+    public int $websiteId;
+
+    public string $tagline = '';
+
+    public string $contact_email = '';
+
+    public string $offering_type = 'services';
+
+    public string $offering_label = '';
+
+    /** @var list<array{name: string, description: string, price: string, image_id: int|null, image: mixed}> */
+    public array $offerings = [];
+
+    public bool $editable = false;
+
+    public function mount(Website $website, SiteContentUpdater $updater): void
     {
-        abort_unless($website->user_id === $request->user()->id, 403);
+        abort_unless($website->user_id === auth()->id(), 403);
         abort_unless($website->isGenerated(), 404);
 
         $website->load('images');
-
         $cdn = WebsiteAssetCdn::forWebsite($website);
         foreach ($website->images as $image) {
             if ($image->existsOnDisk()) {
@@ -41,39 +51,53 @@ class ContentController extends Controller
         }
         $website->load('images');
 
-        return view('websites.content', [
-            'website' => $website,
-            'editable' => $updater->supportsEditing($website),
-            'images' => $website->images,
-            'imagesById' => $website->images->keyBy('id'),
-            'offerings' => $this->offeringsForForm($website, $updater),
-            'catalog' => WebsiteProductCatalog::forWebsite($website)->get(),
-        ]);
+        $this->websiteId = $website->id;
+        $this->tagline = (string) ($website->settings['tagline'] ?? '');
+        $this->contact_email = (string) ($website->settings['contact_email'] ?? '');
+        $this->offering_type = (string) ($website->settings['offering_type'] ?? 'services');
+        $this->offering_label = (string) ($website->settings['offering_label'] ?? '');
+        $this->editable = $updater->supportsEditing($website);
+        $this->offerings = $this->offeringsForForm($website, $updater);
     }
 
-    public function image(Request $request, Website $website, WebsiteImage $image): Response
+    public function addOffering(): void
     {
-        abort_unless($website->user_id === $request->user()->id, 403);
-        abort_unless($image->website_id === $website->id, 404);
-        abort_unless($image->existsOnDisk(), 404);
+        if (count($this->offerings) >= WebsiteOptions::MAX_OFFERINGS) {
+            return;
+        }
 
-        return response()->file(Storage::disk('local')->path($image->path), [
-            'Content-Type' => $image->mime_type,
-        ]);
-    }
-
-    public function update(Request $request, Website $website, SiteContentUpdater $updater): RedirectResponse
-    {
-        abort_unless($website->user_id === $request->user()->id, 403);
-        abort_unless($website->isGenerated(), 404);
-
-        $settingsBefore = [
-            'product_catalog' => WebsiteProductCatalog::forWebsite($website)->get(),
-            'settings' => $website->settings,
-            'offerings_live' => $updater->readOfferingsFromSite($website),
+        $this->offerings[] = [
+            'name' => '',
+            'description' => '',
+            'price' => '',
+            'image_id' => null,
+            'image' => null,
         ];
+    }
 
-        $data = $request->validate([
+    public function removeOffering(int $index): void
+    {
+        if (count($this->offerings) === 1) {
+            $this->offerings[0] = [
+                'name' => '',
+                'description' => '',
+                'price' => '',
+                'image_id' => null,
+                'image' => null,
+            ];
+
+            return;
+        }
+
+        unset($this->offerings[$index]);
+        $this->offerings = array_values($this->offerings);
+    }
+
+    public function save(SiteContentUpdater $updater): mixed
+    {
+        $website = $this->website()->load('images');
+
+        $validated = $this->validate([
             'tagline' => ['nullable', 'string', 'max:200'],
             'contact_email' => ['nullable', 'email', 'max:255'],
             'offering_type' => ['required', 'in:'.implode(',', WebsiteOptions::OFFERING_TYPES)],
@@ -86,8 +110,14 @@ class ContentController extends Controller
             'offerings.*.image' => ['nullable', 'image', 'mimes:jpeg,png,gif,webp', 'max:8192'],
         ]);
 
+        $settingsBefore = [
+            'product_catalog' => WebsiteProductCatalog::forWebsite($website)->get(),
+            'settings' => $website->settings,
+            'offerings_live' => $updater->readOfferingsFromSite($website),
+        ];
+
         $offerings = array_values(array_filter(
-            $data['offerings'] ?? [],
+            $validated['offerings'] ?? [],
             fn ($offering) => filled($offering['name'] ?? null)
         ));
 
@@ -100,14 +130,14 @@ class ContentController extends Controller
         foreach ($offerings as $index => $offering) {
             $imageId = filled($offering['image_id'] ?? null) ? (int) $offering['image_id'] : null;
 
-            if ($request->hasFile("offerings.$index.image")) {
+            if (($offering['image'] ?? null) !== null) {
                 if ($website->images()->count() >= config('sites.max_images')) {
-                    return redirect()->route('websites.content.edit', $website)
-                        ->withErrors(['offerings.'.$index.'.image' => 'This website already has the maximum number of photos.'])
-                        ->withInput();
+                    $this->addError('offerings.'.$index.'.image', 'This website already has the maximum number of photos.');
+
+                    return null;
                 }
 
-                $upload = $request->file("offerings.$index.image");
+                $upload = $offering['image'];
                 $path = $upload->store('uploads/'.$website->id, 'local');
 
                 $image = $website->images()->create([
@@ -139,8 +169,8 @@ class ContentController extends Controller
 
         $catalog = WebsiteProductCatalog::forWebsite($website)->buildFromOfferings(
             $normalizedOfferings,
-            $data['offering_type'],
-            filled($data['offering_label'] ?? null) ? $data['offering_label'] : null,
+            $validated['offering_type'],
+            filled($validated['offering_label'] ?? null) ? $validated['offering_label'] : null,
             $existingCatalog,
         );
 
@@ -150,16 +180,17 @@ class ContentController extends Controller
 
         $website->update([
             'settings' => array_merge($website->settings, [
-                'tagline' => $data['tagline'] ?? null,
-                'contact_email' => $data['contact_email'] ?? null,
+                'tagline' => $validated['tagline'] ?? null,
+                'contact_email' => $validated['contact_email'] ?? null,
             ]),
         ]);
 
         $changed = $updater->apply($website->fresh(['images']));
 
         if ($changed === 0) {
-            return redirect()->route('websites.content.edit', $website)
-                ->with('error', 'Saved, but this site was generated before content editing existed - regenerate it once to enable live updates.');
+            session()->flash('error', 'Saved, but this site was generated before content editing existed - regenerate it once to enable live updates.');
+
+            return $this->redirect(route('websites.content.edit', $website), navigate: true);
         }
 
         try {
@@ -172,16 +203,32 @@ class ContentController extends Controller
             // Non-fatal: content was still updated on the live site.
         }
 
-        return redirect()->route('websites.show', $website)
-            ->with('status', 'Content updated on your site.');
+        session()->flash('status', 'Content updated on your site.');
+
+        return $this->redirect(route('websites.show', $website), navigate: true);
     }
 
+    public function render()
+    {
+        $website = $this->website()->load('images');
+
+        return view('livewire.websites.edit-content', [
+            'website' => $website,
+            'images' => $website->images,
+            'imagesById' => $website->images->keyBy('id'),
+            'offeringTypes' => WebsiteOptions::OFFERING_TYPES,
+            'maxOfferings' => WebsiteOptions::MAX_OFFERINGS,
+        ])->extends('layouts.app')->title('Edit content — '.$website->name);
+    }
+
+    private function website(): Website
+    {
+        return Website::query()->findOrFail($this->websiteId);
+    }
+
+    /** @return list<array{name: string, description: string, price: string, image_id: int|null, image: null}> */
     private function offeringsForForm(Website $website, SiteContentUpdater $updater): array
     {
-        if (old('offerings') !== null) {
-            return old('offerings', []);
-        }
-
         $catalog = WebsiteProductCatalog::forWebsite($website)->get();
         $imagesByKey = $website->images->keyBy('asset_key');
 
@@ -213,6 +260,7 @@ class ContentController extends Controller
                         ?? '',
                     'price' => $item['price'] ?? '',
                     'image_id' => $imageId,
+                    'image' => null,
                 ];
             }, $catalog['items']);
         }
@@ -221,7 +269,7 @@ class ContentController extends Controller
         $live = $updater->readOfferingsFromSite($website);
 
         if ($stored === [] && $live === []) {
-            return [['name' => '', 'description' => '', 'price' => '', 'image_id' => null]];
+            return [['name' => '', 'description' => '', 'price' => '', 'image_id' => null, 'image' => null]];
         }
 
         $count = max(count($stored), count($live));
@@ -244,6 +292,7 @@ class ContentController extends Controller
                 'description' => $liveOffering['description'] ?? $storedOffering['description'] ?? '',
                 'price' => $liveOffering['price'] ?? $storedOffering['price'] ?? '',
                 'image_id' => $imageId,
+                'image' => null,
             ];
         }
 
