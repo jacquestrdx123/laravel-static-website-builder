@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use App\Http\Controllers\WebsiteController;
 use App\Services\WebsiteGenerator;
+use App\WebsiteBuilder\WebsiteOptions;
 use Tests\TestCase;
 
 class BlueprintTest extends TestCase
@@ -15,7 +15,7 @@ class BlueprintTest extends TestCase
 
     public function test_every_site_type_has_a_blueprint(): void
     {
-        foreach (WebsiteController::SITE_TYPES as $type) {
+        foreach (WebsiteOptions::SITE_TYPES as $type) {
             $blueprint = $this->generator()->blueprintFor($type);
 
             $this->assertNotNull($blueprint, "Missing blueprint for site type: $type");
