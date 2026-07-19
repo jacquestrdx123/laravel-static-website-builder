@@ -160,14 +160,35 @@ class Create extends Component
 
     public function save(WebsiteCreator $creator): mixed
     {
-        $validated = $this->validate(array_merge(WebsiteCreator::rules(), [
+        $validated = $this->validate([
+            'name' => ['required', 'string', 'max:100'],
+            'description' => ['required', 'string', 'max:2000'],
+            'tagline' => ['nullable', 'string', 'max:200'],
+            'contact_email' => ['nullable', 'email', 'max:255'],
+            'site_type' => ['required', 'in:'.implode(',', WebsiteOptions::SITE_TYPES)],
+            'sections' => ['required', 'array', 'min:1'],
+            'sections.*' => ['in:'.implode(',', WebsiteOptions::SECTIONS)],
+            'style' => ['required', 'in:'.implode(',', WebsiteOptions::STYLES)],
+            'color_scheme' => ['required', 'in:'.implode(',', WebsiteOptions::COLOR_SCHEMES)],
+            'accent_color' => ['nullable', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],
+            'features' => ['nullable', 'array'],
+            'features.*' => ['in:'.implode(',', WebsiteOptions::FEATURES)],
+            'extra_instructions' => ['nullable', 'string', 'max:2000'],
+            'offering_type' => ['required', 'in:'.implode(',', WebsiteOptions::OFFERING_TYPES)],
+            'offering_label' => ['nullable', 'string', 'max:50'],
+            'ai_elaborate_offerings' => ['nullable', 'boolean'],
+            'generate_favicon_from_logo' => ['nullable', 'boolean'],
+            'offerings' => ['nullable', 'array', 'max:'.WebsiteOptions::MAX_OFFERINGS],
+            'offerings.*.name' => ['nullable', 'string', 'max:100'],
+            'offerings.*.description' => ['nullable', 'string', 'max:500'],
+            'offerings.*.price' => ['nullable', 'string', 'max:50'],
+            'offerings.*.image' => ['nullable', 'image', 'mimes:jpeg,png,gif,webp', 'max:8192'],
             'logo' => ['nullable', 'image', 'mimes:jpeg,png,gif,webp', 'max:8192'],
             'favicon' => ['nullable', 'image', 'mimes:jpeg,png,gif,webp', 'max:2048'],
             'banner' => ['nullable', 'image', 'mimes:jpeg,png,gif,webp', 'max:8192'],
             'galleryRows.*.file' => ['nullable', 'image', 'mimes:jpeg,png,gif,webp', 'max:8192'],
             'galleryRows.*.description' => ['nullable', 'string', 'max:200'],
-            'offerings.*.image' => ['nullable', 'image', 'mimes:jpeg,png,gif,webp', 'max:8192'],
-        ]));
+        ]);
 
         $galleryImages = [];
         $galleryDescriptions = [];

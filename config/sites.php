@@ -38,7 +38,7 @@ return [
     'max_images' => (int) env('SITES_MAX_IMAGES', 10),
 
     // Private per-website vault (SQLite + files). Never web-accessible.
-    'website_data_path' => env('WEBSITE_DATA_PATH', storage_path('app/website-data')),
+    'website_data_path' => env('WEBSITE_DATA_PATH') ?: storage_path('app/website-data'),
 
     /*
     |--------------------------------------------------------------------------
