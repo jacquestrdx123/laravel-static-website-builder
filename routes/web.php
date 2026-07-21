@@ -68,12 +68,14 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
 });
 
+// Public: the homepage funnel links logged-out visitors here.
+Route::get('/pricing', Pricing::class)->name('pricing');
+
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/dashboard', WebsiteIndex::class)->name('dashboard');
     Route::get('/websites', WebsiteIndex::class)->name('websites.index');
-    Route::get('/pricing', Pricing::class)->name('pricing');
 
     Route::get('/websites/create', CreateWebsite::class)->name('websites.create');
     Route::post('/websites', [WebsiteController::class, 'store'])->name('websites.store');

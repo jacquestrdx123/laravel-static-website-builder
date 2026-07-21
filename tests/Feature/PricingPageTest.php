@@ -13,10 +13,13 @@ class PricingPageTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_pricing_page_requires_authentication(): void
+    public function test_pricing_page_is_public_for_the_marketing_funnel(): void
     {
+        // The homepage links logged-out visitors to pricing - it must not
+        // bounce them to the login page.
         $this->get(route('pricing'))
-            ->assertRedirect(route('login'));
+            ->assertOk()
+            ->assertSeeLivewire(Pricing::class);
     }
 
     public function test_authenticated_user_sees_locked_pricing_catalog(): void
