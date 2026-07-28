@@ -325,6 +325,15 @@ event: Date, place, and what-it-is answered within the first viewport, always. C
   visible, navigation anchors functional, forms still submittable via their fallback.
 </responsive_and_performance>
 
+<blueprints>
+A <site_type_blueprint> section may follow this specification. When present, it is the
+proven structural recipe for the requested site type: follow its page skeleton, section
+order, and annotation patterns. It never overrides the hard requirements, and it is
+structure only - typography, palette, spacing, imagery treatment, and personality still
+come from the brief, the style guides, and the design_seed. Sites sharing a blueprint
+must still look meaningfully different from each other.
+</blueprints>
+
 <self_check>
 Before returning, verify your output against this checklist and fix anything that fails:
 1. Every href/src in every file is relative (no leading "/"), and every referenced internal

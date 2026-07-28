@@ -82,11 +82,7 @@ class WebsiteGenerator
             model: config('services.anthropic.model'),
             maxTokens: config('services.anthropic.max_tokens'),
             thinking: ['type' => 'adaptive'],
-            system: [[
-                'type' => 'text',
-                'text' => $this->systemPrompt(),
-                'cacheControl' => ['type' => 'ephemeral', 'ttl' => config('services.anthropic.cache_ttl')],
-            ]],
+            system: $this->systemBlocks($website),
             outputConfig: ['format' => $this->outputSchema()],
             messages: [[
                 'role' => 'user',
@@ -207,6 +203,47 @@ class WebsiteGenerator
     private function systemPrompt(): string
     {
         return File::get(resource_path('prompts/website-generator-system.md'));
+    }
+
+    /**
+     * Two cached system blocks: the shared spec (identical for every request,
+     * so all site types share one cache entry at the first breakpoint) and the
+     * per-site-type structural blueprint (its own cache entry per type at the
+     * second breakpoint). Both blocks are static files - never interpolate.
+     */
+    private function systemBlocks(Website $website): array
+    {
+        $cacheControl = ['type' => 'ephemeral', 'ttl' => config('services.anthropic.cache_ttl')];
+
+        $blocks = [[
+            'type' => 'text',
+            'text' => $this->systemPrompt(),
+            'cacheControl' => $cacheControl,
+        ]];
+
+        $blueprint = $this->blueprintFor($website->settings['site_type'] ?? '');
+
+        if ($blueprint !== null) {
+            $blocks[] = [
+                'type' => 'text',
+                'text' => $blueprint,
+                'cacheControl' => $cacheControl,
+            ];
+        }
+
+        return $blocks;
+    }
+
+    /** The structural blueprint for a site type, or null when none exists. */
+    public function blueprintFor(string $siteType): ?string
+    {
+        if (! preg_match('/^[a-z]+$/', $siteType)) {
+            return null;
+        }
+
+        $path = resource_path('prompts/blueprints/'.$siteType.'.md');
+
+        return File::exists($path) ? File::get($path) : null;
     }
 
     private function outputSchema(): array
