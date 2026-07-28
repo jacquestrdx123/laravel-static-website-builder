@@ -17,7 +17,7 @@ class WebsiteBuilderTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_registration_grants_welcome_credit(): void
+    public function test_registration_does_not_grant_welcome_credit(): void
     {
         $response = $this->post('/register', [
             'name' => 'Jacques',
@@ -27,15 +27,16 @@ class WebsiteBuilderTest extends TestCase
         ]);
 
         $response->assertRedirect(route('dashboard'));
-        $this->assertSame(1, User::firstWhere('email', 'jacques@example.com')->ai_credits);
+        $this->assertSame(0, User::firstWhere('email', 'jacques@example.com')->ai_credits);
     }
 
-    public function test_creating_a_website_spends_a_credit_and_queues_generation(): void
+    public function test_creating_a_website_spends_generation_credits_and_queues_generation(): void
     {
         Queue::fake();
         Storage::fake('local');
 
-        $user = User::factory()->create(['ai_credits' => 2]);
+        $cost = app(\App\Support\CreditsPricing::class)->websiteGenerationCredits();
+        $user = User::factory()->create(['ai_credits' => $cost + 5]);
 
         $response = $this->actingAs($user)->post('/websites', [
             'name' => 'My Bakery',
@@ -61,7 +62,7 @@ class WebsiteBuilderTest extends TestCase
         $website = Website::first();
         $response->assertRedirect(route('websites.show', $website));
 
-        $this->assertSame(1, $user->fresh()->ai_credits);
+        $this->assertSame(5, $user->fresh()->ai_credits);
         $this->assertSame(Website::STATUS_QUEUED, $website->status);
         $this->assertCount(3, $website->images);
 

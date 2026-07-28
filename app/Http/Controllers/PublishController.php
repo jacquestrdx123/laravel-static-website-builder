@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Website;
+use App\Services\CreditBilling;
 use App\Services\PublishedSiteHost;
+use App\Support\CreditsPricing;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use RuntimeException;
 
 class PublishController extends Controller
 {
@@ -14,12 +17,21 @@ class PublishController extends Controller
     }
 
     /**
-     * Publish the generated site: copy it into the Caddy-served web root.
+     * Publish the generated site: charge hosting if needed, then copy into the live web root.
      */
-    public function store(Request $request, Website $website): RedirectResponse
+    public function store(Request $request, Website $website, CreditBilling $billing, CreditsPricing $pricing): RedirectResponse
     {
         abort_unless($website->user_id === $request->user()->id, 403);
         abort_unless($website->isGenerated(), 409);
+
+        try {
+            $billing->ensureWebsiteHosting($request->user(), $website);
+        } catch (RuntimeException) {
+            return redirect()->route('billing.index')
+                ->with('error', 'You need '.$pricing->websiteHostingCreditsPerMonth()
+                    .' credits ('.$pricing->formatZar($pricing->websiteHostingCreditsPerMonth())
+                    .'/month) to publish this website.');
+        }
 
         $this->host->publish($website);
 

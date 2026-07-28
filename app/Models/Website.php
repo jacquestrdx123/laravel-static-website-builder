@@ -63,11 +63,36 @@ class Website extends Model
 
     public function hasActiveEditingSubscription(): bool
     {
+        return $this->hasActiveSubscription(WebsiteSubscription::TYPE_MANUAL_EDITING);
+    }
+
+    public function hasActiveHostingSubscription(): bool
+    {
+        return $this->hasActiveSubscription(WebsiteSubscription::TYPE_WEBSITE_HOSTING);
+    }
+
+    public function hasActiveNewsletterHosting(): bool
+    {
+        return $this->hasActiveSubscription(WebsiteSubscription::TYPE_NEWSLETTER_HOSTING);
+    }
+
+    public function hasActiveSubscription(string $type): bool
+    {
         return $this->subscriptions()
-            ->where('type', WebsiteSubscription::TYPE_MANUAL_EDITING)
+            ->where('type', $type)
             ->where('status', WebsiteSubscription::STATUS_ACTIVE)
             ->where('expires_at', '>', now())
             ->exists();
+    }
+
+    public function activeSubscription(string $type): ?WebsiteSubscription
+    {
+        return $this->subscriptions()
+            ->where('type', $type)
+            ->where('status', WebsiteSubscription::STATUS_ACTIVE)
+            ->where('expires_at', '>', now())
+            ->latest('expires_at')
+            ->first();
     }
 
     /**

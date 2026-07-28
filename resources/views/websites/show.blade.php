@@ -65,9 +65,22 @@
                 </div>
             @else
                 <p><strong>Happy with it?</strong> Publish it to <code>{{ $website->hostname() }}</code>.</p>
+                @php $hostingCredits = app(\App\Support\CreditsPricing::class)->websiteHostingCreditsPerMonth(); @endphp
+                @if (! $website->hasActiveHostingSubscription())
+                    <p class="hint">First publish this period costs {{ $hostingCredits }} credits
+                        ({{ app(\App\Support\CreditsPricing::class)->formatZar($hostingCredits) }}/month hosting).</p>
+                @else
+                    <p class="hint">Hosting is active — publish is included until it renews.</p>
+                @endif
                 <form method="POST" action="{{ route('websites.publish', $website) }}">
                     @csrf
-                    <button type="submit">Publish website</button>
+                    <button type="submit">
+                        @if ($website->hasActiveHostingSubscription())
+                            Publish website
+                        @else
+                            Publish ({{ $hostingCredits }} credits)
+                        @endif
+                    </button>
                 </form>
             @endif
         </div>
@@ -91,11 +104,12 @@
         <div class="card">
             <strong>Not quite right?</strong>
             <p class="hint">Regenerating uses the same brief and photos but produces a fresh design.
-                Costs {{ config('sites.generation_cost') }} credit.</p>
+                Costs {{ app(\App\Support\CreditsPricing::class)->websiteGenerationCredits() }} credits
+                ({{ app(\App\Support\CreditsPricing::class)->formatZar(app(\App\Support\CreditsPricing::class)->websiteGenerationCredits()) }}).</p>
             <div class="actions">
                 <form method="POST" action="{{ route('websites.regenerate', $website) }}">
                     @csrf
-                    <button type="submit" class="btn secondary">Regenerate ({{ config('sites.generation_cost') }} credit)</button>
+                    <button type="submit" class="btn secondary">Regenerate ({{ app(\App\Support\CreditsPricing::class)->websiteGenerationCredits() }} credits)</button>
                 </form>
                 <form method="POST" action="{{ route('websites.destroy', $website) }}"
                       onsubmit="return confirm('Delete this website permanently?')">

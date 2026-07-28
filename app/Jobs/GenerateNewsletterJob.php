@@ -44,10 +44,12 @@ class GenerateNewsletterJob implements ShouldQueue
                 $result['text'],
             );
         } catch (Throwable $e) {
-            $this->website->user->addCredits(
-                $this->creditCost,
-                'Refund: newsletter generation failed for "'.$this->website->name.'"'
-            );
+            if ($this->creditCost > 0) {
+                $this->website->user->addCredits(
+                    $this->creditCost,
+                    'Refund: newsletter generation failed for "'.$this->website->name.'"'
+                );
+            }
 
             Log::error('Newsletter generation failed', [
                 'website_id' => $this->website->id,

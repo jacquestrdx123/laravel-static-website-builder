@@ -4,7 +4,11 @@
 
 @section('content')
     <h1>Generate poster</h1>
-    <p class="muted">Costs {{ $creditCost }} credits. HTML and PNG are saved to your website vault.</p>
+    <p class="muted">
+        Costs {{ $creditCost }} credits ({{ app(\App\Support\CreditsPricing::class)->formatZar($creditCost) }}),
+        including {{ $retriesIncluded }} retries per the locked pricing plan.
+        HTML and PNG are saved to your website vault.
+    </p>
 
     <div class="card">
         <form method="POST" action="{{ route('websites.posters.store', $website) }}">

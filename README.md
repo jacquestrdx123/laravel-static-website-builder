@@ -47,7 +47,7 @@ php artisan serve          # the app
 php artisan queue:work     # processes generation jobs (required!)
 ```
 
-Sign up (you get 1 free credit), create a website, and watch the queue worker
+Sign up, create a website, and watch the queue worker
 run the generation. Without a queue worker jobs sit in the `jobs` table forever.
 
 ### Environment variables
@@ -163,7 +163,7 @@ billing lands.
 php artisan test
 ```
 
-Covers: registration + welcome credit, credit spend/insufficient-credit paths,
+Covers: registration, credit spend/insufficient-credit paths,
 job queuing, preview authorisation + path-traversal defence, the Caddy ask
 endpoint, and the billing stub.
 

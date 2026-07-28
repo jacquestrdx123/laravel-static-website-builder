@@ -26,9 +26,6 @@ class AuthController extends Controller
 
         $user = User::create($data);
 
-        // Welcome credit so new customers can try a generation immediately.
-        $user->addCredits(1, 'Welcome credit');
-
         Auth::login($user);
         $request->session()->regenerate();
 

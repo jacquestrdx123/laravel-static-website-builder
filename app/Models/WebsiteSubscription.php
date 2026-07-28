@@ -9,6 +9,10 @@ class WebsiteSubscription extends Model
 {
     public const TYPE_MANUAL_EDITING = 'manual_editing';
 
+    public const TYPE_WEBSITE_HOSTING = 'website_hosting';
+
+    public const TYPE_NEWSLETTER_HOSTING = 'newsletter_hosting';
+
     public const STATUS_ACTIVE = 'active';
 
     public const STATUS_EXPIRED = 'expired';

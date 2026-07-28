@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Support\CreditsPricing;
+
 class DomainCreditPricing
 {
     /**
@@ -22,7 +24,7 @@ class DomainCreditPricing
         }
 
         $cents = $this->parsePriceToCents($price);
-        $unit = max(1, (int) config('sites.credit_unit_cents', 2000));
+        $unit = max(1, (int) config('sites.credit_unit_cents', app(CreditsPricing::class)->creditUnitCents()));
 
         return max(1, (int) ceil($cents / $unit));
     }
@@ -68,7 +70,7 @@ class DomainCreditPricing
         $normalized = str_replace(',', '.', $normalized);
 
         if ($normalized === '' || ! is_numeric($normalized)) {
-            return (int) config('sites.domain_default_credits', 5) * max(1, (int) config('sites.credit_unit_cents', 2000));
+            return (int) config('sites.domain_default_credits', 5) * max(1, (int) config('sites.credit_unit_cents', app(CreditsPricing::class)->creditUnitCents()));
         }
 
         return (int) round((float) $normalized * 100);

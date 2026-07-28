@@ -7,6 +7,7 @@ use App\Services\SiteContentUpdater;
 use App\Services\WebsiteContentVault;
 use App\Services\WebsiteProductCatalog;
 use App\Services\WebsiteGenerator;
+use App\Support\CreditsPricing;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
@@ -82,7 +83,7 @@ class GenerateWebsiteJob implements ShouldQueue
         ]);
 
         $this->website->user->addCredits(
-            config('sites.generation_cost'),
+            app(CreditsPricing::class)->websiteGenerationCredits(),
             'Refund: generation failed for "'.$this->website->name.'"'
         );
     }

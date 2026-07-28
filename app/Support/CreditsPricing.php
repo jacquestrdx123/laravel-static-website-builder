@@ -9,9 +9,78 @@ class CreditsPricing
         return (float) config('credits.credit_value_zar', 50);
     }
 
+    /** Cents of ZAR per credit — used when converting registrar prices to credits. */
+    public function creditUnitCents(): int
+    {
+        return (int) round($this->creditValueZar() * 100);
+    }
+
     public function currencySymbol(): string
     {
         return (string) config('credits.currency_symbol', 'R');
+    }
+
+    public function websiteGenerationCredits(): int
+    {
+        return (int) config('credits.website_generation.credits', 15);
+    }
+
+    public function websiteHostingCreditsPerMonth(): int
+    {
+        return (int) config('credits.website_hosting.credits_per_month', 3);
+    }
+
+    public function editingCreditsPerMonth(): float
+    {
+        return (float) config('credits.editing_without_ai.credits_per_month', 1.5);
+    }
+
+    public function editingCreditsPerYear(): int
+    {
+        return (int) config('credits.editing_without_ai.credits_per_year', 12);
+    }
+
+    public function newsletterHostingCreditsPerMonth(): int
+    {
+        return (int) config('credits.newsletter.hosting_credits_per_month', 6);
+    }
+
+    public function newsletterIncludedEmailsPerMonth(): int
+    {
+        return (int) config('credits.newsletter.included_emails_per_month', 500);
+    }
+
+    public function newsletterExtraBlockCredits(): int
+    {
+        return (int) config('credits.newsletter.extra_block_credits', 2);
+    }
+
+    public function newsletterExtraBlockSize(): int
+    {
+        return (int) config('credits.newsletter.extra_block_size', 500);
+    }
+
+    public function marketingPosterCredits(): int
+    {
+        return (int) config('credits.marketing_poster.credits', 2);
+    }
+
+    public function marketingPosterRetriesIncluded(): int
+    {
+        return (int) config('credits.marketing_poster.retries_included', 2);
+    }
+
+    /** Extra email blocks needed beyond the monthly included allowance. */
+    public function newsletterOverageCredits(int $emailsThisMonth): int
+    {
+        $over = max(0, $emailsThisMonth - $this->newsletterIncludedEmailsPerMonth());
+        if ($over === 0) {
+            return 0;
+        }
+
+        $blocks = (int) ceil($over / $this->newsletterExtraBlockSize());
+
+        return $blocks * $this->newsletterExtraBlockCredits();
     }
 
     public function toZar(float|int $credits): float

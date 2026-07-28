@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Jobs\GenerateWebsiteJob;
 use App\Models\Website;
 use App\Models\WebsiteImage;
+use App\Support\CreditsPricing;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -97,7 +98,7 @@ class WebsiteController extends Controller
 
         try {
             $user->spendCredits(
-                config('sites.generation_cost'),
+                app(CreditsPricing::class)->websiteGenerationCredits(),
                 'AI generation for "'.$data['name'].'"'
             );
         } catch (RuntimeException) {
@@ -229,7 +230,7 @@ class WebsiteController extends Controller
 
         try {
             $request->user()->spendCredits(
-                config('sites.generation_cost'),
+                app(CreditsPricing::class)->websiteGenerationCredits(),
                 'AI regeneration for "'.$website->name.'"'
             );
         } catch (RuntimeException) {

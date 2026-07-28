@@ -7,7 +7,8 @@
     <h1>Build a new website</h1>
     <p class="muted" style="max-width:40rem; margin-bottom:1.5rem;">
         A short step-by-step wizard — describe your business, add your photos, list your offerings,
-        and the AI builds you a complete static website. Costs {{ config('sites.generation_cost') }} credit.
+        and the AI builds you a complete static website. Costs {{ app(\App\Support\CreditsPricing::class)->websiteGenerationCredits() }} credits
+        ({{ app(\App\Support\CreditsPricing::class)->formatZar(app(\App\Support\CreditsPricing::class)->websiteGenerationCredits()) }}).
     </p>
 
     <style>
@@ -287,7 +288,7 @@
             <div class="actions">
                 <button type="button" id="wizard-next" class="btn">Next</button>
                 <button type="submit" id="wizard-submit" class="btn" style="display: none;">
-                    Generate my website ({{ config('sites.generation_cost') }} credit)
+                    Generate my website ({{ app(\App\Support\CreditsPricing::class)->websiteGenerationCredits() }} credits)
                 </button>
             </div>
         </div>

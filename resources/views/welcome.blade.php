@@ -16,7 +16,7 @@
                 <a class="btn" href="{{ route('websites.create') }}">Build a website</a>
                 <a class="btn secondary" href="{{ route('dashboard') }}">Go to dashboard</a>
             @else
-                <a class="btn" href="{{ route('register') }}">Get started — first site free</a>
+                <a class="btn" href="{{ route('register') }}">Get started</a>
                 <a class="btn secondary" href="{{ route('pricing') }}">See pricing</a>
             @endauth
         </div>

@@ -18,11 +18,12 @@ return [
 
     'publish_path' => env('SITES_PUBLISH_PATH', storage_path('app/published')),
 
-    // How many credits one AI generation costs.
-    'generation_cost' => (int) env('SITES_GENERATION_COST', 1),
+    // Legacy keys — prefer App\Support\CreditsPricing / config/credits.php.
+    // Defaults match locked pricing (1 credit = R50).
+    'generation_cost' => (int) env('SITES_GENERATION_COST', 15),
 
-    // 1 credit = this many cents of registrar/list price (2000 = R20.00 per credit).
-    'credit_unit_cents' => (int) env('CREDIT_UNIT_CENTS', 2000),
+    // 1 credit = this many cents of registrar/list price (5000 = R50.00 per credit).
+    'credit_unit_cents' => (int) env('CREDIT_UNIT_CENTS', 5000),
 
     // Fallback when HostAfrica pricing is unavailable.
     'domain_default_credits' => (int) env('DOMAIN_DEFAULT_CREDITS', 5),
@@ -62,10 +63,11 @@ return [
     // Browser cache for immutable CDN assets (asset_key never changes).
     'cdn_cache_max_age' => (int) env('CDN_CACHE_MAX_AGE', 31536000),
 
-    'editing_subscription_price' => env('EDITING_SUBSCRIPTION_PRICE', 'R299/year'),
+    'editing_subscription_price' => env('EDITING_SUBSCRIPTION_PRICE', 'R600/year'),
     'editing_subscription_years' => (int) env('EDITING_SUBSCRIPTION_YEARS', 1),
-    'newsletter_generation_cost' => (int) env('NEWSLETTER_GENERATION_COST', 2),
-    'poster_generation_cost' => (int) env('POSTER_GENERATION_COST', 3),
+    // Legacy — newsletter AI drafts are included with newsletter hosting (see config/credits.php).
+    'newsletter_generation_cost' => (int) env('NEWSLETTER_GENERATION_COST', 0),
+    'poster_generation_cost' => (int) env('POSTER_GENERATION_COST', 2),
 
     'poster_formats' => [
         'instagram_square' => ['label' => 'Instagram square', 'width' => 1080, 'height' => 1080],

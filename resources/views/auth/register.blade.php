@@ -16,10 +16,6 @@
 
             <div style="display:flex; gap:.7rem; margin:1.1rem 0;">
                 <span class="step-num" style="margin:0; flex:0 0 auto;">✓</span>
-                <span><strong>Your first site is on us.</strong> Sign up and get 1 free AI credit — enough to generate a complete website.</span>
-            </div>
-            <div style="display:flex; gap:.7rem; margin:1.1rem 0;">
-                <span class="step-num" style="margin:0; flex:0 0 auto;">✓</span>
                 <span><strong>Designed around your photos.</strong> The AI looks at your images and builds the design to fit them.</span>
             </div>
             <div style="display:flex; gap:.7rem; margin:1.1rem 0;">
@@ -33,7 +29,6 @@
         </div>
 
         <div class="card reveal reveal-d3">
-            <div class="flash ok" style="margin-bottom:1rem;">Includes 1 free website generation</div>
             <h2 style="margin-top:0">Create your account</h2>
 
             <form method="POST" action="{{ route('register') }}">
@@ -58,7 +53,7 @@
                        required autocomplete="new-password">
 
                 <div style="margin-top: 1.5rem;">
-                    <button type="submit" style="width:100%">Create account &amp; get my free credit</button>
+                    <button type="submit" style="width:100%">Create account</button>
                 </div>
 
                 <p class="hint" style="text-align:center; margin-top: 1rem;">

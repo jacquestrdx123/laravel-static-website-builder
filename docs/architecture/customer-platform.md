@@ -184,7 +184,7 @@ Live URL: `https://{slug}.{SITES_DOMAIN}` or `https://{custom_domain}`.
 | Method | Path | Controller | Purpose |
 |--------|------|------------|---------|
 | GET | `/register` | `AuthController@showRegister` | Registration form |
-| POST | `/register` | `AuthController@register` | Create account + 1 welcome credit |
+| POST | `/register` | `AuthController@register` | Create account |
 | GET/POST | `/login` | `AuthController` | Session login |
 | POST | `/logout` | `AuthController@logout` | End session |
 | GET | `/billing` | `BillingController@index` | Credit balance, packs, transaction history |

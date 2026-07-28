@@ -16,6 +16,7 @@ use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\NewsletterSubscriberController;
 use App\Http\Controllers\PosterController;
 use App\Http\Controllers\PricingController;
+use App\Http\Controllers\PublishController;
 use App\Http\Controllers\PublicNewsletterController;
 use App\Http\Controllers\WebsiteSubscriptionController;
 use App\Http\Controllers\WebsiteController;

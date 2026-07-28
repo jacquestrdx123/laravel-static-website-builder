@@ -84,11 +84,12 @@ class MarketingServicesTest extends TestCase
         File::deleteDirectory($this->vaultRoot.'/'.$website->id);
     }
 
-    public function test_newsletter_generation_and_send_use_vault_and_mail(): void
+    public function test_newsletter_generation_charges_hosting_then_includes_draft(): void
     {
         Mail::fake();
 
-        $owner = User::factory()->create(['ai_credits' => 5]);
+        $hosting = app(\App\Support\CreditsPricing::class)->newsletterHostingCreditsPerMonth();
+        $owner = User::factory()->create(['ai_credits' => $hosting + 2]);
         $website = $this->readyWebsite($owner);
 
         $this->mock(NewsletterGenerator::class, function ($mock) {
@@ -110,7 +111,8 @@ class MarketingServicesTest extends TestCase
             'topic' => 'Weekly update',
         ])->assertRedirect(route('websites.newsletters.index', $website));
 
-        $this->assertSame(3, $owner->fresh()->ai_credits);
+        $this->assertSame(2, $owner->fresh()->ai_credits);
+        $this->assertTrue($website->fresh()->hasActiveNewsletterHosting());
 
         $vault = WebsiteContentVault::forWebsite($website);
         $newsletters = $vault->listNewsletters();
@@ -136,20 +138,21 @@ class MarketingServicesTest extends TestCase
             $mock->shouldReceive('generate')->once()->andThrow(new \RuntimeException('AI failed'));
         });
 
-        $job = new GenerateNewsletterJob($website, 'Topic', null, 2);
+        $job = new GenerateNewsletterJob($website, 'Topic', null, 0);
 
         try {
             $job->handle(app(NewsletterGenerator::class));
         } catch (\RuntimeException) {
-            // expected
+            // expected — hosting is not refunded on AI failure when cost is 0
         }
 
-        $this->assertSame(5, $owner->fresh()->ai_credits);
+        $this->assertSame(3, $owner->fresh()->ai_credits);
     }
 
     public function test_poster_generation_writes_vault_with_mocked_exporter(): void
     {
-        $owner = User::factory()->create(['ai_credits' => 5]);
+        $cost = app(\App\Support\CreditsPricing::class)->marketingPosterCredits();
+        $owner = User::factory()->create(['ai_credits' => $cost + 3]);
         $website = $this->readyWebsite($owner);
 
         $this->mock(PosterGenerator::class, function ($mock) {
@@ -169,7 +172,7 @@ class MarketingServicesTest extends TestCase
             'format' => 'instagram_square',
         ])->assertRedirect(route('websites.posters.index', $website));
 
-        $this->assertSame(2, $owner->fresh()->ai_credits);
+        $this->assertSame(3, $owner->fresh()->ai_credits);
 
         $vault = WebsiteContentVault::forWebsite($website);
         $posters = $vault->listPosters();
@@ -181,6 +184,7 @@ class MarketingServicesTest extends TestCase
 
     public function test_poster_job_refunds_credits_on_generator_failure(): void
     {
+        $cost = app(\App\Support\CreditsPricing::class)->marketingPosterCredits();
         $owner = User::factory()->create(['ai_credits' => 2]);
         $website = $this->readyWebsite($owner);
 
@@ -188,7 +192,7 @@ class MarketingServicesTest extends TestCase
             $mock->shouldReceive('generate')->once()->andThrow(new \RuntimeException('AI failed'));
         });
 
-        $job = new GeneratePosterJob($website, 'Brief', 'instagram_square', 3);
+        $job = new GeneratePosterJob($website, 'Brief', 'instagram_square', $cost);
 
         try {
             $job->handle(app(PosterGenerator::class), app(PosterExporter::class));
@@ -196,7 +200,7 @@ class MarketingServicesTest extends TestCase
             // expected
         }
 
-        $this->assertSame(5, $owner->fresh()->ai_credits);
+        $this->assertSame(2 + $cost, $owner->fresh()->ai_credits);
     }
 
     public function test_public_newsletter_subscribe_and_unsubscribe(): void

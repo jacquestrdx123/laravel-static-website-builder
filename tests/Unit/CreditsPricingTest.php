@@ -71,4 +71,19 @@ class CreditsPricingTest extends TestCase
             'marketing_poster',
         ], $keys);
     }
+
+    public function test_cost_accessors_match_locked_config(): void
+    {
+        $pricing = new CreditsPricing;
+
+        $this->assertSame(15, $pricing->websiteGenerationCredits());
+        $this->assertSame(3, $pricing->websiteHostingCreditsPerMonth());
+        $this->assertSame(12, $pricing->editingCreditsPerYear());
+        $this->assertSame(6, $pricing->newsletterHostingCreditsPerMonth());
+        $this->assertSame(2, $pricing->marketingPosterCredits());
+        $this->assertSame(5000, $pricing->creditUnitCents());
+        $this->assertSame(0, $pricing->newsletterOverageCredits(500));
+        $this->assertSame(2, $pricing->newsletterOverageCredits(501));
+        $this->assertSame(4, $pricing->newsletterOverageCredits(1001));
+    }
 }

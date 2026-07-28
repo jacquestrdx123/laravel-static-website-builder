@@ -6,6 +6,7 @@ use App\Http\Controllers\Concerns\AuthorizesWebsiteAccess;
 use App\Jobs\GeneratePosterJob;
 use App\Models\Website;
 use App\Services\WebsiteContentVault;
+use App\Support\CreditsPricing;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -28,18 +29,19 @@ class PosterController extends Controller
         ]);
     }
 
-    public function create(Request $request, Website $website): View
+    public function create(Request $request, Website $website, CreditsPricing $pricing): View
     {
         $this->authorizeWebsite($request, $website);
 
         return view('websites.posters.create', [
             'website' => $website,
             'formats' => config('sites.poster_formats'),
-            'creditCost' => config('sites.poster_generation_cost'),
+            'creditCost' => $pricing->marketingPosterCredits(),
+            'retriesIncluded' => $pricing->marketingPosterRetriesIncluded(),
         ]);
     }
 
-    public function store(Request $request, Website $website): RedirectResponse
+    public function store(Request $request, Website $website, CreditsPricing $pricing): RedirectResponse
     {
         $this->authorizeWebsite($request, $website);
 
@@ -48,7 +50,7 @@ class PosterController extends Controller
             'format' => ['required', 'string', 'in:'.implode(',', array_keys(config('sites.poster_formats')))],
         ]);
 
-        $creditCost = (int) config('sites.poster_generation_cost');
+        $creditCost = $pricing->marketingPosterCredits();
 
         try {
             $request->user()->spendCredits($creditCost, 'Poster generation: '.$website->name);
