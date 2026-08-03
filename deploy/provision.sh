@@ -45,6 +45,13 @@ die()   { printf '\n%sERROR:%s %s\n' "$C_RED" "$C_RESET" "$*" >&2; exit 1; }
 CHANGED=()
 record() { CHANGED+=("$1"); }
 
+# `producer | grep -q PATTERN` is unsafe under `set -o pipefail`: grep exits the
+# moment it matches, the producer is killed by SIGPIPE, and the pipeline exits
+# 141 — so a *successful* match is reported as failure. Capture the output
+# first, then match against it.
+#   matches <extended-regex> <text>
+matches() { grep -qE "$1" <<<"$2"; }
+
 # ---------------------------------------------------------------------------
 # Preconditions
 # ---------------------------------------------------------------------------
@@ -190,6 +197,35 @@ else
     die "apt-get update failed — a repository is still misconfigured (see above)"
 fi
 
+# Ubuntu 24.04 ships PHP 8.3. Anything newer comes from ondrej/php, which a
+# bare image does not have configured — so add it rather than assuming some
+# earlier tool left it behind.
+step "PHP $PHP_VERSION availability"
+if matches 'Candidate: [0-9]' "$(apt-cache policy "php${PHP_VERSION}-fpm" 2>/dev/null)"; then
+    skip "php$PHP_VERSION available from the configured repositories"
+else
+    ok "php$PHP_VERSION not in the distro repositories — adding ondrej/php"
+    apt-get install -y -qq software-properties-common
+    LC_ALL=C.UTF-8 add-apt-repository -y ppa:ondrej/php >/dev/null
+
+    # add-apt-repository runs its own apt update, so an immediate second one
+    # can collide with the lock it still holds and return success having done
+    # nothing. Retry rather than concluding the repo is broken on first look.
+    PHP_FOUND=0
+    for attempt in 1 2 3; do
+        apt-get update -y -qq || true
+        if matches 'Candidate: [0-9]' "$(apt-cache policy "php${PHP_VERSION}-fpm" 2>/dev/null)"; then
+            PHP_FOUND=1
+            break
+        fi
+        warn "php$PHP_VERSION not visible yet (attempt $attempt/3) — retrying"
+        sleep 5
+    done
+    (( PHP_FOUND )) || die "php$PHP_VERSION is still unavailable after adding ondrej/php"
+    ok "ondrej/php added, php$PHP_VERSION now available"
+    record "added ondrej/php repository"
+fi
+
 PHP_PKGS=(
     "php${PHP_VERSION}-fpm" "php${PHP_VERSION}-cli" "php${PHP_VERSION}-mysql"
     "php${PHP_VERSION}-mbstring" "php${PHP_VERSION}-xml" "php${PHP_VERSION}-curl"
@@ -197,6 +233,10 @@ PHP_PKGS=(
     "php${PHP_VERSION}-intl" "php${PHP_VERSION}-redis" "php${PHP_VERSION}-sqlite3"
 )
 BASE_PKGS=(
+    # nginx and mysql-server are listed explicitly because a genuinely bare
+    # Ubuntu image has neither. They only appeared to be "already present" on
+    # the first box because a partial Forge run had installed them.
+    nginx mysql-server
     git curl unzip ca-certificates gnupg
     redis-server supervisor ufw
     debian-keyring debian-archive-keyring apt-transport-https
@@ -491,7 +531,7 @@ fi
 # Gate the restart on what mysqld is *actually* listening on, not on whether
 # this run edited the file. A previous run that wrote the config but died
 # before restarting would otherwise leave the port publicly exposed forever.
-if ss -tln 2>/dev/null | grep -qE '(\*|0\.0\.0\.0):3306\b'; then
+if matches '(\*|0\.0\.0\.0):3306([^0-9]|$)' "$(ss -tln 2>/dev/null)"; then
     systemctl restart mysql
     ok "restarted mysql to apply the loopback bind"
     record "restarted mysql (was publicly listening)"
@@ -546,7 +586,7 @@ if [[ -f /etc/memcached.conf ]]; then
         record "memcached -l -> 127.0.0.1"
     fi
     # Same reasoning as MySQL: trust the listener, not the edit.
-    if ss -tln 2>/dev/null | grep -qE '(\*|0\.0\.0\.0):11211\b'; then
+    if matches '(\*|0\.0\.0\.0):11211([^0-9]|$)' "$(ss -tln 2>/dev/null)"; then
         systemctl restart memcached && ok "restarted memcached to apply the loopback bind" \
             || warn "memcached restart failed"
         record "restarted memcached (was publicly listening)"
@@ -711,7 +751,7 @@ step "Firewall"
 ufw allow OpenSSH >/dev/null 2>&1 || true
 ufw allow 80/tcp  >/dev/null 2>&1 || true
 ufw allow 443/tcp >/dev/null 2>&1 || true
-if ufw status | grep -q '^Status: active'; then
+if matches '^Status: active' "$(ufw status 2>/dev/null)"; then
     skip "ufw already active"
 else
     ufw --force enable >/dev/null
