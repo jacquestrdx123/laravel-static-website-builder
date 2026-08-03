@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Table Bay Coffee Roasters — small-batch specialty coffee, Woodstock, Cape Town</title>
+<meta name="description" content="Small-batch specialty coffee roasted in Woodstock, Cape Town. Single origins, blends and subscriptions. Wholesale for cafés. Saturday tasting bar at the roastery.">
+<style>
+  :root{
+    --bg:#12100e; --bg-2:#1a1714; --ink:#f5f0e8; --body:#a8a09a;
+    --line:#2b2622; --brand:#c2410c; --brand-soft:#ea7a4a; --cream:#e8dfd2;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--body);
+       font:16px/1.7 "Iowan Old Style",Georgia,"Times New Roman",serif;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{color:var(--ink);line-height:1.15;margin:0 0 .5em;font-weight:500}
+  h1{font-size:clamp(2.3rem,6vw,4rem);letter-spacing:-.02em}
+  h2{font-size:clamp(1.6rem,3.4vw,2.4rem);letter-spacing:-.01em}
+  h3{font-size:1.16rem}
+  p{margin:0 0 1.1rem}
+  a{color:var(--brand-soft)}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 26px}
+  section{padding:92px 0}
+  .sans{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .kicker{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+          text-transform:uppercase;letter-spacing:.18em;font-size:.72rem;
+          color:var(--brand-soft);font-weight:600;margin-bottom:18px;display:block}
+
+  header{position:sticky;top:0;z-index:50;background:rgba(18,16,14,.86);
+         backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .bar{display:flex;align-items:center;gap:28px;padding:17px 0}
+  .logo{color:var(--ink);text-decoration:none;font-size:1.14rem;letter-spacing:.02em;
+        display:flex;align-items:center;gap:11px}
+  nav{margin-left:auto;display:flex;gap:28px}
+  nav a{color:var(--body);text-decoration:none;font-size:.9rem;letter-spacing:.02em}
+  nav a:hover{color:var(--ink)}
+  .shopbtn{border:1px solid var(--brand);color:var(--brand-soft);padding:9px 19px;border-radius:2px;
+           text-decoration:none;font-size:.86rem;letter-spacing:.06em;text-transform:uppercase}
+  .shopbtn:hover{background:var(--brand);color:#fff}
+  @media(max-width:860px){nav{display:none}}
+
+  /* hero */
+  .hero{position:relative;padding:110px 0 96px;overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(680px 400px at 78% 18%,rgba(194,65,12,.22),transparent 62%),
+      radial-gradient(520px 420px at 12% 82%,rgba(120,53,15,.20),transparent 60%);
+    pointer-events:none}
+  .hero .wrap{position:relative}
+  .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:64px;align-items:center}
+  .lede{font-size:1.2rem;max-width:48ch;color:var(--cream);opacity:.85}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px}
+  .btn{padding:14px 28px;text-decoration:none;font-size:.88rem;letter-spacing:.08em;
+       text-transform:uppercase;border-radius:2px;
+       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-weight:600}
+  .btn-solid{background:var(--brand);color:#fff}
+  .btn-solid:hover{background:#9a3412}
+  .btn-line{border:1px solid var(--line);color:var(--cream)}
+  .btn-line:hover{border-color:var(--cream)}
+
+  /* bean visual */
+  .bean{aspect-ratio:1;border-radius:50%;position:relative;
+        background:
+          radial-gradient(circle at 34% 30%,#6b3a1f 0%,#3d2013 46%,#241109 78%);
+        box-shadow:0 40px 90px rgba(0,0,0,.6), inset -20px -26px 60px rgba(0,0,0,.55)}
+  .bean::after{content:"";position:absolute;left:50%;top:8%;bottom:8%;width:14%;
+    transform:translateX(-50%);border-radius:50%;
+    background:linear-gradient(180deg,transparent,rgba(0,0,0,.75),transparent)}
+  .roastdate{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);
+    background:var(--bg-2);border:1px solid var(--line);padding:9px 18px;border-radius:2px;
+    font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;color:var(--brand-soft);
+    white-space:nowrap;font-family:-apple-system,sans-serif;font-weight:600}
+  @media(max-width:880px){.hero-grid{grid-template-columns:1fr;gap:56px}
+                          .bean{max-width:330px;margin:0 auto}}
+
+  /* coffee list */
+  .coffees{background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .beans{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;
+         background:var(--line);border:1px solid var(--line);margin-top:44px}
+  .card{background:var(--bg-2);padding:34px 30px;transition:background .2s}
+  .card:hover{background:#221d18}
+  .origin{font-family:-apple-system,sans-serif;font-size:.7rem;letter-spacing:.16em;
+          text-transform:uppercase;color:var(--brand-soft);font-weight:600}
+  .card h3{margin:12px 0 10px}
+  .notes{display:flex;gap:7px;flex-wrap:wrap;margin:16px 0 18px}
+  .note{font-family:-apple-system,sans-serif;font-size:.74rem;border:1px solid var(--line);
+        padding:4px 11px;border-radius:999px;color:var(--body)}
+  .cost{color:var(--ink);font-size:1.06rem;border-top:1px solid var(--line);padding-top:16px;
+        display:flex;justify-content:space-between;align-items:baseline}
+  .cost small{font-family:-apple-system,sans-serif;font-size:.74rem;color:var(--body);
+              letter-spacing:.06em;text-transform:uppercase}
+
+  /* story */
+  .story-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);
+         border:1px solid var(--line);margin-top:8px}
+  .stat{background:var(--bg);padding:26px 24px;text-align:center}
+  .stat b{display:block;color:var(--ink);font-size:1.9rem;line-height:1.1}
+  .stat span{font-family:-apple-system,sans-serif;font-size:.72rem;letter-spacing:.12em;
+             text-transform:uppercase;color:var(--body)}
+  @media(max-width:880px){.story-grid{grid-template-columns:1fr;gap:44px}}
+
+  /* gallery */
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:40px}
+  .tile{aspect-ratio:1;border-radius:3px;position:relative;overflow:hidden;
+        display:flex;align-items:flex-end;padding:18px}
+  .tile span{font-family:-apple-system,sans-serif;font-size:.74rem;letter-spacing:.1em;
+             text-transform:uppercase;color:rgba(255,255,255,.9);position:relative;font-weight:600}
+  .t1{background:linear-gradient(145deg,#3d2013,#1a0d07)}
+  .t2{background:linear-gradient(145deg,#6b3a1f,#2d1810)}
+  .t3{background:linear-gradient(145deg,#9a3412,#3d1a08)}
+  .t4{background:linear-gradient(145deg,#57534e,#1c1917)}
+
+  /* wholesale strip */
+  .strip{background:var(--brand);color:#fff}
+  .strip h2{color:#fff}
+  .strip p{color:rgba(255,255,255,.9);max-width:56ch}
+  .strip .btn-line{border-color:rgba(255,255,255,.5);color:#fff}
+  .strip .btn-line:hover{background:#fff;color:var(--brand)}
+
+  /* visit / contact */
+  .visit-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px}
+  .row{display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--line);
+       font-family:-apple-system,sans-serif;font-size:.94rem}
+  .row:last-child{border-bottom:0}
+  .row span:last-child{color:var(--ink)}
+  form{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  label{display:block;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;
+        color:var(--body);margin-bottom:7px;font-weight:600}
+  input,textarea{width:100%;padding:12px 14px;background:var(--bg-2);border:1px solid var(--line);
+                 color:var(--ink);font:inherit;font-size:.95rem;border-radius:2px;margin-bottom:16px}
+  input:focus,textarea:focus{outline:none;border-color:var(--brand)}
+  button{background:var(--brand);color:#fff;border:0;padding:14px 30px;font-size:.86rem;
+         letter-spacing:.08em;text-transform:uppercase;font-weight:600;cursor:pointer;
+         border-radius:2px;font-family:inherit}
+  button:hover{background:#9a3412}
+  @media(max-width:880px){.visit-grid{grid-template-columns:1fr;gap:46px}}
+
+  footer{border-top:1px solid var(--line);padding:34px 0;font-family:-apple-system,sans-serif;
+         font-size:.84rem;color:#6b6259}
+  .foot{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
+  html{scroll-behavior:smooth}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a href="#top" class="logo">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#c2410c" stroke-width="1.6" aria-hidden="true">
+        <path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8z"/>
+        <path d="M17 9h1.5a2.5 2.5 0 0 1 0 5H17"/>
+        <path d="M8 3v2M12 2.5V5" stroke-linecap="round"/>
+      </svg>
+      Table Bay Coffee Roasters
+    </a>
+    <nav>
+      <a href="#coffee">Coffee</a>
+      <a href="#story">Roastery</a>
+      <a href="#wholesale">Wholesale</a>
+      <a href="#visit">Visit</a>
+    </nav>
+    <a href="#coffee" class="shopbtn">Order</a>
+  </div>
+</header>
+
+<main id="top">
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="kicker">Woodstock · Cape Town</span>
+      <h1>Roasted on Tuesday.<br>On your table by Thursday.</h1>
+      <p class="lede">Small-batch specialty coffee, roasted to order in a converted warehouse on
+         Albert Road. We don't hold stock for months — we roast what's ordered, the week it ships.</p>
+      <div class="hero-cta">
+        <a href="#coffee" class="btn btn-solid">Browse the coffee</a>
+        <a href="#visit" class="btn btn-line">Saturday tasting bar</a>
+      </div>
+    </div>
+    <div style="position:relative">
+      <div class="bean"></div>
+      <div class="roastdate">Next roast · Tuesday 06:00</div>
+    </div>
+  </div>
+</section>
+
+<section id="coffee" class="coffees">
+  <div class="wrap">
+    <span class="kicker">The current lineup</span>
+    <h2>Four coffees, rotated seasonally</h2>
+    <p style="max-width:56ch">Everything is roasted in 12 kg batches. When a lot runs out we don't
+       re-order it out of season — we move on to what's tasting good.</p>
+
+    <div class="beans">
+      <article class="card">
+        <span class="origin">Ethiopia · Washed</span>
+        <h3>Yirgacheffe</h3>
+        <p>Delicate and tea-like. The one to brew if you think you don't like filter coffee.</p>
+        <div class="notes"><span class="note">Jasmine</span><span class="note">Bergamot</span><span class="note">Peach</span></div>
+        <div class="cost"><span>R210</span><small>250g · filter roast</small></div>
+      </article>
+      <article class="card">
+        <span class="origin">Brazil &amp; Colombia</span>
+        <h3>Table Mountain Blend</h3>
+        <p>Our everyday espresso. Forgiving on the machine and it holds up in milk.</p>
+        <div class="notes"><span class="note">Dark chocolate</span><span class="note">Hazelnut</span><span class="note">Low acid</span></div>
+        <div class="cost"><span>R165</span><small>250g · espresso roast</small></div>
+      </article>
+      <article class="card">
+        <span class="origin">Rwanda · Washed</span>
+        <h3>Nyungwe</h3>
+        <p>Bright and syrupy. Works as filter, and as a single-origin espresso if you like fruit.</p>
+        <div class="notes"><span class="note">Red berry</span><span class="note">Brown sugar</span><span class="note">Blackcurrant</span></div>
+        <div class="cost"><span>R195</span><small>250g · omni roast</small></div>
+      </article>
+      <article class="card">
+        <span class="origin">Subscription</span>
+        <h3>Two bags a month</h3>
+        <p>Rotating origins chosen by the roaster. Pause or cancel whenever. Free Cape Metro delivery.</p>
+        <div class="notes"><span class="note">Free delivery</span><span class="note">Cancel anytime</span></div>
+        <div class="cost"><span>R340</span><small>per month</small></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="story">
+  <div class="wrap story-grid">
+    <div>
+      <span class="kicker">The roastery</span>
+      <h2>A 12 kg drum and a lot of note-taking</h2>
+      <p>We started in 2017 with a second-hand roaster and a stall at the Neighbourgoods Market.
+         The stall is long gone; the roaster is still here, on Albert Road, running four days a week.</p>
+      <p>We buy through importers who publish what they paid the farm. It isn't a marketing line —
+         it's on the bag, and if you ask us we'll show you the contract.</p>
+      <div class="stats">
+        <div class="stat"><b>2017</b><span>Roasting since</span></div>
+        <div class="stat"><b>12kg</b><span>Batch size</span></div>
+        <div class="stat"><b>34</b><span>Cafés supplied</span></div>
+        <div class="stat"><b>4</b><span>Origins on rotation</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="tiles">
+        <div class="tile t1"><span>The drum</span></div>
+        <div class="tile t2"><span>Green store</span></div>
+        <div class="tile t3"><span>Cupping table</span></div>
+        <div class="tile t4"><span>Albert Road</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="wholesale" class="strip">
+  <div class="wrap">
+    <span class="kicker" style="color:rgba(255,255,255,.8)">For cafés and restaurants</span>
+    <h2>Wholesale, with the training included</h2>
+    <p>We supply 34 cafés across the Western Cape. Wholesale pricing starts at 5 kg a week, and
+       includes dialling in your grinder, staff training and a loan grinder if yours dies mid-service.</p>
+    <div class="hero-cta">
+      <a href="#visit" class="btn btn-line">Talk to us about wholesale</a>
+    </div>
+  </div>
+</section>
+
+<section id="visit">
+  <div class="wrap visit-grid">
+    <div>
+      <span class="kicker">Find us</span>
+      <h2>The tasting bar is open Saturdays</h2>
+      <p>Every Saturday morning we brew whatever came off the roaster that week — three or four
+         coffees, side by side, no charge. Come and taste before you commit to a bag.</p>
+      <div class="row"><span>Saturday tasting bar</span><span>08:00 – 13:00</span></div>
+      <div class="row"><span>Roastery (collections)</span><span>Tue – Fri, 09:00 – 16:00</span></div>
+      <div class="row"><span>Address</span><span>112 Albert Road, Woodstock</span></div>
+      <div class="row"><span>Orders</span><span>orders@tablebaycoffee.co.za</span></div>
+      <div class="row"><span>Phone</span><span>021 555 0142</span></div>
+    </div>
+    <div>
+      <h3>Wholesale &amp; general enquiries</h3>
+      <form onsubmit="event.preventDefault();this.querySelector('button').textContent='Thank you — we\'ll reply within a day';">
+        <label for="nm">Name</label><input id="nm" required>
+        <label for="em">Email</label><input id="em" type="email" required>
+        <label for="ms">Message</label><textarea id="ms" rows="5" placeholder="Café name and rough weekly volume, if you're asking about wholesale."></textarea>
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>© 2026 Table Bay Coffee Roasters · 112 Albert Road, Woodstock, Cape Town</span>
+    <span>Roasted Tuesdays &amp; Thursdays</span>
+  </div>
+</footer>
+
+</body>
+</html>
