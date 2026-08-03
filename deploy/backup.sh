@@ -21,7 +21,13 @@ die() { printf '%s  ERROR: %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$*" >&2; exit
 [[ -f "$ENV_FILE" ]] || die "$ENV_FILE not found"
 
 # Read credentials from the app's own .env so they can never drift apart.
-envval() { sed -nE "s/^$1=(.*)\$/\1/p" "$ENV_FILE" | head -1; }
+# Capture then take the first line: `sed ... | head -1` lets head exit early,
+# which SIGPIPEs sed and — under `set -o pipefail` — fails the whole script.
+envval() {
+    local v
+    v="$(sed -nE "s/^$1=(.*)\$/\1/p" "$ENV_FILE")"
+    printf '%s' "${v%%$'\n'*}"
+}
 DB_DATABASE="$(envval DB_DATABASE)"
 DB_USERNAME="$(envval DB_USERNAME)"
 DB_PASSWORD="$(envval DB_PASSWORD)"
@@ -61,7 +67,10 @@ mysqldump --defaults-extra-file="$CNF" \
 # A truncated dump is worse than no dump — it looks like a backup. Verify the
 # gzip stream is intact and the dump reached its own end marker.
 gzip -t "$TARGET" || die "dump is not a valid gzip stream — keeping it for inspection"
-zcat "$TARGET" | tail -5 | grep -q 'Dump completed' \
+# Same SIGPIPE trap: capture the tail, then match against it. A false
+# negative here would abort every run as "truncated".
+DUMP_TAIL="$(zcat "$TARGET" | tail -5)"
+grep -q 'Dump completed' <<<"$DUMP_TAIL" \
     || die "dump has no completion marker — treating as truncated, not rotating"
 
 chmod 600 "$TARGET"
