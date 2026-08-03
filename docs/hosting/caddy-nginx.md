@@ -28,20 +28,19 @@ PHP never reloads Nginx. Publish only writes files and domain symlinks via `Publ
 
 | Path | Purpose | Owner |
 |------|---------|--------|
-| `/var/www/builder` | App release (current symlink) | `deploy`:`www-data` |
+| `/var/www/builder` | Releases, shared state, `current` symlink | `forge`:`forge` |
 | `/var/www/builder/current/public` | Laravel public | same |
-| `/srv/websites` | `SITES_PUBLISH_PATH` | `www-data`:`www-data` (deploy group write) |
-| `/srv/websites/{slug}` | Live site files | `www-data` |
-| `/srv/websites/domains/{host}` | Symlink → slug dir | `www-data` |
+| `/var/www/builder/shared/.env` | Real environment file (mode 600) | `forge`:`forge` |
+| `/srv/websites` | `SITES_PUBLISH_PATH` | `forge`:`forge` |
+| `/srv/websites/{slug}` | Live site files | `forge` |
+| `/srv/websites/domains/{host}` | Symlink → slug dir | `forge` |
 | `/etc/caddy/Caddyfile` | Edge config (from `deploy/caddy.edge.Caddyfile`) | `root` |
 | `/etc/nginx/sites-available/siteforge-origin` | Origin config (from `deploy/nginx.origin.conf`) | `root` |
 
-Suggested OS users:
-
-- `deploy` — git pull / `deploy/deploy.sh`
-- `www-data` — PHP-FPM pool user (reads app + writes `/srv/websites`)
-
-`deploy` should be in group `www-data` with group-writable `/srv/websites` and storage dirs.
+One OS user, `forge`, owns the whole chain: it runs the Nginx workers, the
+PHP-FPM `siteforge` pool, the Horizon/scheduler processes, and the deploy
+scripts. Its sudo rights are scoped by `/etc/sudoers.d/siteforge-deploy` to
+exactly the reloads a deploy needs — nothing more.
 
 ---
 
@@ -79,45 +78,86 @@ Replace placeholders in Caddy/Nginx configs before install (`APP_HOST`, `SITES_D
 
 | File | Role |
 |------|------|
+| `deploy/deploy.env.example` | Config template — hostnames, repo, DB (copy to `deploy.env`) |
+| `deploy/provision.sh` | Idempotent server provisioning (root, one command) |
+| `deploy/deploy.sh` | Atomic release deploy |
+| `deploy/rollback.sh` | Flip `current` back to a previous release |
 | `deploy/caddy.edge.Caddyfile` | Public TLS edge → proxy to Nginx |
 | `deploy/nginx.origin.conf` | Localhost:8080 app + static sites |
-| `deploy/bootstrap-vps.sh` | Idempotent Ubuntu package + dir setup |
-| `deploy/deploy.sh` | Release deploy (no Forge) |
+| `deploy/php-fpm.pool.conf` | Dedicated `siteforge` FPM pool |
 | `deploy/supervisor/siteforge.conf` | Horizon + scheduler |
-| `deploy/Caddyfile` | **Legacy** — Caddy served files itself; prefer edge+origin |
-| `deploy/nginx.conf.example` | **Legacy** — public TLS Nginx; prefer origin |
+
+---
+
+## Release layout
+
+```text
+/var/www/builder/
+    releases/20260803-104200-a1b2c3d/   built in full, then activated
+    shared/.env                          symlinked into every release
+    shared/storage/                      symlinked into every release
+    shared/deploy.env                    deployment config
+    shared/repo.git/                     bare mirror for cheap fetches
+    current -> releases/20260803-104200-a1b2c3d
+```
+
+`current` only moves after the new release is fully built and passes a boot
+check, so a failed deploy cannot take the site down.
 
 ---
 
 ## Bootstrap (first bring-up)
 
-1. Point DNS at the VPS (or use staging hosts).
-2. As root: copy repo (or clone) and run:
+1. Point DNS at the VPS: `A app`, `A sites`, `A *.sites`.
+2. Copy `deploy/` to the server and run, as root:
 
 ```bash
-export APP_HOST=app.example.com
-export SITES_DOMAIN=sites.example.com
-export CADDY_EMAIL=admin@example.com
-export DEPLOY_USER=deploy
-sudo -E bash deploy/bootstrap-vps.sh
+cp deploy/deploy.env.example deploy/deploy.env
+$EDITOR deploy/deploy.env          # APP_HOST, SITES_DOMAIN, ACME_EMAIL, REPO_URL
+bash deploy/provision.sh
 ```
 
-3. Clone/release the app into `/var/www/builder`, copy `.env`, `composer install`, `artisan key:generate`, `migrate`, `storage:link`.
-4. `sudo systemctl reload nginx && sudo systemctl reload caddy`
+`provision.sh` installs PHP/Composer/Redis/Supervisor/Caddy/Chromium, repairs
+any broken apt keyrings, writes the Nginx + Caddy + FPM configs, creates the
+MySQL database, and generates `/var/www/builder/shared/.env`.
+
+3. Add the deploy key to GitHub (read-only) and fill in `ANTHROPIC_API_KEY`:
+
+```bash
+sudo -u forge ssh-keygen -t ed25519 -N '' -f /home/forge/.ssh/id_ed25519
+cat /home/forge/.ssh/id_ed25519.pub          # → GitHub → Settings → Deploy keys
+$EDITOR /var/www/builder/shared/.env
+```
+
+4. Ship the first release, then generate the app key:
+
+```bash
+sudo -u forge bash deploy/deploy.sh
+sudo -u forge /usr/bin/php8.4 /var/www/builder/current/artisan key:generate --force
+```
+
 5. Smoke tests (below).
 
 ---
 
 ## Deploy (subsequent releases)
 
-As `deploy`:
+As the deploy user:
 
 ```bash
-cd /var/www/builder
-./deploy/deploy.sh   # or: bash /path/to/repo/deploy/deploy.sh
+bash /var/www/builder/current/deploy/deploy.sh      # deploy REPO_BRANCH
+REF=v1.2.0 bash .../deploy.sh                        # a specific tag or sha
+DRY_RUN=1 bash .../deploy.sh                         # build without activating
 ```
 
-Restarts Supervisor programs after migrate/optimize.
+Roll back:
+
+```bash
+bash /var/www/builder/current/deploy/rollback.sh --list
+bash /var/www/builder/current/deploy/rollback.sh     # previous release
+```
+
+Rollback flips the symlink only — **database migrations are not reversed**.
 
 ---
 
@@ -150,15 +190,19 @@ curl -sI "https://www.customer.com/" | head -1
 
 ## Permissions checklist
 
+Nginx, the PHP-FPM `siteforge` pool and the deploy user are all the **same
+user** (`forge`). That is deliberate: publishing a site happens inside a web
+request, so PHP has to write `/srv/websites` directly, and a single owner
+removes the group-permission juggling entirely.
+
 ```bash
-sudo mkdir -p /srv/websites/domains
-sudo chown -R www-data:www-data /srv/websites
-sudo chmod 2775 /srv/websites /srv/websites/domains
-# deploy user can write published trees via www-data group
-sudo usermod -aG www-data deploy
+sudo chown -R forge:forge /srv/websites /var/www/builder
+sudo chmod 755 /srv/websites /srv/websites/domains
+grep '^user' /etc/nginx/nginx.conf              # -> user forge;
+grep -E '^(user|group)' /etc/php/8.4/fpm/pool.d/siteforge.conf
 ```
 
-PHP-FPM must run as `www-data` (default) so publish from the web request can write `/srv/websites`.
+`provision.sh` sets all of this up; the commands above are for verification.
 
 ---
 
@@ -170,8 +214,10 @@ PHP-FPM must run as `www-data` (default) so publish from the web request can wri
 | 404 on `{slug}.sites…` | Missing `/srv/websites/{slug}`; wrong `SITES_DOMAIN` in Nginx regex vs `.env` |
 | 404 on custom domain | Missing symlink under `/srv/websites/domains/{host}`; Host header mismatch (www vs apex) |
 | Ask always 502 | Nginx/PHP down; loopback server block missing; wrong `root` for Laravel |
-| App 502 | PHP-FPM socket path mismatch (check `php8.3-fpm.sock` vs installed version) |
-| Publish fails with permission denied | `/srv/websites` not writable by `www-data` |
+| App 502 | PHP-FPM socket missing — pool listens on `/run/php/siteforge.sock`; check `systemctl status php8.4-fpm` |
+| App serves the previous release | `php8.4-fpm` was not reloaded after the symlink flip (realpath cache) |
+| Publish fails with permission denied | `/srv/websites` not owned by `forge`, or the FPM pool is running as another user |
+| `apt-get update` fails, PHP will not install | Empty apt keyring in `/usr/share/keyrings` — re-run `provision.sh`, which repairs them |
 
 Caddy logs: `journalctl -u caddy -f`  
 Nginx logs: `/var/log/nginx/error.log`  
