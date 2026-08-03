@@ -111,6 +111,73 @@ corporate: Trustworthy and structured. Clear hierarchy, restrained blues/neutral
   (stats, logos as text, certifications). Clean sans stacks, tighter spacing than elegant.
 </style_guides>
 
+<motion_language>
+Motion is part of the design, not decoration bolted on at the end. A static page with a
+couple of fade-ins reads as a template. What makes a site feel alive is a small number of
+deliberate, well-chosen movements that reward attention and reinforce the brand's character.
+
+WHEN "animations" IS ENABLED, the site must have a real motion design. Choose FOUR TO SIX
+distinct ideas from the menu below - enough that the page feels considered as the visitor
+scrolls, not so many that it fidgets. Do not apply every technique; pick the ones that suit
+this business and this style, and execute them precisely.
+
+Menu of techniques:
+- Staggered reveals: children of a section enter in sequence (60-90ms apart), not all at
+  once. This single change does more for perceived quality than any other.
+- Hero entrance: on load, the headline, sub-copy and CTA arrive in sequence. Keep it under
+  900ms total - a visitor should never wait to read.
+- Scroll-linked motion: a progress bar, a header that shrinks/condenses, a section that
+  shifts subtly as it passes through the viewport. Drive from a single rAF-throttled
+  handler or IntersectionObserver, never a raw scroll listener doing layout reads.
+- Depth on scroll: background and foreground move at slightly different rates. Small
+  amounts (10-40px of travel). Skip entirely on touch devices.
+- Number count-up: stats animate from zero when scrolled into view, once. Excellent for
+  credibility sections (years trading, jobs completed, clients served).
+- Text reveal: headline animates in by line or word with a clip-path or mask. Reserve for
+  ONE headline - usually the hero - or it becomes a tic.
+- Image treatment: a slow scale (1.0 to 1.06 over several seconds) on a hero image, or an
+  image that un-blurs / clips into view as it enters. Never both on the same image.
+- Card interactions: lift plus shadow bloom on hover, accent border sweep, an arrow that
+  travels. Interactive cards must also respond to :focus-visible, identically.
+- Button micro-interactions: an arrow that slides, a fill that wipes across, a subtle
+  press-down on :active. Every button on the site should feel responsive to touch.
+- SVG line draw: stroke-dasharray/dashoffset animation on an underline, divider or icon as
+  it enters. Pairs well with playful and elegant.
+- Gradient/shimmer: a slow animated gradient behind a heading or on a CTA. One per page.
+- Marquee: a continuous horizontal strip (testimonial quotes, service names, logos-as-text).
+  Duplicate the content for a seamless loop and pause on hover.
+- Accordion/tab transitions: FAQ answers and tabbed content should animate height or
+  clip-path open, never snap.
+
+MOTION CHARACTER MUST MATCH THE STYLE - the same technique feels wrong at the wrong tempo:
+- minimal: 200-300ms, ease-out, small distances (8-16px). Motion you notice only if looking.
+- bold: 300-450ms, decisive easing, large travel, big scale changes. Motion as a statement.
+- elegant: 600-900ms, long gentle easing (cubic-bezier(.22,.61,.36,1)), generous fades and
+  slow image scales. Never bouncy - bounce reads as cheap here.
+- playful: 400-600ms with overshoot (cubic-bezier(.34,1.56,.64,1)), rotation, springy hovers.
+- corporate: 200-350ms, crisp and uniform, no overshoot. Confidence through consistency.
+
+NON-NEGOTIABLE RULES:
+- Animate transform and opacity only. Never animate width, height, top, left, margin or
+  padding - they force layout on every frame and visibly stutter on mid-range phones.
+- Use IntersectionObserver for enter-on-scroll, never a scroll handler measuring positions.
+  Unobserve after firing: reveals happen once, they do not replay on scroll-up.
+- Content must be readable without JavaScript. Reveal classes may only ADD motion to content
+  that is already in the DOM and visible by default; never leave elements at opacity:0 with
+  JS as the only path to visibility. A JS error must not produce a blank page.
+- Respect prefers-reduced-motion: reduce - wrap decorative motion in the media query and
+  disable transforms, loops, parallax and count-ups. Reduced motion means content appears
+  immediately in its final state, not that the site becomes broken.
+- Nothing loops infinitely next to text a person is trying to read. Marquees, shimmers and
+  pulses belong in accents, dividers and CTAs.
+- Never animate anything faster than 3 flashes per second.
+- Motion must never delay information. Anything above the fold is readable within 1 second.
+
+WHEN "animations" IS NOT ENABLED: no scroll reveals, no parallax, no loops. Still ship
+crisp hover, focus and :active states with short transitions (150-200ms) - a calm site is
+not a dead one.
+</motion_language>
+
 <color_schemes>
 - light: light backgrounds, dark ink. Surfaces slightly tinted, never pure #fff everywhere.
 - dark: dark backgrounds (not pure black; use deep tinted darks), light ink, careful elevation
@@ -165,8 +232,9 @@ Implement exactly the features toggled in the brief, no more:
 
 smooth_scroll: CSS scroll-behavior: smooth plus JS-enhanced anchor scrolling that respects
   prefers-reduced-motion.
-animations: Tasteful entrance reveals via IntersectionObserver adding a class; CSS transitions
-  under 400ms; parallax only if subtle. Everything gated behind prefers-reduced-motion.
+animations: Build the full motion design described in <motion_language>. This is the single
+  biggest difference between a site that feels bought and one that feels built - do not
+  settle for fade-ins alone.
 sticky_header: Header stays fixed/sticky with a scrolled state (background gains opacity or a
   shadow after scrolling). Mobile nav must still work.
 back_to_top: A floating button appearing after ~one viewport of scroll, smooth scroll to top,

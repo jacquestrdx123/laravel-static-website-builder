@@ -35,8 +35,12 @@ class Create extends Component
 
     public string $accent_color = '#0e7a5f';
 
-    /** @var list<string> */
-    public array $features = ['seo_meta', 'smooth_scroll'];
+    /**
+     * Motion is on by default - a site with no movement reads as a template.
+     *
+     * @var list<string>
+     */
+    public array $features = ['seo_meta', 'smooth_scroll', 'animations', 'sticky_header'];
 
     public string $extra_instructions = '';
 
