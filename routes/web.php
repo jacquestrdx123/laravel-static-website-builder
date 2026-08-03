@@ -15,11 +15,6 @@ use App\Http\Controllers\DomainTransferController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\NewsletterSubscriberController;
 use App\Http\Controllers\PosterController;
-<<<<<<< HEAD
-use App\Http\Controllers\PricingController;
-use App\Http\Controllers\PublishController;
-=======
->>>>>>> 39492e9fff7c5c7393a3715f43a1ae4ec8335ba7
 use App\Http\Controllers\PublicNewsletterController;
 use App\Http\Controllers\PublishController;
 use App\Http\Controllers\WebsiteSubscriptionController;

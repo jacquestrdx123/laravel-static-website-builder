@@ -61,7 +61,8 @@ class LivewireCustomerPagesTest extends TestCase
         Queue::fake();
         Storage::fake('local');
 
-        $user = User::factory()->create(['ai_credits' => 2]);
+        $cost = app(\App\Support\CreditsPricing::class)->websiteGenerationCredits();
+        $user = User::factory()->create(['ai_credits' => $cost + 1]);
 
         Livewire::actingAs($user)
             ->test(Create::class)

@@ -20,7 +20,7 @@
                 <a class="btn" href="{{ route('billing.index') }}">Buy credits</a>
                 <a class="btn secondary" href="{{ route('dashboard') }}">Back to dashboard</a>
             @else
-                <a class="btn" href="{{ route('register') }}">Get started free</a>
+                <a class="btn" href="{{ route('register') }}">Create account</a>
                 <a class="btn secondary" href="{{ route('login') }}">Log in</a>
             @endauth
         </div>

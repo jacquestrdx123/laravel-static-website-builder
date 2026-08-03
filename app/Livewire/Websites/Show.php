@@ -6,6 +6,7 @@ use App\Jobs\GenerateWebsiteJob;
 use App\Models\Website;
 use App\Services\PublishedSiteHost;
 use App\Services\WebsiteContentVault;
+use App\Support\CreditsPricing;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Locked;
@@ -49,7 +50,7 @@ class Show extends Component
 
         try {
             auth()->user()->spendCredits(
-                config('sites.generation_cost'),
+                app(CreditsPricing::class)->websiteGenerationCredits(),
                 'AI regeneration for "'.$website->name.'"'
             );
         } catch (RuntimeException) {

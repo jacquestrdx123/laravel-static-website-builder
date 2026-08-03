@@ -87,7 +87,7 @@ class LivewireCustomerSurfaceTest extends TestCase
         $this->assertSame(6, $user->fresh()->ai_credits);
     }
 
-    public function test_livewire_register_grants_welcome_credit(): void
+    public function test_livewire_register_does_not_grant_welcome_credit(): void
     {
         Livewire::test(Register::class)
             ->set('name', 'Ada')
@@ -97,6 +97,6 @@ class LivewireCustomerSurfaceTest extends TestCase
             ->call('register')
             ->assertRedirect(route('dashboard'));
 
-        $this->assertSame(1, User::firstWhere('email', 'ada@example.com')->ai_credits);
+        $this->assertSame(0, User::firstWhere('email', 'ada@example.com')->ai_credits);
     }
 }

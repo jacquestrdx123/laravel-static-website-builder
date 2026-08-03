@@ -45,7 +45,7 @@ class WebsiteCreator
         }
 
         $user->spendCredits(
-            config('sites.generation_cost'),
+            app(\App\Support\CreditsPricing::class)->websiteGenerationCredits(),
             'AI generation for "'.$data['name'].'"'
         );
 

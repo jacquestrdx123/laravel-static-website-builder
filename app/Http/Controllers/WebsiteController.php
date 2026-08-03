@@ -4,14 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Jobs\GenerateWebsiteJob;
 use App\Models\Website;
-<<<<<<< HEAD
-use App\Models\WebsiteImage;
-use App\Support\CreditsPricing;
-=======
 use App\Services\WebsiteContentVault;
 use App\Services\WebsiteCreator;
+use App\Support\CreditsPricing;
 use App\WebsiteBuilder\WebsiteOptions;
->>>>>>> 39492e9fff7c5c7393a3715f43a1ae4ec8335ba7
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -74,12 +70,6 @@ class WebsiteController extends Controller
         }
 
         try {
-<<<<<<< HEAD
-            $user->spendCredits(
-                app(CreditsPricing::class)->websiteGenerationCredits(),
-                'AI generation for "'.$data['name'].'"'
-            );
-=======
             $website = $creator->create($request->user(), $data, [
                 'logo' => $request->file('logo'),
                 'favicon' => $request->file('favicon'),
@@ -87,7 +77,6 @@ class WebsiteController extends Controller
                 'gallery_images' => array_values($request->file('gallery_images', [])),
                 'offerings' => $offeringFiles,
             ]);
->>>>>>> 39492e9fff7c5c7393a3715f43a1ae4ec8335ba7
         } catch (RuntimeException) {
             return redirect()->route('billing.index')
                 ->with('error', 'You need more credits to generate a website.');

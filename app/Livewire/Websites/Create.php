@@ -256,7 +256,7 @@ class Create extends Component
             'offeringTypes' => WebsiteOptions::OFFERING_TYPES,
             'maxOfferings' => WebsiteOptions::MAX_OFFERINGS,
             'maxPhotos' => (int) config('sites.max_images'),
-            'generationCost' => config('sites.generation_cost'),
+            'generationCost' => app(\App\Support\CreditsPricing::class)->websiteGenerationCredits(),
         ])->extends('layouts.app');
     }
 }

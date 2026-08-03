@@ -3,7 +3,7 @@
     <h1>Build a new website</h1>
     <p class="muted" style="max-width:40rem; margin-bottom:1.5rem;">
         Choose a site template, describe your business, add photos and offerings —
-        and the AI builds a complete static website. Costs {{ $generationCost }} credit.
+        and the AI builds a complete static website. Costs {{ $generationCost }} credits.
     </p>
 
     <style>
@@ -325,7 +325,7 @@
                     <button type="button" class="btn" wire:click="nextStep">Next</button>
                 @else
                     <button type="submit" class="btn" wire:loading.attr="disabled">
-                        <span wire:loading.remove wire:target="save">Generate my website ({{ $generationCost }} credit)</span>
+                        <span wire:loading.remove wire:target="save">Generate my website ({{ $generationCost }} credits)</span>
                         <span wire:loading wire:target="save">Starting generation…</span>
                     </button>
                 @endif

@@ -27,7 +27,6 @@ class Register extends Component
         ]);
 
         $user = User::create($data);
-        $user->addCredits(1, 'Welcome credit');
 
         Auth::login($user);
         session()->regenerate();

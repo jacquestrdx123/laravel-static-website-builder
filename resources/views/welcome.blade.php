@@ -196,24 +196,6 @@
 @endsection
 
 @section('content')
-<<<<<<< HEAD
-    <section class="hero">
-        <a class="brand-mark reveal reveal-d1" href="{{ url('/') }}">Site<span>Forge</span></a>
-        <p class="eyebrow reveal reveal-d2">Describe · Generate · Publish</p>
-        <h1 class="reveal reveal-d3">Your website, built by AI.</h1>
-        <p class="lede reveal reveal-d4">
-            Upload your photos, tell us about your business, flip a few toggles —
-            and get a fast, hand-crafted-quality static website in minutes.
-        </p>
-        <div class="hero-cta reveal reveal-d5">
-            @auth
-                <a class="btn" href="{{ route('websites.create') }}">Build a website</a>
-                <a class="btn secondary" href="{{ route('dashboard') }}">Go to dashboard</a>
-            @else
-                <a class="btn" href="{{ route('register') }}">Get started</a>
-                <a class="btn secondary" href="{{ route('pricing') }}">See pricing</a>
-            @endauth
-=======
     <!-- ============ HERO ============ -->
     <header class="hero">
         <div class="hero-copy">
@@ -229,14 +211,14 @@
                     <a class="mk-btn" href="{{ route('websites.create') }}">Build a website →</a>
                     <a class="mk-btn ghost" href="{{ route('dashboard') }}">Go to dashboard</a>
                 @else
-                    <a class="mk-btn" href="{{ route('register') }}">Get started — first site free</a>
+                    <a class="mk-btn" href="{{ route('register') }}">Get started</a>
                     <a class="mk-btn ghost" href="{{ route('pricing') }}">See pricing</a>
                 @endauth
             </div>
             <div class="hero-trust rv rv-d5">
                 <span class="chip"><b>~3 min</b> from brief to preview</span>
                 <span class="chip"><b>100%</b> static &amp; fast</span>
-                <span class="chip"><b>Free</b> HTTPS on every site</span>
+                <span class="chip"><b>HTTPS</b> on every site</span>
                 <span class="chip"><b>.co.za</b> domains built-in</span>
             </div>
         </div>
@@ -277,11 +259,10 @@
     <!-- ============ STATS ============ -->
     <section class="stats">
         <div class="mk-container">
-            <div class="stat rv"><b>1 credit</b><span>free when you sign up</span></div>
+            <div class="stat rv"><b>15 credits</b><span>per website generation</span></div>
             <div class="stat rv rv-d1"><b>10 photos</b><span>designed around, not stock</span></div>
             <div class="stat rv rv-d2"><b>0 code</b><span>needed, ever</span></div>
             <div class="stat rv rv-d3"><b>24/7</b><span>your site never sleeps</span></div>
->>>>>>> 39492e9fff7c5c7393a3715f43a1ae4ec8335ba7
         </div>
     </section>
 
@@ -368,13 +349,13 @@
     <section class="section" style="padding-top: 0;">
         <div class="mk-container">
             <div class="cta-band rv">
-                <p class="mk-eyebrow">Start free</p>
-                <h2>Your first website is on us.</h2>
-                <p>Sign up, get a free AI credit, and see your business online before your coffee gets cold.</p>
+                <p class="mk-eyebrow">Get started</p>
+                <h2>Ready to get online?</h2>
+                <p>Create an account, buy credits, and launch a website designed around your business.</p>
                 @auth
                     <a class="mk-btn" href="{{ route('websites.create') }}">Build a website →</a>
                 @else
-                    <a class="mk-btn" href="{{ route('register') }}">Create my free website →</a>
+                    <a class="mk-btn" href="{{ route('register') }}">Create my account →</a>
                 @endauth
             </div>
         </div>
