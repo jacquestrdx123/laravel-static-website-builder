@@ -152,6 +152,7 @@
         <div class="links">
             <a class="link optional" href="{{ url('/#features') }}">Features</a>
             <a class="link optional" href="{{ url('/#how-it-works') }}">How it works</a>
+            <a class="link" href="{{ route('examples') }}">Examples</a>
             <a class="link" href="{{ route('pricing') }}">Pricing</a>
             @auth
                 <a class="link" href="{{ route('dashboard') }}">Dashboard</a>

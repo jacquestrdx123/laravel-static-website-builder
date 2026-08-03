@@ -22,6 +22,7 @@ use App\Http\Controllers\WebsiteController;
 use App\Livewire\Auth\Login as AuthLogin;
 use App\Livewire\Auth\Register as AuthRegister;
 use App\Livewire\Billing;
+use App\Livewire\Examples;
 use App\Livewire\Domains\Contacts as DomainContacts;
 use App\Livewire\Domains\Dns as DomainDns;
 use App\Livewire\Domains\Index as DomainIndex;
@@ -70,6 +71,7 @@ Route::middleware('guest')->group(function () {
 
 // Public: the homepage funnel links logged-out visitors here.
 Route::get('/pricing', Pricing::class)->name('pricing');
+Route::get('/examples', Examples::class)->name('examples');
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
