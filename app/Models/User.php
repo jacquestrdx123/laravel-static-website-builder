@@ -56,6 +56,11 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(Domain::class)->latest();
     }
 
+    public function promoCodeRedemptions(): HasMany
+    {
+        return $this->hasMany(PromoCodeRedemption::class);
+    }
+
     /** Atomically deduct credits, recording a ledger entry. Throws when the balance is insufficient. */
     public function spendCredits(int $amount, string $description): void
     {

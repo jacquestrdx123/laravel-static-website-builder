@@ -8,9 +8,10 @@ return [
     |--------------------------------------------------------------------------
     |
     | Generated sites are written to storage/app/private/sites/{slug} while in
-    | preview. Publishing copies the site into the publish_path, which Caddy
-    | serves per-hostname (see deploy/Caddyfile). "domain" is the wildcard
-    | subdomain zone customers get for free, e.g. {slug}.sites.example.com.
+    | preview. Publishing copies the site into the publish_path, which Nginx
+    | serves per-hostname behind Caddy TLS (see docs/hosting/caddy-nginx.md).
+    | "domain" is the wildcard subdomain zone customers get for free, e.g.
+    | {slug}.sites.example.com.
     |
     */
 

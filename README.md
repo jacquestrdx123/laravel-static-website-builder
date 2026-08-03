@@ -28,7 +28,7 @@ register → buy AI credits → describe business + upload images + choose toggl
 | Publish / unpublish to the Caddy web root | `app/Http/Controllers/PublishController.php` |
 | Credits ledger + stubbed checkout | `app/Http/Controllers/BillingController.php`, `App\Models\User::spendCredits()` |
 | Caddy `on_demand_tls` ask endpoint | `app/Http/Controllers/CaddyController.php` (`GET /caddy/allowed`) |
-| Caddy server config | `deploy/Caddyfile` |
+| Production hosting (Caddy + Nginx) | `docs/hosting/caddy-nginx.md`, `deploy/caddy.edge.Caddyfile`, `deploy/nginx.origin.conf` |
 
 ## Local development
 
@@ -58,58 +58,38 @@ run the generation. Without a queue worker jobs sit in the `jobs` table forever.
 | `ANTHROPIC_MODEL` | Model used for site generation | `claude-opus-4-8` |
 | `ANTHROPIC_MAX_TOKENS` | Output budget per generation | `64000` |
 | `SITES_DOMAIN` | Wildcard zone for published sites (`{slug}.SITES_DOMAIN`) | `sites.localhost` |
-| `SITES_PUBLISH_PATH` | Directory Caddy serves published sites from | `storage/app/published` |
+| `SITES_PUBLISH_PATH` | Directory Nginx serves published sites from | `storage/app/published` |
+| `HOSTING_DRIVER` | Host provisioner (`null` / `filesystem` / `nginx_snippets`) | `null` |
+| `CADDY_ASK_URL` | Caddy on-demand TLS ask URL (ops; mirrored in Caddyfile) | `http://127.0.0.1:8080/caddy/allowed` |
 | `SITES_GENERATION_COST` | Credits per generation | `1` |
 | `SITES_MAX_IMAGES` | Max uploads per website | `10` |
 
-## Production hosting with Caddy
+## Production hosting (Caddy TLS + Nginx origin)
 
-`deploy/Caddyfile` contains a full working config. The shape:
+See **[docs/hosting/caddy-nginx.md](docs/hosting/caddy-nginx.md)** for the single-VPS runbook.
 
-1. **The app** is served on `app.example.com` via `php_fastcgi`.
-2. **Published sites** live in `/srv/websites/{slug}` (`SITES_PUBLISH_PATH`).
-3. A single `https://` site block serves *all* customer hostnames:
-   - `{slug}.sites.example.com` maps to `/srv/websites/{slug}` via `host_regexp`.
-   - Custom domains map to `/srv/websites/domains/{host}` (symlink per domain).
-4. **on-demand TLS**: before issuing a certificate for any hostname, Caddy asks
-   the app (`GET /caddy/allowed?domain=...`), which returns 200 only for
-   published sites. That's the whole "custom domain" security story — no
-   certificates for hostnames that aren't yours.
+Shape:
 
-DNS required: `A app.example.com` and a wildcard `A *.sites.example.com`
-pointing at the server.
+1. **Caddy** terminates HTTPS (on-demand certs for customer hosts; managed cert for the app).
+2. **Nginx** on `127.0.0.1:8080` serves the Laravel app and static sites under `/srv/websites`.
+3. **Publish** copies sites via `PublishedSiteHost`; custom domains are symlinks under `/srv/websites/domains/{host}`.
+4. **on-demand TLS**: Caddy asks `GET /caddy/allowed?domain=...` before issuing certs.
+
+Configs: `deploy/caddy.edge.Caddyfile`, `deploy/nginx.origin.conf`.  
+Bootstrap / deploy: `deploy/bootstrap-vps.sh`, `deploy/deploy.sh`.
+
+DNS: `A app.example.com` and `A *.sites.example.com` → the VPS.
 
 ## Laravel Forge deployment
 
-This app has **no frontend build** — all styling is inline in the Blade layout.
-A stub `package.json` is included so Forge's default `npm ci && npm run build`
-steps succeed as no-ops if you haven't customised the deployment script yet.
+Forge is optional/legacy. Prefer `deploy/deploy.sh` on a self-managed VPS.
+If you still use Forge, see `deploy/forge-deploy.sh`.
 
-Recommended deployment script (also in `deploy/forge-deploy.sh`):
+Also configure:
 
-```bash
-$CREATE_RELEASE()
-
-cd $FORGE_RELEASE_DIRECTORY
-
-$FORGE_COMPOSER install --no-dev --no-interaction --prefer-dist --optimize-autoloader
-
-$FORGE_PHP artisan optimize
-$FORGE_PHP artisan storage:link
-$FORGE_PHP artisan migrate --force
-
-$ACTIVATE_RELEASE()
-
-$RESTART_QUEUES()
-```
-
-Also configure in Forge:
-
-- **Environment**: `ANTHROPIC_API_KEY`, `SITES_DOMAIN`, `SITES_PUBLISH_PATH`.
-- **Queues**: add a worker on the `database` connection — generations are
-  queued jobs and never run without one.
-- **Branch**: make sure the site deploys the branch that actually contains
-  this code.
+- **Environment**: `ANTHROPIC_API_KEY`, `SITES_DOMAIN`, `SITES_PUBLISH_PATH=/srv/websites`, `HOSTING_DRIVER=filesystem`.
+- **Queues**: Horizon (or `queue:work`) — generations are queued and never run without a worker.
+- **Branch**: deploy the branch that contains this code.
 
 ## Credits & payments
 

@@ -1,10 +1,7 @@
-# nginx equivalent of deploy/Caddyfile for SiteForge customer static hosting.
+# LEGACY — prefer deploy/nginx.origin.conf (localhost:8080 behind Caddy).
 #
-# Assumptions:
-#   - Laravel app at app.example.com (separate server block, PHP-FPM)
-#   - Published sites at /srv/websites/{slug}
-#   - Custom domains symlinked to /srv/websites/domains/{host}
-#   - TLS: certbot with a pre-issue hook calling GET /caddy/allowed?domain=
+# This example assumed Nginx terminated public TLS. Current architecture uses
+# Caddy for TLS and Nginx as origin only. See docs/hosting/caddy-nginx.md
 
 # Builder application
 server {

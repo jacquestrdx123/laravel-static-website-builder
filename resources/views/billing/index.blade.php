@@ -37,11 +37,11 @@
         <h2 style="margin-top:0">Buy credits</h2>
         <p class="hint">⚠ Payments are not wired up yet — buying a pack credits your account immediately (development stub).</p>
         <div class="actions">
-            @foreach ($packs as $credits => $price)
+            @foreach ($packs as $credits => $pack)
                 <form method="POST" action="{{ route('billing.purchase') }}">
                     @csrf
                     <input type="hidden" name="credits" value="{{ $credits }}">
-                    <button type="submit">{{ $credits }} credits — {{ $price }}</button>
+                    <button type="submit">{{ $credits }} credits — {{ $pack['label'] }}</button>
                 </form>
             @endforeach
         </div>

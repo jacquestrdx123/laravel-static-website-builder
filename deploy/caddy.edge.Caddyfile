@@ -1,0 +1,42 @@
+# SiteForge — Caddy TLS edge (HTTPS only + reverse_proxy to Nginx).
+#
+# Nginx owns HTTP origin on 127.0.0.1:8080 (see deploy/nginx.origin.conf).
+# Replace placeholders before install:
+#   APP_HOST       e.g. app.example.com
+#   CADDY_EMAIL    e.g. admin@example.com
+#
+# Install:
+#   sudo cp deploy/caddy.edge.Caddyfile /etc/caddy/Caddyfile
+#   sudo systemctl reload caddy
+#
+# DNS: A/AAAA for APP_HOST and *.SITES_DOMAIN → this VPS.
+
+{
+	email CADDY_EMAIL
+
+	# Customer hostnames only — APP_HOST uses the named site block below
+	# (standard automatic HTTPS, not on-demand).
+	on_demand_tls {
+		ask http://127.0.0.1:8080/caddy/allowed
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Builder application — managed cert (not on-demand)
+# ---------------------------------------------------------------------------
+APP_HOST {
+	encode zstd gzip
+	reverse_proxy 127.0.0.1:8080
+}
+
+# ---------------------------------------------------------------------------
+# All other HTTPS hosts (free subdomains + custom domains) — on-demand TLS
+# ---------------------------------------------------------------------------
+https:// {
+	tls {
+		on_demand
+	}
+
+	encode zstd gzip
+	reverse_proxy 127.0.0.1:8080
+}

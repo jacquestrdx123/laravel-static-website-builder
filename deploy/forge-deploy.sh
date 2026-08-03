@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Laravel Forge zero-downtime deployment script for SiteForge.
-# Copy this into your Forge site's Deployment Script field, or keep the
-# default Forge script — the stub package.json makes npm steps no-ops.
+# LEGACY Laravel Forge deployment script.
+# Prefer self-managed: deploy/deploy.sh + docs/hosting/caddy-nginx.md
+# Copy this into Forge's Deployment Script field only if you still use Forge.
 
 $CREATE_RELEASE()
 
