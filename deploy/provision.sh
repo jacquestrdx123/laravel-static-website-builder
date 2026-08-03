@@ -687,7 +687,25 @@ ENVFILE
 fi
 
 # ---------------------------------------------------------------------------
-# 16. Firewall
+# 16. Database backups
+#
+# rollback.sh flips code, never schema. A destructive migration can only be
+# undone from a dump, and this box has no binlog and no point-in-time
+# recovery — so a nightly dump is the entire safety net.
+# ---------------------------------------------------------------------------
+step "Database backups"
+install -m 750 "$SCRIPT_DIR/backup.sh" /usr/local/bin/siteforge-backup
+cat > /etc/cron.d/siteforge-backup <<CRON
+# SiteForge — nightly MySQL backup. Written by deploy/provision.sh.
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+30 2 * * * root /usr/local/bin/siteforge-backup >> /var/log/siteforge-backup.log 2>&1
+CRON
+chmod 644 /etc/cron.d/siteforge-backup
+ok "nightly backup installed (02:30 UTC -> /var/backups/siteforge)"
+
+# ---------------------------------------------------------------------------
+# 17. Firewall
 # ---------------------------------------------------------------------------
 step "Firewall"
 ufw allow OpenSSH >/dev/null 2>&1 || true
@@ -702,7 +720,7 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 17. Validate and start services
+# 18. Validate and start services
 # ---------------------------------------------------------------------------
 step "Validating configuration"
 nginx -t 2>&1 | sed 's/^/  /'

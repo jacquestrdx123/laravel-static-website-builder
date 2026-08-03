@@ -91,7 +91,34 @@ bash /var/www/builder/current/deploy/rollback.sh
 - Old releases keep their `vendor/`, so rollback is a symlink flip, not a rebuild.
 
 **Not covered:** migrations are never reversed. A destructive migration needs a
-database restore, not a rollback. Take a dump before deploying one.
+database restore, not a rollback — see below.
+
+---
+
+## Backups
+
+`provision.sh` installs a nightly dump at 02:30 UTC (`/etc/cron.d/siteforge-backup`),
+keeping 14 days in `/var/backups/siteforge`. It reads its credentials from the app's
+own `shared/.env`, so the two can never drift apart, and it verifies each dump is a
+valid gzip stream that reached its own completion marker **before** rotating anything
+out — a truncated dump is worse than no dump, because it looks like a backup.
+
+```bash
+sudo /usr/local/bin/siteforge-backup          # run one now
+tail -20 /var/log/siteforge-backup.log        # what the cron job did
+ls -la /var/backups/siteforge/
+```
+
+Restore:
+
+```bash
+zcat /var/backups/siteforge/siteforge-YYYYMMDD-HHMMSS.sql.gz | \
+  mysql -u siteforge -p siteforge
+```
+
+This is the **entire** safety net for schema changes — the box has no binary log and
+no point-in-time recovery, so the most you can lose is one day. Before deploying a
+destructive migration, take a dump first and don't rely on the nightly one.
 
 ---
 
