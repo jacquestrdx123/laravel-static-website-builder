@@ -22,7 +22,7 @@ class Website extends Model
     public const STATUS_PUBLISHED = 'published';
 
     protected $fillable = [
-        'user_id', 'name', 'slug', 'status', 'settings', 'product_catalog', 'error',
+        'user_id', 'name', 'slug', 'status', 'is_demo', 'settings', 'product_catalog', 'error',
         'custom_domain', 'generated_at', 'published_at',
     ];
 
@@ -31,6 +31,7 @@ class Website extends Model
         return [
             'settings' => 'array',
             'product_catalog' => 'array',
+            'is_demo' => 'boolean',
             'generated_at' => 'datetime',
             'published_at' => 'datetime',
         ];
@@ -122,6 +123,18 @@ class Website extends Model
     }
 
     /** Hostname the site is served from once published, e.g. my-shop.sites.example.com */
+    /**
+     * Published demo sites, newest first - what the public /examples page shows.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder<self>  $query
+     */
+    public function scopePublicDemos(\Illuminate\Database\Eloquent\Builder $query): void
+    {
+        $query->where('is_demo', true)
+            ->where('status', self::STATUS_PUBLISHED)
+            ->latest('published_at');
+    }
+
     public function hostname(): string
     {
         return $this->custom_domain ?: $this->slug.'.'.config('sites.domain');
