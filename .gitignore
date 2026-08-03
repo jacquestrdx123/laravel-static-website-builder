@@ -27,3 +27,6 @@ Homestead.yaml
 Thumbs.db
 
 database/database.sqlite
+
+# Filled-in deployment config (contains DB password)
+deploy/deploy.env
