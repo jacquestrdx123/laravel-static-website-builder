@@ -197,6 +197,10 @@ PHP_PKGS=(
     "php${PHP_VERSION}-intl" "php${PHP_VERSION}-redis" "php${PHP_VERSION}-sqlite3"
 )
 BASE_PKGS=(
+    # nginx and mysql-server are listed explicitly because a genuinely bare
+    # Ubuntu image has neither. They only appeared to be "already present" on
+    # the first box because a partial Forge run had installed them.
+    nginx mysql-server
     git curl unzip ca-certificates gnupg
     redis-server supervisor ufw
     debian-keyring debian-archive-keyring apt-transport-https
