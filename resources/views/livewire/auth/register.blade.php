@@ -51,6 +51,10 @@
                 <button type="submit" style="width:100%" wire:loading.attr="disabled">Create account</button>
             </div>
 
+            <div class="auth-divider"><span>or</span></div>
+
+            <a class="btn secondary auth-google" href="{{ route('auth.google') }}">Continue with Google</a>
+
             <p class="hint" style="text-align:center; margin-top: 1rem;">
                 Already have an account? <a href="{{ route('login') }}">Log in</a>
             </p>

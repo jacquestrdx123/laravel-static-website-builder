@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AssetCdnController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\CaddyController;
 use App\Http\Controllers\ContentController;
@@ -12,17 +12,17 @@ use App\Http\Controllers\DomainNameserverController;
 use App\Http\Controllers\DomainSearchController;
 use App\Http\Controllers\DomainSettingsController;
 use App\Http\Controllers\DomainTransferController;
+use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\NewsletterSubscriberController;
 use App\Http\Controllers\PosterController;
 use App\Http\Controllers\PublicNewsletterController;
 use App\Http\Controllers\PublishController;
-use App\Http\Controllers\WebsiteSubscriptionController;
 use App\Http\Controllers\WebsiteController;
+use App\Http\Controllers\WebsiteSubscriptionController;
 use App\Livewire\Auth\Login as AuthLogin;
 use App\Livewire\Auth\Register as AuthRegister;
 use App\Livewire\Billing;
-use App\Livewire\Examples;
 use App\Livewire\Domains\Contacts as DomainContacts;
 use App\Livewire\Domains\Dns as DomainDns;
 use App\Livewire\Domains\Index as DomainIndex;
@@ -32,6 +32,7 @@ use App\Livewire\Domains\Search as DomainSearch;
 use App\Livewire\Domains\Settings as DomainSettings;
 use App\Livewire\Domains\Show as DomainShow;
 use App\Livewire\Domains\Transfer as DomainTransfer;
+use App\Livewire\Examples;
 use App\Livewire\Pricing;
 use App\Livewire\Websites\Create as CreateWebsite;
 use App\Livewire\Websites\EditContent as EditWebsiteContent;
@@ -67,6 +68,8 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::get('/login', AuthLogin::class)->name('login');
     Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('auth.google');
+    Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
 });
 
 // Public: the homepage funnel links logged-out visitors here.

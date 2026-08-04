@@ -398,6 +398,31 @@
         }
         @media (max-width: 760px) { .auth-split { grid-template-columns: 1fr; } }
 
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            margin: 1.25rem 0;
+            color: var(--muted);
+            font-size: .8rem;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+        }
+        .auth-divider::before,
+        .auth-divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--line);
+        }
+        .auth-google {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            text-decoration: none;
+            box-sizing: border-box;
+        }
+
         .site-footer {
             border-top: 1px solid var(--line);
             padding: 1.75rem 1.5rem;

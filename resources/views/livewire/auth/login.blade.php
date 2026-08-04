@@ -5,6 +5,10 @@
         <p class="muted" style="margin:0 0 1.25rem">Access your websites, credits, and marketing tools.</p>
 
         <form wire:submit="login">
+            @if (session('error'))
+                <div class="error" style="margin-bottom:1rem;">{{ session('error') }}</div>
+            @endif
+
             <label for="email">Email</label>
             <input id="email" type="email" wire:model="email" required autofocus autocomplete="email">
             @error('email')<div class="error">{{ $message }}</div>@enderror
@@ -22,5 +26,9 @@
                 <a class="btn secondary" href="{{ route('register') }}">Create an account</a>
             </div>
         </form>
+
+        <div class="auth-divider"><span>or</span></div>
+
+        <a class="btn secondary auth-google" href="{{ route('auth.google') }}">Continue with Google</a>
     </div>
 </div>

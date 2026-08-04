@@ -15,7 +15,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
 
-#[Fillable(['name', 'email', 'password', 'is_admin', 'ai_credits'])]
+#[Fillable(['name', 'email', 'google_id', 'password', 'is_admin', 'ai_credits'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements FilamentUser
 {
