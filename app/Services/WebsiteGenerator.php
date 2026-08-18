@@ -11,6 +11,7 @@ use App\Models\Website;
 use App\Models\WebsiteImage;
 use App\Services\WebsiteAssetCdn;
 use App\Services\WebsiteProductCatalog;
+use App\WebsiteBuilder\HeroPresets;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -280,6 +281,11 @@ class WebsiteGenerator
         $cdn = WebsiteAssetCdn::forWebsite($website);
         $catalogExport = WebsiteProductCatalog::forWebsite($website)->forSiteExport($cdn);
 
+        // Fresh per generation so regenerating the same brief commits to a
+        // different hero director (the model has no sampling params).
+        $designSeed = random_int(1, 9999);
+        $heroReference = HeroPresets::pick($settings, $designSeed);
+
         $brief = [
             'business_name' => $website->name,
             'site_type' => $settings['site_type'] ?? 'business',
@@ -300,18 +306,39 @@ class WebsiteGenerator
             'generate_favicon_from_logo' => (bool) ($settings['generate_favicon_from_logo'] ?? false),
             'image_assets' => $assetNames,
             'image_roles' => $this->imageRolesForBrief($website, $assetNames),
-            // Fresh per generation so regenerating the same brief commits to
-            // a different art direction (the model has no sampling params).
-            'design_seed' => random_int(1, 9999),
+            'design_seed' => $designSeed,
+            'hero_reference' => $heroReference,
         ];
+
+        Log::info('Hero preset selected', [
+            'website_id' => $website->id,
+            'hero_id' => $heroReference['id'] ?? null,
+            'design_seed' => $designSeed,
+        ]);
 
         $content = [[
             'type' => 'text',
             'text' => "Build a static website from this brief:\n\n"
                 .json_encode($brief, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
-                ."\n\nThe customer's photos follow. Each is labelled with its role (logo, favicon, banner, gallery, product) "
-                .'and asset path. Use each image only for its intended role.',
+                ."\n\nA composition reference still of the selected hero director follows first "
+                .'(structure, scale, light, layering — not the brand, copy, or assets). '
+                ."Then the customer's photos. Each customer photo is labelled with its role "
+                .'(logo, favicon, banner, gallery, product) and asset path. Use each customer '
+                .'image only for its intended role.',
         ]];
+
+        $referencePath = HeroPresets::screenshotPath((string) ($heroReference['id'] ?? ''));
+
+        if ($referencePath !== null) {
+            $content[] = [
+                'type' => 'text',
+                'text' => 'COMPOSITION REFERENCE — award-level hero still. Recreate its structure, '
+                    .'type scale, light, layering, and motion language for THIS business. Do not clone '
+                    .'the brand, copy, or assets. Translate into responsive vanilla CSS using the '
+                    .'customer photos that follow.',
+            ];
+            $content[] = $this->fileImageBlock($referencePath);
+        }
 
         foreach ($website->images as $index => $image) {
             $role = $image->type ?? 'gallery';
@@ -389,6 +416,25 @@ class WebsiteGenerator
                 'type' => 'base64',
                 'mediaType' => $image->mime_type,
                 'data' => $data,
+            ],
+        ];
+    }
+
+    /** Vision block from a local file (hero composition reference). */
+    private function fileImageBlock(string $path): array
+    {
+        $mime = mime_content_type($path) ?: 'image/jpeg';
+
+        if (! in_array($mime, ['image/jpeg', 'image/png', 'image/gif', 'image/webp'], true)) {
+            $mime = 'image/jpeg';
+        }
+
+        return [
+            'type' => 'image',
+            'source' => [
+                'type' => 'base64',
+                'mediaType' => $mime,
+                'data' => base64_encode((string) file_get_contents($path)),
             ],
         ];
     }

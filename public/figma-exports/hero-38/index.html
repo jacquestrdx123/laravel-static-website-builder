@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S5motors — Daily Hero 38 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend+Mega:wght@400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: 'Lexend Mega', sans-serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1440px;
+    height: 810px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: #0f0424;
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .bg {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 1440px;
+    height: 827px;
+    object-fit: cover;
+  }
+  .veil {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 589px;
+    height: 810px;
+    background: linear-gradient(90deg, #0f0424 2%, rgba(65,13,126,0) 93%);
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  .logo {
+    position: absolute;
+    left: 24px;
+    top: 34px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .logo .mark {
+    width: 17px;
+    height: 17px;
+    overflow: hidden;
+  }
+  .logo .mark img {
+    width: 395%;
+    height: 395%;
+    margin-left: -148%;
+    margin-top: -148%;
+    max-width: none;
+  }
+  .logo span {
+    font-size: 12px;
+    letter-spacing: -1.56px;
+    color: #fff;
+    white-space: nowrap;
+  }
+
+  nav {
+    position: absolute;
+    left: 50%;
+    top: 18px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    padding: 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.01);
+    backdrop-filter: blur(40px);
+  }
+  nav a { display: block; height: 34px; }
+  nav a img { height: 100%; width: auto; }
+  nav a.home { width: 61px; }
+  nav a.models { width: 70px; }
+  nav a.perf { width: 105px; }
+  nav a.tech { width: 95px; }
+  nav a.gallery { width: 68px; }
+  nav a.contact { width: 73px; }
+
+  .login {
+    position: absolute;
+    left: 1278px;
+    top: 26px;
+    width: 58px;
+    height: 36px;
+  }
+  .login img { width: 100%; height: 100%; }
+  .burger {
+    position: absolute;
+    left: 1364px;
+    top: 16px;
+    width: 52px;
+    height: 52px;
+    border-radius: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .burger img { width: 23px; height: 13px; }
+
+  .headline {
+    position: absolute;
+    left: 53px;
+    top: 152px;
+    width: 489px;
+    height: 214px;
+  }
+  .headline img { width: 100%; height: 100%; }
+  .lede {
+    position: absolute;
+    left: 54px;
+    top: 400px;
+    width: 388px;
+    height: 40px;
+  }
+  .lede img { width: 100%; height: 100%; }
+
+  .cta {
+    position: absolute;
+    left: 53px;
+    top: 471px;
+    display: flex;
+    align-items: center;
+  }
+  .cta .more {
+    width: 145px;
+    height: 70px;
+  }
+  .cta .more img { width: 100%; height: 100%; }
+  .cta .go {
+    width: 61px;
+    height: 61px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.2);
+  }
+  .cta .go img { width: 21px; height: 21px; }
+
+  .tiles {
+    position: absolute;
+    left: 53px;
+    top: 637px;
+    display: flex;
+    gap: 20px;
+  }
+  .tile {
+    width: 156px;
+    height: 149px;
+    border-radius: 32px;
+    overflow: hidden;
+    position: relative;
+  }
+  .tile img { width: 100%; height: 100%; object-fit: cover; }
+  .tile.car {
+    background: #d8bdff;
+  }
+  .tile.car img {
+    position: absolute;
+    left: -12px;
+    top: -15px;
+    width: 281px;
+    height: 158px;
+    transform: scaleY(-1) rotate(180deg);
+    object-fit: cover;
+  }
+
+  .float {
+    position: absolute;
+    left: 1179px;
+    top: 385px;
+    width: 237px;
+    height: 297px;
+  }
+  .float .glow {
+    position: absolute;
+    left: 0;
+    top: 17px;
+    width: 237px;
+    height: 193px;
+    border-radius: 32px;
+    background: linear-gradient(180deg, #d44eb5, #6009e3 26%);
+    filter: blur(5px);
+  }
+  .float .card {
+    position: absolute;
+    left: 0;
+    top: 43px;
+    width: 237px;
+    height: 254px;
+    border-radius: 32px;
+    overflow: hidden;
+    border: 2px solid #fff;
+    background: linear-gradient(136deg, #fff 63%, #d1abff 98%);
+    backdrop-filter: blur(10px);
+  }
+  .float .shot {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    width: 217px;
+    height: 133px;
+    border-radius: 22px;
+    object-fit: cover;
+    object-position: bottom;
+  }
+  .float .copy {
+    position: absolute;
+    left: 30px;
+    top: 165px;
+    width: 127px;
+    height: 64px;
+  }
+  .float .copy img { width: 100%; height: 100%; }
+  .float .go {
+    position: absolute;
+    right: 7px;
+    bottom: 7px;
+    width: 61px;
+    height: 61px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.38);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .float .go img { width: 21px; height: 21px; }
+
+  .scroll {
+    position: absolute;
+    left: 1344px;
+    top: 716px;
+    width: 70px;
+    height: 70px;
+    border-radius: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .scroll img { width: 18px; height: 18px; }
+
+  .cta .more, .cta .go, .float .go { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); }
+  .cta:hover .more, .float:hover .go { transform: translateY(-3px); }
+  @media (prefers-reduced-motion: no-preference) {
+    .headline, .lede, .cta { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.2s both; }
+    .tiles { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.55s both; }
+    .float { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.75s both; }
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <img class="bg" src="assets/bg.png" alt="">
+    <div class="veil"></div>
+
+    <a class="logo" href="#">
+      <span class="mark"><img src="assets/logo-src.png" alt=""></span>
+      <span>S5motors</span>
+    </a>
+    <nav>
+      <a class="home" href="#"><img src="assets/nav-home.svg" alt="Home"></a>
+      <a class="models" href="#"><img src="assets/nav-models.svg" alt="Models"></a>
+      <a class="perf" href="#"><img src="assets/nav-perf.svg" alt="Performance"></a>
+      <a class="tech" href="#"><img src="assets/nav-tech.svg" alt="Technology"></a>
+      <a class="gallery" href="#"><img src="assets/nav-gallery.svg" alt="Gallery"></a>
+      <a class="contact" href="#"><img src="assets/nav-contact.svg" alt="Contact"></a>
+    </nav>
+    <a class="login" href="#"><img src="assets/login.svg" alt="Login"></a>
+    <a class="burger" href="#"><img src="assets/menu.svg" alt=""></a>
+
+    <div class="headline"><img src="assets/headline.svg" alt="The perfect balance of industrial speed"></div>
+    <div class="lede"><img src="assets/lede.svg" alt="Experience elegance, power, and thrilling drives with a luxury car that redefines performance."></div>
+    <div class="cta">
+      <a class="more" href="#"><img src="assets/view-more.svg" alt="View More"></a>
+      <a class="go" href="#"><img src="assets/arrow.svg" alt=""></a>
+    </div>
+
+    <div class="tiles">
+      <div class="tile"><img src="assets/tile-range.svg" alt="32 KM Range"></div>
+      <div class="tile car"><img src="assets/tile-car-b.png" alt=""></div>
+      <div class="tile"><img src="assets/tile-speed.svg" alt="150 KM Top Speed"></div>
+      <div class="tile"><img src="assets/tile-battery.svg" alt="75 KWH Battery"></div>
+    </div>
+
+    <a class="float" href="#">
+      <div class="glow"></div>
+      <div class="card">
+        <img class="shot" src="assets/card-headlight.png" alt="">
+        <div class="copy"><img src="assets/card-copy.svg" alt="Experience Luxury on Wheels"></div>
+        <span class="go"><img src="assets/arrow-card.svg" alt=""></span>
+      </div>
+    </a>
+
+    <a class="scroll" href="#">
+      <img src="assets/arrow-down-2.svg" alt="Scroll">
+    </a>
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1440;
+      var scale = Math.min(1, width / 1440);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (810 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>

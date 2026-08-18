@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unleash — Daily Hero 39 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Outfit:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: Outfit, sans-serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1440px;
+    height: 810px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: #dfe4ea;
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .bg {
+    position: absolute;
+    inset: 0;
+    width: 1440px;
+    height: 810px;
+    object-fit: cover;
+  }
+
+  .logo {
+    position: absolute;
+    left: 20px;
+    top: 17px;
+    width: 27px;
+    height: 33px;
+    overflow: hidden;
+    mix-blend-mode: multiply;
+  }
+  .logo img {
+    position: absolute;
+    width: 228%;
+    height: 185%;
+    left: -64%;
+    top: -42%;
+    max-width: none;
+  }
+
+  .actions {
+    position: absolute;
+    left: 1161px;
+    top: 14px;
+    display: flex;
+    align-items: center;
+    gap: 39px;
+  }
+  .ico {
+    width: 16px;
+    height: 16px;
+    position: relative;
+  }
+  .ico img { position: absolute; }
+  .ico.search { mix-blend-mode: difference; }
+  .ico .ring { width: 16px; height: 16px; }
+  .ico .handle { width: 6px; height: 6px; right: 0; bottom: 0; }
+  .ico.bag .body { width: 16px; height: 16px; left: 0; top: 2px; }
+  .ico.bag .top { width: 6px; height: 4px; left: 5px; top: 0; }
+  .buy {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 22px;
+    background: #fff;
+    border-radius: 999px;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: #1b2f4c;
+    white-space: nowrap;
+  }
+  .buy .ico { width: 16px; height: 16px; }
+
+  .headline {
+    position: absolute;
+    left: 50%;
+    top: 101px;
+    transform: translateX(-50%);
+    width: 1031px;
+    height: 73px;
+    mix-blend-mode: difference;
+  }
+  .headline img { width: 100%; height: 100%; }
+
+  .explore {
+    position: absolute;
+    left: 1189px;
+    top: 289px;
+    width: 188px;
+    height: 188px;
+  }
+  .explore .outer, .explore .inner { position: absolute; }
+  .explore .outer { inset: 0; }
+  .explore .inner { left: 33px; top: 33px; width: 121px; height: 121px; }
+  .explore img { width: 100%; height: 100%; }
+  .explore span {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 15px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #34414b;
+  }
+
+  .cards {
+    position: absolute;
+    left: 366px;
+    top: 457px;
+    display: flex;
+    gap: 42px;
+  }
+  .card {
+    position: relative;
+    width: 200px;
+    height: 321px;
+  }
+  .card .shape {
+    position: absolute;
+    inset: 0;
+    width: 200px;
+    height: 321px;
+  }
+  .card .photo-wrap {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 200px;
+    height: 162px;
+    overflow: hidden;
+    border-radius: 40px 40px 0 40px;
+  }
+  .card .photo-wrap img {
+    position: absolute;
+    left: -25px;
+    top: -159px;
+    width: 371px;
+    height: 321px;
+    object-fit: cover;
+    object-position: bottom;
+  }
+  .card.c3 .photo-wrap img {
+    left: -85px;
+    top: -203px;
+    width: 449px;
+    height: 389px;
+  }
+  .card .dots {
+    position: absolute;
+    right: 28px;
+    top: 7px;
+    width: 45px;
+    height: 45px;
+  }
+  .card .dots img { width: 100%; height: 100%; }
+  .card h3 {
+    position: absolute;
+    left: 22px;
+    top: 178px;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 1.05;
+    color: #1b2f4c;
+    mix-blend-mode: difference;
+  }
+  .card p {
+    position: absolute;
+    left: 21px;
+    top: 244px;
+    width: 150px;
+    font-size: 12px;
+    line-height: 1.35;
+    color: #1b2f4c;
+    mix-blend-mode: difference;
+  }
+
+  .thumbs {
+    position: absolute;
+    left: 1218px;
+    top: 674px;
+    display: flex;
+    gap: 17px;
+  }
+  .thumbs a {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #fff;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .thumbs img {
+    width: 45px;
+    height: 46px;
+    object-fit: contain;
+  }
+
+  .card, .explore, .buy { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); }
+  .card:hover, .explore:hover { transform: translateY(-6px); }
+  @media (prefers-reduced-motion: no-preference) {
+    .headline { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.15s both; }
+    .cards { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.5s both; }
+    .explore { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.7s both; }
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <img class="bg" src="assets/bg.png" alt="">
+
+    <a class="logo" href="#"><img src="assets/logo.png" alt="Logo"></a>
+    <div class="actions">
+      <a class="ico search" href="#" aria-label="Search">
+        <img class="ring" src="assets/search-ring.svg" alt="">
+        <img class="handle" src="assets/search-handle.svg" alt="">
+      </a>
+      <a class="ico bag" href="#" aria-label="Bag">
+        <img class="body" src="assets/bag.svg" alt="">
+        <img class="top" src="assets/bag-handle.svg" alt="">
+      </a>
+      <a class="buy" href="#">
+        Buy Now
+        <span class="ico bag">
+          <img class="body" src="assets/bag.svg" alt="">
+          <img class="top" src="assets/bag-handle.svg" alt="">
+        </span>
+      </a>
+    </div>
+
+    <div class="headline"><img src="assets/headline.svg" alt="Unleash yourself"></div>
+
+    <a class="explore" href="#">
+      <span class="outer"><img src="assets/explore-outer.svg" alt=""></span>
+      <span class="inner"><img src="assets/explore-inner.svg" alt=""></span>
+      <span>Explore</span>
+    </a>
+
+    <div class="cards">
+      <a class="card" href="#">
+        <img class="shape" src="assets/card.svg" alt="">
+        <div class="photo-wrap"><img src="assets/neck-1.png" alt=""></div>
+        <img class="dots" src="assets/dots.svg" alt="">
+        <h3>Ocean Heart</h3>
+        <p>A stunning jewel ring that captures the essence of the sea.</p>
+      </a>
+      <a class="card" href="#">
+        <img class="shape" src="assets/card.svg" alt="">
+        <div class="photo-wrap"><img src="assets/neck-2.png" alt=""></div>
+        <img class="dots" src="assets/dots.svg" alt="">
+        <h3>Sapphire Tide</h3>
+        <p>A radiant necklace inspired by the rhythm of blue waves.</p>
+      </a>
+      <a class="card c3" href="#">
+        <img class="shape" src="assets/card.svg" alt="">
+        <div class="photo-wrap"><img src="assets/neck-3.png" alt=""></div>
+        <img class="dots" src="assets/dots.svg" alt="">
+        <h3>Crystal Drop</h3>
+        <p>A delicate jewel piece with drops of ocean-blue light.</p>
+      </a>
+    </div>
+
+    <div class="thumbs">
+      <a href="#"><img src="assets/jewel-1.png" alt=""></a>
+      <a href="#"><img src="assets/jewel-2.png" alt=""></a>
+    </div>
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1440;
+      var scale = Math.min(1, width / 1440);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (810 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="113.444" height="113.444" viewBox="0 0 113.444 113.444" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="Repeat group 1">
+<g id="Repeat group 1_inner" data-figma-trr="r18p82.78-0f">
+<path id="Line 3" d="M67.4076 19.392C79.1054 31.698 31.3223 19.638 46.713 4.64707C52.4186 -0.776559 64.1086 16.0049 67.4076 19.392Z" fill="url(#paint0_linear_0_34)" fill-opacity="0.78"/>
+</g>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(22.8207 -15.9792) rotate(20)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(49.7304 -23.1897) rotate(40)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(77.4834 -20.7616) rotate(60)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(102.732 -8.9879) rotate(80)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(122.431 10.7114) rotate(100)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(134.205 35.9602) rotate(120)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(136.633 63.7131) rotate(140)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(129.423 90.6228) rotate(160)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(113.444 113.444) rotate(180)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(90.6228 129.423) rotate(-160)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(63.7131 136.633) rotate(-140)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(35.9602 134.205) rotate(-120)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(10.7114 122.431) rotate(-100)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(-8.9879 102.732) rotate(-80)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(-20.7616 77.4834) rotate(-60)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(-23.1897 49.7304) rotate(-40)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(-15.9793 22.8207) rotate(-20)"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_34" x1="46.3734" y1="4.98456" x2="67.0702" y2="25.6813" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="white" stop-opacity="0"/>
+</linearGradient>
+</defs>
+</svg>

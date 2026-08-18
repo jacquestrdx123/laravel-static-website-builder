@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cycle — Daily Hero 29 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: Syne, sans-serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1440px;
+    height: 810px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: #000;
+    border-radius: 40px;
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .scene {
+    position: absolute;
+    left: 0; top: 0;
+    width: 1440px; height: 810px;
+  }
+  .scene img, .scene video { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+
+  .notch-nav {
+    position: absolute;
+    right: 0; top: 0;
+    width: 620px; height: 143px;
+    pointer-events: none;
+  }
+  .notch-search {
+    position: absolute;
+    left: 716px; top: 10px;
+    width: 235px; height: 121px;
+    pointer-events: none;
+  }
+
+  .logo {
+    position: absolute;
+    left: 43px; top: 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .logo img { width: 44px; height: 22px; }
+  .logo span {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    letter-spacing: -0.64px;
+    color: #fff;
+  }
+
+  .search {
+    position: absolute;
+    left: 795px; top: 30px;
+    width: 20px; height: 20px;
+  }
+  .search img { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+  nav {
+    position: absolute;
+    right: 0; top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  nav a {
+    padding: 20px;
+    font-size: 13px;
+    letter-spacing: 2.86px;
+    text-transform: uppercase;
+    color: #000;
+  }
+  nav .contact {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #000;
+    color: #fff;
+    padding: 8px 20px 8px 8px;
+    border-radius: 999px;
+  }
+  nav .contact i {
+    width: 36px; height: 36px;
+    background: #fff;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  nav .contact i img { width: 14px; height: 14px; }
+
+  .nums {
+    position: absolute;
+    left: 43px; top: 186px;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    color: #fff;
+  }
+  .nums span { font-size: 20px; opacity: 0.8; }
+  .nums span:nth-child(1) { font-size: 28px; opacity: 1; }
+  .nums span:nth-child(3) { opacity: 0.6; }
+  .nums span:nth-child(4) { opacity: 0.4; }
+  .nums span:nth-child(5) { opacity: 0.2; }
+
+  .stat {
+    position: absolute;
+    width: 156px; height: 149px;
+    color: #fff;
+  }
+  .stat-a { left: 1068px; top: 200px; }
+  .stat-b { left: 1224px; top: 349px; }
+  .stat .num {
+    position: absolute;
+    left: 23px; top: 48px;
+    font-size: 40px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .stat .unit { font-weight: 400; opacity: 0.85; }
+  .stat .lab {
+    position: absolute;
+    left: 25px; top: 90px;
+    font-size: 14px;
+  }
+
+  .sku {
+    position: absolute;
+    left: 405px; top: 655px;
+    font-size: 17px;
+    letter-spacing: 22.78px;
+    text-transform: uppercase;
+    color: #fff;
+    white-space: nowrap;
+  }
+  .rule {
+    position: absolute;
+    left: 683px; top: 661px;
+    width: 141px; height: 1px;
+    background: #fff;
+  }
+  .name {
+    position: absolute;
+    left: 405px; top: 685px;
+    font-weight: 800;
+    font-size: 100px;
+    letter-spacing: -1px;
+    text-transform: uppercase;
+    color: #fff;
+    line-height: 1;
+  }
+  .blurb {
+    position: absolute;
+    left: 921px; top: 691px;
+    width: 229px;
+    font-size: 16px;
+    line-height: 1.4;
+    color: #fff;
+  }
+
+  .inset {
+    position: absolute;
+    left: 10px; top: 441px;
+    width: 432px; height: 359px;
+    pointer-events: none;
+  }
+  .inset img { width: 100%; height: 100%; }
+  .inset-shot {
+    position: absolute;
+    left: 10px; top: 620px;
+    width: 368px; height: 180px;
+    overflow: hidden;
+  }
+  .go {
+    position: absolute;
+    left: 243px; top: 636px;
+    width: 29px; height: 29px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .go img { width: 14px; height: 12px; transform: rotate(45deg); }
+
+  .gauge {
+    position: absolute;
+    left: 1222px; top: 570px;
+    width: 163px; height: 169px;
+  }
+  .gauge .ticks { width: 163px; height: 155px; }
+  .gauge .km {
+    position: absolute;
+    left: 46px; top: 40px;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .gauge .km b { font-weight: 300; }
+  .gauge .thumb {
+    position: absolute;
+    left: 39px; top: 64px;
+    width: 84px; height: 84px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <div class="scene"><video src="assets/hero-video.mp4" poster="assets/scene.png" autoplay muted loop playsinline></video></div>
+    <img class="notch-nav" src="assets/notch-nav.svg" alt="">
+    <img class="notch-search" src="assets/notch-search.svg" alt="">
+
+    <a class="logo" href="#">
+      <img src="assets/logo.svg" alt="">
+      <span>Cycle</span>
+    </a>
+    <div class="search">
+      <img src="assets/search.svg" alt="">
+      <img src="assets/search-handle.svg" alt="">
+    </div>
+    <nav>
+      <a href="#">Collection</a>
+      <a href="#">Designs</a>
+      <a href="#">Patterns</a>
+      <a class="contact" href="#">
+        <i><img src="assets/plane.svg" alt=""></i>
+        Contact
+      </a>
+    </nav>
+
+    <div class="nums">
+      <span>01</span><span>02</span><span>03</span><span>04</span><span>05</span>
+    </div>
+
+    <div class="stat stat-a">
+      <div class="num">32 <span class="unit">km</span></div>
+      <div class="lab">Range</div>
+    </div>
+    <div class="stat stat-b">
+      <div class="num">3.2 <span class="unit">H</span></div>
+      <div class="lab">Charge Time</div>
+    </div>
+
+    <div class="sku">09/vyper</div>
+    <div class="rule"></div>
+    <div class="name">Zephyr</div>
+    <p class="blurb">Experience the future of cycling with the revolutionary Zephyr bicycle today.</p>
+
+    <img class="inset" src="assets/inset.svg" alt="">
+    <div class="go"><img src="assets/arrow.svg" alt=""></div>
+
+    <div class="gauge">
+      <img class="ticks" src="assets/gauge.svg" alt="">
+      <div class="km">12.6<b>KM</b></div>
+      <img class="thumb" src="assets/gauge-thumb.png" alt="">
+    </div>
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1440;
+      var scale = Math.min(1, width / 1440);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (810 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>

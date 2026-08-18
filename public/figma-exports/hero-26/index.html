@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Velocity — Daily Hero 26 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind:wght@600&family=Outfit:ital,wght@0,300;0,400;0,700;1,400&family=Urbanist:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: Urbanist, sans-serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: #000;
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .scene {
+    position: absolute;
+    inset: 0;
+    width: 1920px;
+    height: 1080px;
+    object-fit: cover;
+  }
+  video.scene { pointer-events: none; }
+  .vignette {
+    position: absolute;
+    right: -119px;
+    bottom: -104px;
+    width: 450px;
+    height: 322px;
+    background: #010101;
+    filter: blur(30px);
+    pointer-events: none;
+  }
+  .play {
+    position: absolute;
+    left: 849px;
+    top: 429px;
+    width: 222px;
+    height: 222px;
+  }
+  .play img { width: 100%; height: 100%; }
+
+  .logo {
+    position: absolute;
+    left: 24px;
+    top: 27px;
+    width: 70px;
+    height: 21px;
+    overflow: hidden;
+  }
+  .logo img {
+    position: absolute;
+    width: 135%;
+    height: 445%;
+    left: -17%;
+    top: -173%;
+    max-width: none;
+  }
+
+  nav {
+    position: absolute;
+    left: 665px;
+    top: 32px;
+    display: flex;
+    gap: 90px;
+    color: #fff;
+    font-size: 17px;
+    white-space: nowrap;
+  }
+  .menu {
+    position: absolute;
+    right: 25px;
+    top: 32px;
+    width: 28px;
+    height: 14px;
+  }
+  .menu img { width: 100%; height: 100%; }
+
+  .headline {
+    position: absolute;
+    left: 91px;
+    top: 178px;
+    color: #fff;
+    font-family: Outfit, sans-serif;
+    font-weight: 400;
+    font-size: 120px;
+    line-height: 0.94;
+    letter-spacing: -3.6px;
+    text-transform: uppercase;
+  }
+  .headline em { display: block; margin-left: 68px; font-style: italic; }
+
+  .lede {
+    position: absolute;
+    left: 159px;
+    top: 579px;
+    width: 405px;
+    color: #d1d1d1;
+    font-size: 20px;
+    line-height: 1.4;
+  }
+
+  .cta {
+    position: absolute;
+    left: 160px;
+    top: 677px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    width: 249px;
+    padding: 32px 40px;
+    background: #fff;
+    color: #000;
+    font-family: Hind, sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+  .cta img { width: 69px; height: 15px; }
+
+  .model {
+    position: absolute;
+    left: 1398px;
+    top: 666px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: #d1d1d1;
+    font-family: Outfit, sans-serif;
+    font-weight: 300;
+    font-size: 40px;
+    letter-spacing: -0.4px;
+  }
+  .model img { width: 32px; height: 44px; }
+  .model b { font-weight: 700; }
+
+  .stat {
+    position: absolute;
+    width: 243px;
+    height: 151px;
+    backdrop-filter: blur(20px);
+    background: rgba(255,255,255,0.05);
+    color: #d1d1d1;
+  }
+  .stat b {
+    position: absolute;
+    left: 40px;
+    top: 40px;
+    font-family: Outfit, sans-serif;
+    font-weight: 300;
+    font-size: 60px;
+    letter-spacing: -0.6px;
+    line-height: 0.7;
+  }
+  .stat b i { font-style: normal; font-weight: 400; font-size: 36px; opacity: 0.3; margin-left: 2px; }
+  .stat span {
+    position: absolute;
+    left: 40px;
+    top: 102px;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    opacity: 0.4;
+  }
+  .stat.life { left: 1653px; top: 746px; }
+  .stat.range { left: 1402px; top: 905px; }
+  .stat.speed { left: 1653px; top: 905px; }
+
+  .preview {
+    position: absolute;
+    left: 1402px;
+    top: 746px;
+    width: 243px;
+    height: 151px;
+    overflow: hidden;
+  }
+  .preview img.car {
+    position: absolute;
+    left: -27px;
+    top: -4px;
+    width: 297px;
+    height: 159px;
+    object-fit: cover;
+    object-position: bottom;
+  }
+  .preview .shade {
+    position: absolute;
+    left: 4px;
+    top: 89px;
+    width: 234px;
+    height: 39px;
+  }
+  .preview .spin {
+    position: absolute;
+    left: 114px;
+    top: 116px;
+    width: 24px;
+    height: 24px;
+  }
+
+  .brands {
+    position: absolute;
+    left: 91px;
+    top: 904px;
+    display: flex;
+    gap: 31px;
+  }
+  .brands a {
+    width: 97px;
+    height: 97px;
+    border-radius: 50%;
+    backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .brands a.on { box-shadow: inset 0 0 0 1px rgba(255,255,255,0.7); }
+  .brands a img { max-width: 40px; max-height: 46px; }
+  .brands a.dim img { opacity: 0.5; }
+
+  .scroll {
+    position: absolute;
+    left: 947px;
+    top: 869px;
+    width: 25px;
+    height: 187px;
+    color: #fff;
+    opacity: 0.3;
+  }
+  .scroll span {
+    position: absolute;
+    left: 9px;
+    top: 0;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 12.84px;
+    text-transform: uppercase;
+    transform: rotate(-90deg);
+    transform-origin: left top;
+    white-space: nowrap;
+  }
+  .scroll img.dot { position: absolute; left: 0; bottom: 0; width: 25px; height: 25px; }
+  .scroll img.ln { position: absolute; left: 12px; bottom: 25px; width: 2px; height: 20px; }
+
+  .cta { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); }
+  .cta:hover { transform: translateY(-3px); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .headline, .lede, .cta { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.2s both; }
+    .stat, .preview, .model { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.55s both; }
+    .preview .spin { animation: spin 4s linear infinite; }
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <video class="scene" src="assets/hero-video.mp4" poster="assets/scene.png" autoplay muted loop playsinline></video>
+    <div class="vignette"></div>
+    <a class="play" href="#"><img src="assets/play.svg" alt=""></a>
+
+    <a class="logo" href="#"><img src="assets/logo-mark.png" alt="Velocity"></a>
+    <nav>
+      <a href="#">Performance</a>
+      <a href="#">Technology</a>
+      <a href="#">Interior</a>
+      <a href="#">Experience</a>
+    </nav>
+    <a class="menu" href="#"><img src="assets/menu.svg" alt=""></a>
+
+    <h1 class="headline">Velocity<em>Beyond</em>Limits</h1>
+    <p class="lede">Precision engineered performance designed to redefine modern luxury driving experiences.</p>
+    <a class="cta" href="#">Explore More <img src="assets/cta-arrow.svg" alt=""></a>
+
+    <div class="model">
+      <img src="assets/ferrari-mark.svg" alt="">
+      Ferrari <b>296 GTB</b>
+    </div>
+
+    <div class="preview">
+      <img class="car" src="assets/car-pink.png" alt="">
+      <img class="shade" src="assets/car-shadow.svg" alt="">
+      <img class="spin" src="assets/refresh-ring.svg" alt="">
+    </div>
+    <div class="stat life"><b>15<i>h</i></b><span>Battery Life</span></div>
+    <div class="stat range"><b>300<i>mi</i></b><span>Range</span></div>
+    <div class="stat speed"><b>120<i>mph</i></b><span>Speed</span></div>
+
+    <div class="brands">
+      <a class="on" href="#"><img src="assets/ferrari.svg" alt="Ferrari"></a>
+      <a href="#"><img src="assets/lambo.svg" alt="Lamborghini"></a>
+      <a class="dim" href="#"><img src="assets/mercedes.svg" alt="Mercedes"></a>
+      <a href="#"><img src="assets/lexus.svg" alt="Lexus"></a>
+      <a class="dim" href="#"><img src="assets/bmw.svg" alt="BMW"></a>
+    </div>
+
+    <div class="scroll">
+      <span>Explore</span>
+      <img class="ln" src="assets/explore-line.svg" alt="">
+      <img class="dot" src="assets/explore-dot.svg" alt="">
+    </div>
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1920;
+      var scale = Math.min(1, width / 1920);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (1080 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>

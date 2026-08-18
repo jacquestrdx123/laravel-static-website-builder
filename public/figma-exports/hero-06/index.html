@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vegtopia — Daily Hero 06 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Prompt:wght@400;500;600;700&family=Quicksand:wght@700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: Prompt, sans-serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1440px;
+    height: 810px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: #009ca6;
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .food {
+    position: absolute;
+    right: -80px;
+    top: -40px;
+    width: 820px;
+    height: 820px;
+    object-fit: contain;
+    pointer-events: none;
+  }
+
+  .brand {
+    position: absolute;
+    left: 27px;
+    top: 40px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .brand .mark {
+    width: 26px;
+    height: 26px;
+    background: #fff;
+    border-radius: 11px 5px 11px 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .brand .mark img { width: 14px; height: 14px; }
+  .brand span {
+    font-family: Quicksand, sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -1.58px;
+    color: #fff;
+  }
+  .navpill {
+    position: absolute;
+    left: 50%;
+    top: 24px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    background: #fff;
+    border-radius: 999px;
+  }
+  .navpill a {
+    padding: 20px;
+    border-radius: 999px;
+    font-size: 14px;
+    color: #000;
+  }
+  .navpill a.active { background: rgba(255,214,137,0.56); font-weight: 600; }
+  .actions {
+    position: absolute;
+    right: 24px;
+    top: 24px;
+    display: flex;
+    gap: 8px;
+  }
+  .icon-btn {
+    width: 58px;
+    height: 58px;
+    border-radius: 999px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .icon-btn img { width: 22px; height: 22px; }
+  .icon-btn .dot {
+    position: absolute;
+    top: 4px;
+    right: 3px;
+    width: 13px;
+    height: 13px;
+    background: #e23;
+    border-radius: 50%;
+  }
+  .profile {
+    width: 93px;
+    height: 58px;
+    border-radius: 999px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    padding: 0 8px 0 0;
+  }
+  .profile img.av {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #fff;
+  }
+
+  .title {
+    position: absolute;
+    left: 24px;
+    top: 201px;
+    font-family: Anton, sans-serif;
+    font-weight: 400;
+    line-height: 0.84;
+    letter-spacing: -4px;
+    text-transform: none;
+    color: #fefff0;
+  }
+  .title .g { font-size: 199px; }
+  .title .n { font-size: 199px; color: #ffd689; margin-left: 18px; }
+  .title .b { display: block; font-size: 270px; letter-spacing: -5.4px; margin-left: 257px; margin-top: -8px; }
+  .badge {
+    position: absolute;
+    left: 12px;
+    top: 328px;
+    width: 235px;
+    height: 235px;
+  }
+  .lede {
+    position: absolute;
+    left: 170px;
+    top: 602px;
+    width: 459px;
+    font-size: 18px;
+    line-height: 1.4;
+    color: #fff;
+  }
+  .lede strong { font-weight: 700; }
+  .cta-row {
+    position: absolute;
+    left: 170px;
+    top: 716px;
+    display: flex;
+    align-items: center;
+  }
+  .btn-dark {
+    height: 70px;
+    padding: 0 32px;
+    background: #000;
+    color: #fff;
+    border-radius: 999px;
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: -0.4px;
+    display: flex;
+    align-items: center;
+  }
+  .btn-cart {
+    width: 70px;
+    height: 70px;
+    border-radius: 999px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .btn-cart img { width: 22px; height: 22px; }
+  .scroll {
+    position: absolute;
+    left: 24px;
+    top: 716px;
+    width: 70px;
+    height: 70px;
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .scroll img { width: 32px; height: 32px; }
+
+  .menu-card {
+    position: absolute;
+    width: 201px;
+    background: #fff;
+    border-radius: 28px;
+    padding: 4px 4px 24px;
+    text-align: center;
+  }
+  .menu-card .art {
+    height: 119px;
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+  }
+  .menu-card .art img {
+    position: absolute;
+    width: 160%;
+    height: 180%;
+    left: -10%;
+    top: -40%;
+    object-fit: cover;
+  }
+  .menu-card h3 { margin-top: 16px; font-size: 18px; font-weight: 600; letter-spacing: -0.18px; }
+  .menu-card p { margin-top: 8px; font-size: 14px; color: #5f5f5f; padding: 0 12px; }
+  .menu-card .price { margin-top: 16px; color: #05abb5; font-weight: 600; font-size: 18px; }
+  .card-a { left: 899px; top: 523px; }
+  .card-a .art { background: rgba(145,255,242,0.4); }
+  .card-b { left: 1108px; top: 602px; }
+  .card-b .art { background: rgba(255,145,240,0.4); }
+  .card-c {
+    left: 1319px;
+    top: 633px;
+    width: 166px;
+    border-radius: 23px;
+  }
+  .card-c .art { height: 98px; background: rgba(255,255,145,0.4); border-radius: 20px; }
+  .card-c h3 { font-size: 15px; }
+  .mini-cart {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .arrows {
+    position: absolute;
+    right: 24px;
+    top: 521px;
+    display: flex;
+    gap: 8px;
+  }
+  .arrows a {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .arrows a.dim { opacity: 0.4; }
+  .social {
+    position: absolute;
+    right: 18px;
+    top: 162px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .social a {
+    width: 47px;
+    height: 47px;
+    background: url("assets/social-glow.svg") center/contain no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .social a img { width: 14px; height: 14px; }
+
+  .btn-dark, .menu-card, .navpill a { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); }
+  .btn-dark:hover, .menu-card:hover { transform: translateY(-4px); }
+  @media (prefers-reduced-motion: no-preference) {
+    .title { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.2s both; }
+    .food { animation: drop 1.4s cubic-bezier(0.22,1,0.36,1) both; }
+    .card-a { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.7s both; }
+    .card-b { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.85s both; }
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+  @keyframes drop { from { opacity: 0; transform: translateY(-40px) rotate(-6deg); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <video class="food" src="assets/hero-video.mp4" poster="assets/smoky.png" autoplay muted loop playsinline></video>
+
+    <a class="brand" href="#">
+      <span class="mark"><img src="assets/logo-leaf.svg" alt=""></span>
+      <span>vegtopia</span>
+    </a>
+    <nav class="navpill">
+      <a class="active" href="#">Home</a>
+      <a href="#">Menu</a>
+      <a href="#">Signature</a>
+      <a href="#">About</a>
+      <a href="#">Locations</a>
+    </nav>
+    <div class="actions">
+      <a class="icon-btn" href="#"><img src="assets/cart2.svg" alt="Cart"><span class="dot"></span></a>
+      <a class="profile" href="#"><img class="av" src="assets/avatar.png" alt=""></a>
+    </div>
+
+    <div class="title">
+      <span class="g">Green</span><span class="n">Not</span>
+      <span class="b">Boring</span>
+    </div>
+    <img class="badge" src="assets/star.svg" alt="">
+    <p class="lede"><strong>Vegtopia</strong> transforms healthy eating into an exciting experience filled with crispy layers, smoky flavors, and satisfying plant-based creations.</p>
+    <a class="scroll" href="#"><img src="assets/arrow.svg" alt=""></a>
+    <div class="cta-row">
+      <a class="btn-dark" href="#">Add to cart</a>
+      <a class="btn-cart" href="#"><img src="assets/cart2.svg" alt=""></a>
+    </div>
+
+    <div class="menu-card card-a">
+      <div class="art">
+        <img src="assets/smoky.png" alt="">
+        <span class="mini-cart"><img src="assets/cart.svg" alt=""></span>
+      </div>
+      <h3>Smoky Bloom</h3>
+      <p>Smoked mushrooms, garlic cream, pickles</p>
+      <div class="price">$43.9</div>
+    </div>
+    <div class="menu-card card-b">
+      <div class="art"><img src="assets/sunset.png" alt=""></div>
+      <h3>Sunset Crunch</h3>
+    </div>
+    <div class="menu-card card-c">
+      <div class="art"><img src="assets/halo.png" alt=""></div>
+      <h3>Green Halo</h3>
+    </div>
+    <div class="arrows">
+      <a class="dim" href="#"><img src="assets/caret.svg" alt=""></a>
+      <a href="#"><img src="assets/caret.svg" alt="" style="transform:scaleX(-1)"></a>
+    </div>
+    <div class="social">
+      <a href="#"><img src="assets/ig.svg" alt="Instagram"></a>
+      <a href="#"><img src="assets/ig.svg" alt=""></a>
+      <a href="#"><img src="assets/ig.svg" alt=""></a>
+    </div>
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1440;
+      var scale = Math.min(1, width / 1440);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (810 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 <site_type_blueprint type="business">
 This is a PROVEN STRUCTURAL RECIPE for business sites. Follow its page structure, section
 order, and annotation patterns. It is NOT a visual design: typography, palette, spacing,
-imagery treatment, and personality come from the brief, the style guide, and the design_seed.
+imagery treatment, and personality come from the brief, the style guide, and hero_reference.
 Two business sites built from this blueprint must look like different designers made them.
 
 ## Page skeleton (index.html)

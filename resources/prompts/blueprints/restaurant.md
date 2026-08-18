@@ -1,8 +1,8 @@
 <site_type_blueprint type="restaurant">
 This is a PROVEN STRUCTURAL RECIPE for restaurant/café/food sites. Follow its page structure,
 section order, and annotation patterns. It is NOT a visual design: typography, palette,
-spacing, imagery treatment, and personality come from the brief, the style guide, and the
-design_seed. Two restaurants built from this blueprint must feel like different rooms.
+spacing, imagery treatment, and personality come from the brief, the style guide, and
+hero_reference. Two restaurants built from this blueprint must feel like different rooms.
 
 ## Page skeleton (index.html)
 

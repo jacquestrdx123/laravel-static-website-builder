@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aqua Dreams — Daily Hero 21 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: Inter, sans-serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1440px;
+    height: 810px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: #4c6f8a;
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .bg {
+    position: absolute;
+    left: -17px;
+    top: -153px;
+    width: 1784px;
+    height: 997px;
+  }
+  .bg img, .bg video { width: 100%; height: 100%; object-fit: cover; object-position: bottom; pointer-events: none; }
+
+  .logo {
+    position: absolute;
+    left: 24px;
+    top: 14px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  .logo img { width: 182%; height: 182%; margin-left: -41%; margin-top: -41%; max-width: none; }
+
+  nav {
+    position: absolute;
+    left: 50%;
+    top: 35px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 80px;
+    color: #fff;
+    font-size: 16px;
+    white-space: nowrap;
+  }
+  nav a:not(.on) { opacity: 0.5; }
+
+  .tools {
+    position: absolute;
+    right: 24px;
+    top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 19px;
+  }
+  .ico { position: relative; width: 20px; height: 20px; }
+  .ico.menu { width: 40px; height: 40px; }
+  .ico img { position: absolute; }
+  .dots { display: grid; grid-template-columns: repeat(3, 4px); gap: 5px; width: 22px; height: 22px; margin: 9px; }
+  .dots i { width: 4px; height: 4px; background: #fff; border-radius: 50%; }
+
+  .headline {
+    position: absolute;
+    left: 24px;
+    top: 152px;
+    width: 358px;
+    color: #fff;
+    font-family: Outfit, sans-serif;
+    font-weight: 600;
+    font-size: 66px;
+    line-height: 1.04;
+    letter-spacing: -3.3px;
+    text-transform: uppercase;
+    text-align: right;
+  }
+  .aside {
+    position: absolute;
+    left: 505px;
+    top: 145px;
+    width: 142px;
+    color: #fff;
+    font-size: 24px;
+    line-height: 1.25;
+  }
+
+  .cards { position: absolute; left: 0; top: 569px; width: 1440px; height: 241px; }
+  .card {
+    position: absolute;
+    top: 0;
+    width: 360px;
+    height: 241px;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    background: rgba(255,255,255,0.08);
+  }
+  .card.mid {
+    left: 720px;
+    top: -64px;
+    height: 305px;
+    background: #081425;
+    backdrop-filter: none;
+  }
+  .card.a { left: 0; }
+  .card.b { left: 360px; }
+  .card.d { left: 1080px; }
+
+  .card h3 {
+    position: absolute;
+    left: 24px;
+    top: 68px;
+    width: 212px;
+    color: #fff;
+    font-family: Outfit, sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 1.04;
+    text-transform: uppercase;
+  }
+  .card.mid h3 { top: 134px; font-size: 24px; }
+  .card.mid p {
+    position: absolute;
+    left: 149px;
+    top: 212px;
+    width: 177px;
+    color: #fff;
+    font-size: 14px;
+    line-height: 1.3;
+  }
+
+  .card .photo { position: absolute; pointer-events: none; }
+  .card.a .photo { left: 121px; top: -245px; width: 442px; height: 611px; transform: rotate(180deg) scaleY(-1); object-fit: cover; object-position: bottom; }
+  .card.b .photo { right: -115px; top: -129px; width: 322px; height: 428px; object-fit: cover; }
+  .card.mid .photo { left: -595px; top: -645px; width: 1456px; height: 1794px; transform: rotate(-171.53deg) scaleY(-1); object-fit: cover; opacity: 0.6; }
+  .card.d .photo { left: 0; top: -425px; width: 819px; height: 1053px; transform: rotate(-158.86deg) scaleY(-1); object-fit: cover; }
+
+  .pill {
+    position: absolute;
+    left: 24px;
+    bottom: 28px;
+    display: flex;
+    align-items: center;
+    height: 41px;
+    padding: 0 8px 0 12px;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 999px;
+    color: #fff;
+    font-size: 12px;
+    gap: 10px;
+  }
+  .pill .disc {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(219,237,249,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .pill .disc img { width: 9px; height: 9px; }
+
+  .orb {
+    position: absolute;
+    right: -63px;
+    top: -63px;
+    width: 213px;
+    height: 213px;
+  }
+  .orb img { position: absolute; }
+  .orb .r3 { left: 0; top: 0; width: 213px; height: 213px; }
+  .orb .r2 { left: 32px; top: 32px; width: 150px; height: 150px; }
+  .orb .r1 { left: 63px; top: 63px; width: 87px; height: 87px; }
+  .orb .go {
+    position: absolute;
+    left: 86px;
+    top: 86px;
+    width: 41px;
+    height: 41px;
+    border-radius: 50%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .orb .go img { width: 16px; height: 16px; transform: rotate(-45deg); }
+
+  .bar {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 1440px;
+    height: 80px;
+    backdrop-filter: blur(25px);
+    background: rgba(0,0,0,0.01);
+    pointer-events: none;
+  }
+
+  .pill, .orb .go { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); }
+  .pill:hover { transform: translateY(-2px); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .headline, .aside { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.2s both; }
+    .cards { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.55s both; }
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <div class="bg"><video src="assets/hero-video.mp4" poster="assets/bg.png" autoplay muted loop playsinline></video></div>
+
+    <a class="logo" href="#"><img src="assets/logo.png" alt="Aqua Dreams"></a>
+    <nav>
+      <a class="on" href="#">Flow</a>
+      <a href="#">Current</a>
+      <a href="#">Depth</a>
+      <a href="#">Motion</a>
+    </nav>
+    <div class="tools">
+      <a class="ico" href="#">
+        <img src="assets/search-ring.svg" alt="" style="left:12%;top:12%;width:63%;height:63%;">
+        <img src="assets/search-handle.svg" alt="" style="left:66%;top:66%;width:22%;height:22%;">
+      </a>
+      <a class="ico" href="#">
+        <img src="assets/user-head.svg" alt="" style="left:25%;top:12%;width:50%;height:50%;">
+        <img src="assets/user-body.svg" alt="" style="left:12%;top:62%;width:75%;height:22%;">
+      </a>
+      <a class="ico menu" href="#"><span class="dots"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></a>
+    </div>
+
+    <h1 class="headline">Drift Beyond Still Waters</h1>
+    <p class="aside">Silence Moves Beneath Light</p>
+
+    <div class="cards">
+      <div class="card a">
+        <img class="photo" src="assets/fish-pink.png" alt="">
+        <h3>Ethereal Motion</h3>
+        <a class="pill" href="#">View Sequence <span class="disc"><img src="assets/arrow-line.svg" alt=""></span></a>
+      </div>
+      <div class="card b">
+        <img class="photo" src="assets/fish-blue.png" alt="">
+        <h3>Ambient Depth</h3>
+        <a class="pill" href="#">Enter Experience <span class="disc"><img src="assets/arrow-line.svg" alt=""></span></a>
+      </div>
+      <div class="card mid">
+        <img class="photo" src="assets/texture.png" alt="">
+        <h3>Surface Reflection</h3>
+        <p>Smooth aquatic movement designed to feel cinematic, weightless, and endlessly calming.</p>
+        <div class="orb">
+          <img class="r3" src="assets/ring-3.svg" alt="">
+          <img class="r2" src="assets/ring-2.svg" alt="">
+          <img class="r1" src="assets/ring-1.svg" alt="">
+          <a class="go" href="#"><img src="assets/arrow-w-line.svg" alt=""></a>
+        </div>
+      </div>
+      <div class="card d">
+        <img class="photo" src="assets/fish-orange.png" alt="">
+        <h3>Silent Current</h3>
+        <a class="pill" href="#">Discover Vision <span class="disc"><img src="assets/arrow-line.svg" alt=""></span></a>
+      </div>
+    </div>
+    <div class="bar"></div>
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1440;
+      var scale = Math.min(1, width / 1440);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (810 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>

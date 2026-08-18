@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DarkShield — Daily Hero 08 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300&family=Wix+Madefor+Text:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: 'Wix Madefor Text', sans-serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1440px;
+    height: 810px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: #000;
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .bg {
+    position: absolute;
+    inset: 0;
+    width: 1440px;
+    height: 810px;
+    object-fit: cover;
+  }
+  video.bg { pointer-events: none; }
+  .fade {
+    position: absolute;
+    left: 0; top: 0;
+    width: 1440px; height: 301px;
+    background: linear-gradient(180deg, #000 0%, rgba(0,0,0,0) 100%);
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  .logo {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    width: 83px;
+    height: 108px;
+    background: #202327;
+    overflow: hidden;
+  }
+  .logo img {
+    position: absolute;
+    left: 50%;
+    bottom: 13px;
+    width: 41px;
+    height: 41px;
+    transform: translateX(-50%);
+    object-fit: cover;
+  }
+
+  .menu {
+    position: absolute;
+    left: 1302px;
+    top: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    font-size: 12px;
+    letter-spacing: 8.16px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .menu img { width: 28px; height: 6px; }
+
+  .h1 {
+    position: absolute;
+    font-family: Unbounded, sans-serif;
+    font-weight: 300;
+    font-size: 52px;
+    line-height: 1;
+    letter-spacing: -1.04px;
+    text-transform: uppercase;
+    color: #fff;
+    white-space: nowrap;
+  }
+  .h1.a { left: 44px; top: 131px; }
+  .h1.b { left: 230px; top: 181px; }
+  .h1.c { left: 127px; top: 232px; }
+  .h1.d { left: 38px; top: 282px; }
+
+  .aside-title {
+    position: absolute;
+    left: 426px;
+    top: 367px;
+    width: 197px;
+    color: #fff;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 1.2;
+  }
+  .aside-copy {
+    position: absolute;
+    left: 456px;
+    top: 437px;
+    width: 167px;
+    color: #fff;
+    opacity: 0.6;
+    font-size: 14px;
+    line-height: 1.35;
+  }
+
+  .stack {
+    position: absolute;
+    left: 865px;
+    width: 388px;
+    font-family: Unbounded, sans-serif;
+    font-weight: 300;
+    font-size: 28px;
+    line-height: 1;
+    letter-spacing: -0.56px;
+    text-transform: uppercase;
+    color: #fff;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .stack.a { top: 664px; }
+  .stack.b { top: 692px; }
+  .stack.c { top: 720px; }
+
+  .card {
+    position: absolute;
+    overflow: hidden;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(8px);
+  }
+  .card.y32 { left: 187px; top: 525px; width: 141px; height: 184px; }
+  .card.y32 .photo { position: absolute; left: -15px; top: -6px; width: 190px; height: 190px; object-fit: cover; }
+  .card.mk1 { left: 38px; top: 593px; width: 140px; height: 184px; }
+  .card.mk1 .photo { position: absolute; left: 14px; top: 0; width: 111px; height: 139px; object-fit: cover; }
+  .card .label {
+    position: absolute;
+    left: 14px;
+    bottom: 14px;
+    font-family: Unbounded, sans-serif;
+    font-weight: 300;
+    font-size: 24px;
+    letter-spacing: -0.48px;
+    text-transform: uppercase;
+    background: linear-gradient(256deg, rgba(255,255,255,0.18) 5%, #fff 93%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .card.mk1 .label { left: 11px; }
+  .card .arrow {
+    position: absolute;
+    right: 6px;
+    top: 6px;
+    width: 16px;
+    height: 16px;
+    transform: rotate(-135deg);
+  }
+  .card .arrow img { width: 12px; height: 10px; }
+
+  .diamond {
+    position: absolute;
+    left: 780px;
+    top: 448px;
+    width: 175px;
+    height: 175px;
+  }
+  .diamond img { width: 100%; height: 100%; }
+
+  .spikes {
+    position: absolute;
+    left: 1293px;
+    top: 655px;
+    width: 95px;
+    height: 95px;
+    mix-blend-mode: plus-lighter;
+  }
+  .spikes img { width: 100%; height: 100%; }
+
+  .counter {
+    position: absolute;
+    left: 1321px;
+    top: 232px;
+    width: 81px;
+    height: 109px;
+  }
+  .counter .n {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 38px;
+    text-align: right;
+    color: #fff;
+    font-size: 12px;
+    letter-spacing: 8.16px;
+    text-transform: uppercase;
+  }
+  .counter img { position: absolute; height: 1px; }
+  .counter .l1 { left: 53px; top: 5px; width: 28px; }
+  .counter .l2 { left: 67px; top: 29px; width: 14px; }
+  .counter .l3 { left: 70px; top: 49px; width: 11px; }
+  .counter .l4 { left: 74px; top: 69px; width: 7px; }
+  .counter .l5 { left: 77px; top: 89px; width: 4px; }
+  .counter .l6 { left: 79px; top: 109px; width: 2px; }
+
+  .card, .diamond { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); }
+  .card:hover { transform: translateY(-4px); }
+  .diamond:hover { transform: scale(1.04); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .h1, .aside-title, .aside-copy { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.2s both; }
+    .card.mk1 { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.5s both; }
+    .card.y32 { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.65s both; }
+    .stack { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.8s both; }
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <video class="bg" src="assets/hero-video.mp4" poster="assets/bg.png" autoplay muted loop playsinline></video>
+    <div class="fade"></div>
+
+    <a class="logo" href="#"><img src="assets/logo.png" alt="DarkShield"></a>
+    <a class="menu" href="#">Menu <img src="assets/menu.svg" alt=""></a>
+
+    <div class="h1 a">ENGINEER</div>
+    <div class="h1 b">THE</div>
+    <div class="h1 c">INVISIBLE</div>
+    <div class="h1 d">THREAT</div>
+
+    <p class="aside-title">Synthetic Threat Development</p>
+    <p class="aside-copy">DarkShield Systems engineers cybernetic viruses to control digital ecosystems.</p>
+
+    <div class="stack a">Autonomous</div>
+    <div class="stack b">Network</div>
+    <div class="stack c">Control</div>
+
+    <a class="card mk1" href="#">
+      <img class="photo" src="assets/card-mk1.png" alt="">
+      <span class="label">Mk1</span>
+      <span class="arrow"><img src="assets/arrow.svg" alt=""></span>
+    </a>
+    <a class="card y32" href="#">
+      <img class="photo" src="assets/card-y32.png" alt="">
+      <span class="label">y32</span>
+      <span class="arrow"><img src="assets/arrow.svg" alt=""></span>
+    </a>
+
+    <a class="diamond" href="#"><img src="assets/diamond.svg" alt=""></a>
+    <img class="spikes" src="assets/spikes.svg" alt="">
+
+    <div class="counter">
+      <span class="n">001</span>
+      <img class="l1" src="assets/line-2.svg" alt="">
+      <img class="l2" src="assets/line-3.svg" alt="">
+      <img class="l3" src="assets/line-4.svg" alt="">
+      <img class="l4" src="assets/line-5.svg" alt="">
+      <img class="l5" src="assets/line-6.svg" alt="">
+      <img class="l6" src="assets/line-7.svg" alt="">
+    </div>
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1440;
+      var scale = Math.min(1, width / 1440);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (810 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>

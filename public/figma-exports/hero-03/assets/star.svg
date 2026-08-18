@@ -1,0 +1,11 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="48.4085" height="48.4085" viewBox="0 0 48.4085 48.4085" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="Repeat group 1">
+<g id="Repeat group 1_inner" data-figma-trr="r5u1.5-0f">
+<path id="Union" d="M21.5812 8.84491C23.0297 10.2936 25.3784 10.2937 26.827 8.84515L30.1342 5.53825C31.3181 4.35452 33.2373 4.35448 34.4212 5.53816C35.6053 6.72202 35.6053 8.64163 34.4214 9.82559L29.4504 14.7966C26.5533 17.6937 21.8561 17.6938 18.9589 14.7967L13.9873 9.82546C12.8033 8.64155 12.8033 6.72199 13.9872 5.53804C15.1712 4.35408 17.0908 4.35413 18.2747 5.53814L21.5812 8.84491Z" fill="#F3CEB9"/>
+</g>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(39.7444 -6.29496) rotate(72)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(58.013 29.559) rotate(144)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(29.5592 58.0129) rotate(-144)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(-6.29483 39.7444) rotate(-72)"/>
+</g>
+</svg>

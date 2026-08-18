@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glacius — Daily Hero 32 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Kulim+Park:wght@300;400;700&family=Marcellus+SC&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: 'Kulim Park', sans-serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: #f4f5f7;
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .bg {
+    position: absolute;
+    left: -37px; top: -23px;
+    width: 1993px; height: 1231px;
+    transform: scaleX(-1);
+  }
+  .bg img { width: 100%; height: 100%; object-fit: cover; object-position: bottom; }
+  .bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(60,78,106,0.3);
+  }
+  .object {
+    position: absolute;
+    left: 0; top: 105px;
+    width: 1920px; height: 848px;
+    transform: scaleX(-1);
+  }
+  .object img { width: 100%; height: 100%; object-fit: cover; object-position: bottom; }
+  .object::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(222,223,229,0) 61%, #f4f5f7 100%);
+  }
+  .glow {
+    position: absolute;
+    left: 258px; top: 862px;
+    width: 1403px; height: 523px;
+    pointer-events: none;
+  }
+  .clouds {
+    position: absolute;
+    left: 0; top: 750px;
+    width: 1920px; height: 330px;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .clouds img {
+    position: absolute;
+    mix-blend-mode: screen;
+  }
+  .c1 { left: -19px; top: 0; width: 1938px; height: 544px; filter: blur(50px); }
+  .c2 { left: 1142px; top: 9px; width: 998px; height: 627px; }
+  .c3 { left: -236px; top: 70px; width: 1758px; height: 461px; }
+
+  .logo {
+    position: absolute;
+    left: 47px; top: 25px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .logo img {
+    width: 33px; height: 33px;
+    object-fit: cover;
+  }
+  .logo span {
+    font-family: 'Marcellus SC', serif;
+    font-size: 20px;
+    letter-spacing: 2.15px;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  nav {
+    position: absolute;
+    left: 50%; top: 37px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 60px;
+    font-size: 12px;
+    letter-spacing: 0.24px;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  nav a:not(.on) { opacity: 0.5; }
+  .actions {
+    position: absolute;
+    left: 1642px; top: 17px;
+    display: flex;
+    align-items: center;
+    gap: 60px;
+  }
+  .actions .login {
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.28px;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .actions .go {
+    padding: 20px;
+    border-radius: 999px;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: #fff;
+    background: linear-gradient(94deg, rgba(226,240,255,0.4) 13%, rgba(226,240,255,0.08) 91%);
+  }
+
+  .frost {
+    position: absolute;
+    left: 50%; top: 392px;
+    transform: translateX(-50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 400px;
+    letter-spacing: 20px;
+    line-height: 0.72;
+    text-transform: uppercase;
+    white-space: pre;
+    mix-blend-mode: lighten;
+    opacity: 0.5;
+    background: linear-gradient(180deg, rgba(226,240,255,0.6) 0%, rgba(226,240,255,0.12) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    pointer-events: none;
+  }
+  .oh {
+    position: absolute;
+    left: 50%; top: 281px;
+    transform: translateX(-50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 707px;
+    letter-spacing: 35px;
+    line-height: 0.72;
+    text-transform: uppercase;
+    background: linear-gradient(180deg, rgba(226,240,255,0.01) 0%, rgba(226,240,255,0.6) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 4px 23px rgba(66,86,114,0.49);
+    pointer-events: none;
+  }
+
+  .explore {
+    position: absolute;
+    left: 865px; top: 878px;
+    width: 188px; height: 188px;
+  }
+  .explore .outer, .explore .inner { position: absolute; }
+  .explore .outer { inset: 0; width: 188px; height: 188px; }
+  .explore .inner { left: 33px; top: 33px; width: 121px; height: 121px; }
+  .explore span {
+    position: absolute;
+    left: 50%; top: 89px;
+    transform: translateX(-50%);
+    font-size: 14px;
+    text-transform: uppercase;
+    color: #1f2b3f;
+  }
+  .th {
+    position: absolute;
+    border-radius: 50%;
+    overflow: hidden;
+    object-fit: cover;
+  }
+  .th1 { left: 654px; top: 944px; width: 56px; height: 56px; }
+  .th2 { left: 745px; top: 930px; width: 85px; height: 85px; }
+  .th3 { left: 1088px; top: 930px; width: 85px; height: 85px; }
+  .th4 { left: 1208px; top: 944px; width: 56px; height: 56px; }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <div class="bg"><img src="assets/bg.png" alt=""></div>
+    <div class="object"><img src="assets/object.png" alt=""></div>
+    <img class="glow" src="assets/glow.svg" alt="">
+    <div class="clouds">
+      <img class="c1" src="assets/cloud-a.png" alt="">
+      <img class="c2" src="assets/cloud-b.png" alt="">
+      <img class="c3" src="assets/cloud-c.png" alt="">
+    </div>
+
+    <a class="logo" href="#">
+      <img src="assets/logo.png" alt="">
+      <span>Glacius</span>
+    </a>
+    <nav>
+      <a class="on" href="#">Home</a>
+      <a href="#">About us</a>
+      <a href="#">Services</a>
+      <a href="#">contact</a>
+    </nav>
+    <div class="actions">
+      <a class="login" href="#">Login</a>
+      <a class="go" href="#">Get Started</a>
+    </div>
+
+    <div class="frost">Fr     st</div>
+    <div class="oh">O</div>
+
+    <div class="explore">
+      <img class="outer" src="assets/ring-outer.svg" alt="">
+      <img class="inner" src="assets/ring-inner.svg" alt="">
+      <span>Explore</span>
+    </div>
+    <img class="th th1" src="assets/thumb-a.png" alt="">
+    <img class="th th2" src="assets/thumb-b.png" alt="">
+    <img class="th th3" src="assets/thumb-c.png" alt="">
+    <img class="th th4" src="assets/thumb-d.png" alt="">
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1920;
+      var scale = Math.min(1, width / 1920);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (1080 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>

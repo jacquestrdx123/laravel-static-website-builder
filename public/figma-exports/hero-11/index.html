@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exoform — Daily Hero 11 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind:wght@300;500;600;700&family=Oswald:wght@500;600&family=Chakra+Petch:wght@500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #000; font-family: Hind, sans-serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: #000;
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .hero-bg {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    width: 1920px;
+    height: 1080px;
+    object-fit: cover;
+    mix-blend-mode: lighten;
+    pointer-events: none;
+  }
+
+  .logo {
+    position: absolute;
+    left: 34px;
+    top: 33px;
+    width: 67px;
+    height: 67px;
+    mix-blend-mode: screen;
+  }
+  .logo img { width: 100%; height: 100%; object-fit: cover; }
+  .menu {
+    position: absolute;
+    right: 55px;
+    top: 60px;
+    width: 29px;
+    height: 14px;
+  }
+  .menu img { width: 100%; height: 100%; }
+
+  nav {
+    position: absolute;
+    left: 50%;
+    top: 60px;
+    transform: translateX(-50%);
+    width: 1426px;
+    display: flex;
+    justify-content: space-between;
+    color: #d1d1d1;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 4.8px;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+  nav a.dim { opacity: 0.4; }
+
+  .headline {
+    position: absolute;
+    left: 58px;
+    top: 310px;
+    color: #d1d1d1;
+    font-family: Oswald, sans-serif;
+    font-weight: 500;
+    font-size: 120px;
+    line-height: 1;
+    letter-spacing: -2.4px;
+    text-transform: uppercase;
+  }
+  .headline .row { display: flex; align-items: baseline; gap: 8px; }
+  .headline .slash { opacity: 0.2; font-weight: 600; }
+
+  .tags {
+    position: absolute;
+    left: 1322px;
+    top: 453px;
+    width: 361px;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .tags span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 20px;
+    border: 1px solid #d1d1d1;
+    border-radius: 999px;
+    color: #d1d1d1;
+    font-weight: 500;
+    font-size: 14px;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+  .tags span:nth-child(2) { opacity: 0.8; }
+  .tags span:nth-child(3) { opacity: 0.7; }
+  .tags span:nth-child(4) { opacity: 0.6; }
+  .tags span:nth-child(5) { opacity: 0.5; }
+  .tags span:nth-child(6) { opacity: 0.4; }
+  .tags span:nth-child(7) { opacity: 0.3; }
+  .tags span:nth-child(8) { opacity: 0.1; }
+
+  .cta {
+    position: absolute;
+    left: 43px;
+    top: 808px;
+    padding: 32px 40px;
+    border-radius: 999px;
+    background: #fff;
+    color: #000;
+    font-weight: 600;
+    font-size: 20px;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+  .lede {
+    position: absolute;
+    left: 387px;
+    top: 809px;
+    width: 290px;
+    color: #d1d1d1;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 1.4;
+    text-align: right;
+  }
+
+  .chevrons {
+    position: absolute;
+    left: 1363px;
+    top: 824px;
+    display: flex;
+    gap: 5px;
+  }
+  .chevrons i {
+    width: 13px;
+    height: 28px;
+    position: relative;
+    opacity: 0.1;
+  }
+  .chevrons i:nth-child(2) { opacity: 0.2; }
+  .chevrons i:nth-child(3) { opacity: 0.4; }
+  .chevrons i:nth-child(4) { opacity: 0.2; }
+  .chevrons i::before,
+  .chevrons i::after {
+    content: "";
+    position: absolute;
+    left: 4px;
+    width: 5px;
+    height: 14px;
+    background: #d1d1d1;
+  }
+  .chevrons i::before { top: 0; transform: rotate(45deg); }
+  .chevrons i::after { bottom: 0; transform: rotate(-45deg); }
+
+  .num {
+    position: absolute;
+    right: 126px;
+    top: 810px;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 80px;
+    color: #d1d1d1;
+    opacity: 0.2;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+  .aside {
+    position: absolute;
+    left: 1363px;
+    top: 899px;
+    width: 431px;
+    color: #d1d1d1;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 1.4;
+  }
+  .dial {
+    position: absolute;
+    left: 1081px;
+    top: 890px;
+    width: 97px;
+    height: 97px;
+    border: 1px solid rgba(209,209,209,0.25);
+    border-radius: 50%;
+  }
+  .dial::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 14px;
+    height: 2px;
+    background: #d1d1d1;
+    transform: translate(-50%, -50%);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .headline { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.2s both; }
+    .cta, .lede, .aside { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.55s both; }
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <video class="hero-bg" src="assets/hero-video.mp4" poster="assets/raw4.png" autoplay muted loop playsinline></video>
+    <a class="logo" href="#"><img src="assets/logo.png" alt="Exoform"></a>
+    <a class="menu" href="#" aria-label="Menu"><img src="assets/menu.svg" alt=""></a>
+    <nav>
+      <a href="#">[ Home ]</a>
+      <a class="dim" href="#">About us</a>
+      <a class="dim" href="#">Services</a>
+      <a class="dim" href="#">contact</a>
+    </nav>
+
+    <h1 class="headline">
+      <div class="row" style="justify-content:flex-end; width:700px;">Where</div>
+      <div class="row" style="justify-content:flex-end; width:700px; margin-top:8px;">Form</div>
+      <div class="row" style="margin-top:8px;"><span>Meets</span> <span class="slash">//</span></div>
+      <div class="row" style="margin-top:8px;">Function</div>
+    </h1>
+
+    <div class="tags">
+      <span>STRUCTURE</span>
+      <span>FLOW</span>
+      <span>PEAK</span>
+      <span>BALANCE</span>
+      <span>CORE</span>
+      <span>SIGNAL</span>
+      <span>SYNC</span>
+      <span>VISION</span>
+    </div>
+
+    <a class="cta" href="#">OUR PROCESS</a>
+    <p class="lede">Where precision shapes every motion. Design defines intent. Form and function exist as one unified system.</p>
+    <div class="chevrons" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="num">05</div>
+    <p class="aside">Built where structure meets purpose. Crafted to respond with clarity, control, and seamless interaction across every layer.</p>
+    <div class="dial" aria-hidden="true"></div>
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1920;
+      var scale = Math.min(1, width / 1920);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (1080 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>

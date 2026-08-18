@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arboria — Daily Hero 02 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@200;300;400;700&family=Lexend+Exa:wght@400&family=Rozha+One&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: 'Lexend', sans-serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1440px;
+    height: 810px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: #454640;
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .bg {
+    position: absolute;
+    left: -162.55px;
+    top: 94px;
+    width: 1830.56px;
+    height: 925.41px;
+  }
+  .bg img { width: 100%; height: 100%; object-fit: cover; }
+  .bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, #454640 0%, rgba(69,70,64,0) 68.8%);
+    pointer-events: none;
+  }
+  .wordmark {
+    position: absolute;
+    left: 50%;
+    top: 233px;
+    transform: translateX(-50%);
+    font-family: 'Rozha One', serif;
+    font-size: 418.73px;
+    line-height: 0.84;
+    letter-spacing: -25.12px;
+    text-transform: uppercase;
+    color: #fff;
+    opacity: 0.1;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .branch {
+    position: absolute;
+    left: -257px;
+    top: 210px;
+    width: 2344px;
+    height: 922px;
+    object-fit: cover;
+    pointer-events: none;
+  }
+
+  .logo {
+    position: absolute;
+    left: 29px;
+    top: 27px;
+    width: 24px;
+    height: 24px;
+  }
+  .logo img { width: 100%; height: 100%; }
+  nav {
+    position: absolute;
+    left: 50%;
+    top: 34px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 129px;
+    font-size: 14px;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+  nav a { color: #b2b3a7; }
+  nav a.active { color: #fff; font-weight: 700; }
+  .login {
+    position: absolute;
+    right: 94px;
+    top: 35px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .menu {
+    position: absolute;
+    right: 24px;
+    top: 35px;
+    width: 32px;
+    height: 8px;
+  }
+  .menu img { width: 100%; height: 100%; }
+
+  .headline {
+    position: absolute;
+    left: 18px;
+    top: 181px;
+    font-family: 'Lexend Exa', sans-serif;
+    font-size: 52px;
+    line-height: 1.04;
+    letter-spacing: -6.24px;
+    color: #fff;
+    white-space: nowrap;
+  }
+  .lede {
+    position: absolute;
+    left: 462px;
+    top: 181px;
+    width: 225px;
+    font-size: 16px;
+    line-height: 1.4;
+    color: #b2b3a7;
+  }
+  .cta {
+    position: absolute;
+    left: 462px;
+    top: 306px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 20px 8px 8px;
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 999px;
+    color: #fff;
+    font-size: 16px;
+  }
+  .cta .disc {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cta .disc img { width: 11px; height: 11px; }
+
+  .play {
+    position: absolute;
+    left: 153px;
+    top: 398px;
+    width: 126px;
+    height: 126px;
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .play .inner {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .play .inner img { width: 17px; height: 17px; transform: rotate(90deg); }
+
+  .card {
+    position: absolute;
+    width: 296px;
+    height: 280px;
+    border-radius: 40px;
+    background: #d7d8d6;
+    overflow: hidden;
+  }
+  .card-about { left: 820px; top: 201px; }
+  .card-about .photo {
+    position: absolute;
+    left: -83px;
+    top: -174px;
+    width: 497px;
+    height: 332px;
+    transform: rotate(18.77deg);
+    object-fit: cover;
+  }
+  .card-about .label {
+    position: absolute;
+    left: 43px;
+    top: 140px;
+    font-weight: 300;
+    font-size: 16px;
+    letter-spacing: -0.32px;
+    color: #474842;
+  }
+  .card-about h3 {
+    position: absolute;
+    left: 41px;
+    top: 168px;
+    width: 165px;
+    font-family: 'Lexend Exa', sans-serif;
+    font-size: 24px;
+    line-height: 1.04;
+    letter-spacing: -2.4px;
+    color: #474842;
+    font-weight: 400;
+  }
+  .card-stove { left: 1116px; top: 477px; }
+  .card-stove .photo {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 437px;
+    height: 292px;
+    object-fit: cover;
+  }
+  .card-stove .label {
+    position: absolute;
+    left: 41px;
+    top: 45px;
+    font-weight: 300;
+    font-size: 16px;
+    letter-spacing: -0.32px;
+    color: #474842;
+  }
+  .card-stove h3 {
+    position: absolute;
+    left: 41px;
+    top: 74px;
+    width: 165px;
+    font-family: 'Lexend Exa', sans-serif;
+    font-size: 24px;
+    line-height: 1.04;
+    letter-spacing: -2.4px;
+    color: #474842;
+    font-weight: 400;
+  }
+  .card .more {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card .more img { width: 11px; height: 11px; }
+
+  .vline {
+    position: absolute;
+    top: 0;
+    width: 1px;
+    height: 810px;
+    background: rgba(255,255,255,0.12);
+    pointer-events: none;
+  }
+  .vline.a { left: 0; }
+  .vline.b { left: 360px; }
+  .vline.c { left: 720px; }
+  .vline.d { left: 1080px; }
+  .vline.e { left: 1439px; }
+
+  .scroll {
+    position: absolute;
+    left: 50%;
+    top: 666px;
+    transform: translateX(-50%) rotate(90deg);
+    font-weight: 200;
+    font-size: 12px;
+    letter-spacing: 5.64px;
+    text-transform: uppercase;
+    color: #fff;
+  }
+
+  .stat {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  .stat img { width: 31px; height: 31px; position: absolute; left: -38px; top: 2px; }
+  .stat .k { color: #b2b3a7; }
+  .stat .v { color: #fff; }
+  .stat-a { left: 1239px; top: 220px; }
+  .stat-b { left: 1306px; top: 334px; }
+
+  .cta, .play, .card .more, nav a, .login { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); }
+  .cta:hover, .play:hover { transform: translateY(-3px); }
+  .card:hover .more { transform: scale(1.1) rotate(12deg); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .wordmark { animation: fadeIn 1.6s cubic-bezier(0.22,1,0.36,1) both; }
+    .branch { animation: rise 1.8s cubic-bezier(0.22,1,0.36,1) both; }
+    .headline, .lede, .cta { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.4s both; }
+    .card-about { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.7s both; }
+    .card-stove { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.9s both; }
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 0.1; } }
+  @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <div class="bg"><img src="assets/bg.png" alt=""></div>
+    <div class="wordmark">arboria</div>
+    <img class="branch" src="assets/branch.png" alt="Mossy branch">
+
+    <div class="vline a"></div>
+    <div class="vline b"></div>
+    <div class="vline c"></div>
+    <div class="vline d"></div>
+    <div class="vline e"></div>
+
+    <a class="logo" href="#"><img src="assets/logo-tree.svg" alt="Arboria"></a>
+    <nav>
+      <a class="active" href="#">Home</a>
+      <a href="#">Stove</a>
+      <a href="#">Contact</a>
+    </nav>
+    <a class="login" href="#">Login</a>
+    <img class="menu" src="assets/menu.svg" alt="">
+
+    <div class="headline">Find your<br>inner green</div>
+    <p class="lede">Nurturing green spaces, cultivating sustainable solutions, and inspiring a greener tomorrow for all.</p>
+    <a class="cta" href="#">
+      <span class="disc"><img src="assets/icon-grid.svg" alt=""></span>
+      Our Products
+    </a>
+    <a class="play" href="#"><span class="inner"><img src="assets/play.svg" alt=""></span></a>
+
+    <div class="card card-about">
+      <img class="photo" src="assets/card-about.png" alt="">
+      <p class="label">About</p>
+      <h3>Nature's beauty is boundless.</h3>
+      <a class="more" href="#"><img src="assets/icon-card-grid.svg" alt=""></a>
+    </div>
+    <div class="card card-stove">
+      <img class="photo" src="assets/card-stove.png" alt="">
+      <p class="label">EcoStove</p>
+      <h3>Heat for Life</h3>
+      <a class="more" href="#"><img src="assets/icon-card-grid.svg" alt=""></a>
+    </div>
+
+    <div class="stat stat-a">
+      <img src="assets/icon-sun.svg" alt="">
+      <span class="k">Titanium Forest</span>
+      <span class="v">282 G</span>
+    </div>
+    <div class="stat stat-b">
+      <img src="assets/icon-phyto.svg" alt="">
+      <span class="k">Phytotherapy</span>
+      <span class="v">43%</span>
+    </div>
+    <div class="scroll">Scroll</div>
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1440;
+      var scale = Math.min(1, width / 1440);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (810 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>

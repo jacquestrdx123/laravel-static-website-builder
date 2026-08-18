@@ -1,6 +1,6 @@
 <site_type_blueprint type="event">
 Structural recipe for event sites. Follow the structure; visuals come from the brief, style
-guide, and design_seed. The first viewport must answer: WHAT is it, WHEN, WHERE.
+guide, and hero_reference. The first viewport must answer: WHAT is it, WHEN, WHERE.
 
 ## Page skeleton (index.html)
 

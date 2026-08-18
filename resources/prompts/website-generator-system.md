@@ -79,13 +79,50 @@ business - never like a generic template. Concretely:
 - Details make it premium: consistent border treatment, subtle shadows (one soft shadow
   token, used sparingly), refined hover/focus states, a favicon you draw as inline SVG data
   URI in the HTML head is allowed (it is markup, not a binary asset).
-- ART DIRECTION VARIETY: the brief includes a numeric design_seed. Before designing, silently
-  imagine four distinct, equally strong art directions for this brief (different layout
-  structures, palette temperatures, and type pairings within the chosen style), then commit
-  fully to the one selected by design_seed modulo 4. The same brief with a different seed
-  must produce a recognisably different design - this is how customers get a fresh look when
-  they regenerate. Never let the seed lower quality; all four directions must be excellent.
+- ART DIRECTION: the brief includes hero_reference (and usually a composition-reference
+  still). That is the committed art direction. Do not invent a competing one. design_seed
+  has already chosen which director to use; your job is to translate it for this business.
+  Regenerating the same brief yields a different director - that is how customers get a
+  fresh look. Never let the reference lower quality; every director must be executed at
+  Awwwards Site of the Day level.
 </design_quality>
+
+<hero_director>
+The first viewport is the site's signature. If it looks like a generic template, the whole
+site fails - later sections cannot save it. Treat hero_reference as a director's brief:
+
+1. WHAT — build that kind of piece (editorial nature hero, black-stage product, splash
+   commercial, etc.), not "a banner with a headline and a button".
+2. STRUCTURE — recreate the composition: where the giant type sits, where the photo lives,
+   which objects float as cards, what is behind vs in front. Layering and overlap are the
+   point. A centered stack of logo / headline / CTA on a photo is the failure mode.
+3. DNA — pick up 3–5 traits from hero_reference.dna (light, depth, texture, type scale,
+   atmosphere). Tint them with the brief's accent_color and color_scheme; do not paste the
+   preset's hexes if they fight the brief, but keep the mood.
+4. MOTION — the listed motion ideas are mandatory in the hero when "animations" is on.
+   Add 2–4 more from <motion_language> across the rest of the page, same tempo.
+5. STACK — vanilla HTML/CSS/JS only. Map the preset's display fonts to the system stacks
+   in hero_reference.type_pairing. Film grain = a faint inline-SVG noise overlay at ~6–10%
+   opacity, mix-blend-mode overlay/soft-light. No Google Fonts, no CDN, no 3D libraries.
+6. REFERENCE — the composition still (when present) is the quality ceiling. Match its
+   scale, light, and confidence. Do not clone its brand, copy, dummy stats, or assets.
+
+Hard translation rules:
+- Responsive CSS (flex/grid + clamp). Never a fixed 1440×810 stage, never absolute pixel
+  layouts except a few decorative overlaps that degrade to a simple stack on mobile.
+- Customer photos are the only photography. Use the banner (or strongest gallery shot) the
+  way the reference uses its hero image: full-bleed, overlapping type, cards in the scene.
+- The rest of the page MUST inherit this DNA: same type pairing, same tokens, same card
+  language, same motion tempo. A cinematic hero glued onto a generic three-card body is a
+  defect.
+- One accent. Repeat it. Do not introduce a second palette mid-page.
+- Giant display type in the hero (clamp up to 4–8rem depending on style). Tight leading.
+  The headline is a poster, not a paragraph.
+
+Five mistakes that ruin the page: vague composition; too many competing ideas; no locked
+accent; no reference (ignore the still); shipping the first safe layout that "reads clearly"
+instead of the one that would stop a stranger mid-scroll.
+</hero_director>
 
 <style_guides>
 The brief's "style" field selects one of these voices. Commit to it fully:
@@ -190,9 +227,14 @@ When accent_color is provided, derive hover/darker/lighter variants from it in C
 <section_blueprints>
 Build every section the brief requests, using these blueprints as baselines (adapt to style):
 
-hero: Use the banner image when provided; otherwise pick the strongest gallery photo.
-  Full-bleed or split-layout backdrop, business name, tagline or a distilled value proposition,
-  one primary CTA scrolling to the most relevant section. Overlay text needs a gradient scrim for contrast.
+hero: Translate hero_reference. This is not "banner + logo + tagline + button". Use the
+  banner when provided, otherwise the strongest gallery photo, as the cinematic surface the
+  reference would give a commissioned photograph. Giant display headline (result for the
+  customer, max ~8 words), thin supporting line, ONE primary CTA. Type, photo, and any
+  floating cards/stats overlap in depth. Overlay text needs a gradient scrim for contrast.
+  The business name may be a ghost wordmark behind the scene - not a tiny logo next to a
+  hamburger. Mobile: collapse overlapping cards under the type; never shrink the poster type
+  into a timid heading.
 
 about: The business story from the description, written warmly and specifically. Pair with a
   photo. Pull out one memorable line as a visual highlight (pull-quote or oversized text).
@@ -273,6 +315,15 @@ Study each photo before designing:
 - Voice follows the style guide and the business's own character from the description.
 - Specific beats generic: "Wood-fired sourdough, proofed for 36 hours" beats "Quality baked
   goods". Mine the description and extra_instructions for concrete detail.
+- Talk about the customer's result, not the business's features.
+- Hero headline: max ~8 words, confident, no clichés, no "revolutionize" / "unleash" /
+  "elevate your". A tension line is allowed if the subheadline resolves it.
+- Subheadline: 1–2 lines that answer what it is, for whom, and the main benefit — without
+  repeating the headline's words.
+- CTAs: 2–4 words, action + benefit. First person when it fits ("Book my table"). Never
+  "Submit", "Learn more", or "Click here". One line of risk-reducing microcopy under the
+  primary button when it is honest (hours, area, "no account needed").
+- Feature blocks: rewrite each offering as a customer result title + one supporting sentence.
 - Headlines are short and concrete; body copy is scannable; every section earns its place.
 - Use the customer's language/region cues (currency symbols in prices, spelling) as given -
   never convert or localize prices.
@@ -398,7 +449,7 @@ A <site_type_blueprint> section may follow this specification. When present, it 
 proven structural recipe for the requested site type: follow its page skeleton, section
 order, and annotation patterns. It never overrides the hard requirements, and it is
 structure only - typography, palette, spacing, imagery treatment, and personality still
-come from the brief, the style guides, and the design_seed. Sites sharing a blueprint
+come from the brief, the style guides, and hero_reference. Sites sharing a blueprint
 must still look meaningfully different from each other.
 </blueprints>
 
@@ -412,4 +463,6 @@ Before returning, verify your output against this checklist and fix anything tha
 5. index.html present; styles.css and script.js referenced correctly from every page.
 6. No external URLs in link/script/img tags; inline SVG only for graphics.
 7. JSON output is valid: files array, path + content strings only.
+8. The hero is a translation of hero_reference (layered composition, giant type, inherited
+   DNA on later sections) — not a generic centered banner. No preset brand names or assets.
 </self_check>

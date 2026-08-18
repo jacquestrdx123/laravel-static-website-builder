@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finddly — Daily Hero 27 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;500&family=Outfit:wght@400;500&family=Syne:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: Outfit, sans-serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1440px;
+    height: 810px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: #1a1a1a;
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .bg {
+    position: absolute;
+    left: 0; top: 0;
+    width: 1440px; height: 810px;
+  }
+  .bg img { width: 100%; height: 100%; object-fit: cover; }
+  .wash {
+    position: absolute;
+    left: 0; top: 313px;
+    width: 899px; height: 497px;
+    background: linear-gradient(214deg, rgba(0,0,0,0.01) 44.6%, rgb(5,79,100) 84%);
+    pointer-events: none;
+  }
+
+  .logo {
+    position: absolute;
+    left: 53px; top: 36px;
+    display: flex;
+    align-items: center;
+    gap: 17px;
+  }
+  .logo img { width: 15px; height: 15px; }
+  .logo span {
+    font-family: Syne, sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+
+  nav {
+    position: absolute;
+    left: 278px; top: 40px;
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  nav .sep { width: 1px; height: 8px; background: rgba(255,255,255,0.7); }
+  nav .active { position: relative; }
+  nav .active::after {
+    content: "";
+    position: absolute;
+    left: 0; bottom: -10px;
+    width: 84px; height: 1px;
+    background: #fff;
+  }
+
+  .tools {
+    position: absolute;
+    right: 53px; top: 32px;
+    display: flex;
+    align-items: center;
+    gap: 45px;
+  }
+  .tools .search { width: 18px; height: 18px; position: relative; }
+  .tools .search img { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .tools .menu { width: 15px; height: 8px; }
+
+  .kicker {
+    position: absolute;
+    left: 449px; top: 187px;
+    width: 542px; height: 24px;
+    font-family: Merriweather, serif;
+    font-weight: 500;
+    font-size: 32px;
+    letter-spacing: 54.72px;
+    text-transform: uppercase;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .title {
+    position: absolute;
+    left: 61px; top: 257px;
+    width: 1318px; height: 236px;
+    font-family: Merriweather, serif;
+    font-weight: 300;
+    font-size: 300px;
+    letter-spacing: 33px;
+    line-height: 0.74;
+    text-transform: uppercase;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .copy {
+    position: absolute;
+    left: 82px; top: 618px;
+    width: 339px;
+    color: #fff;
+  }
+  .copy h2 {
+    font-family: Outfit, sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .copy p {
+    font-size: 16px;
+    line-height: 1.45;
+    opacity: 0.8;
+  }
+
+  .scroll {
+    position: absolute;
+    left: 582px; top: 664px;
+    width: 276px; height: 276px;
+    pointer-events: none;
+  }
+  .scroll .o, .scroll .m, .scroll .i {
+    position: absolute;
+  }
+  .scroll .o { left: 0; top: 0; width: 276px; height: 276px; }
+  .scroll .m { left: 28px; top: 28px; width: 219px; height: 219px; }
+  .scroll .i { left: 54px; top: 54px; width: 168px; height: 168px; }
+  .scroll .arrow {
+    position: absolute;
+    left: 128px; top: 110px;
+    width: 20px; height: 20px;
+  }
+  .scroll .arrow img { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+  .pager {
+    position: absolute;
+    left: 1130px; top: 695px;
+    width: 228px; height: 63px;
+    color: #fff;
+    overflow: hidden;
+  }
+  .pager .cur {
+    position: absolute;
+    right: 97px; top: 8px;
+    font-family: Merriweather, serif;
+    font-weight: 300;
+    font-size: 70px;
+    line-height: 0.8;
+    text-transform: uppercase;
+  }
+  .pager .rule {
+    position: absolute;
+    left: 125px; top: 59px;
+    width: 42px; height: 1px;
+    background: #fff;
+  }
+  .pager .tot {
+    position: absolute;
+    right: 0; top: 29px;
+    font-family: Merriweather, serif;
+    font-size: 40px;
+    opacity: 0.5;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <div class="bg"><img src="assets/caribe.png" alt=""></div>
+    <div class="wash"></div>
+
+    <a class="logo" href="#">
+      <img src="assets/logo.svg" alt="">
+      <span>Finddly</span>
+    </a>
+    <nav>
+      <span class="active">Destinations</span>
+      <span class="sep"></span>
+      <span>Experiences</span>
+      <span class="sep"></span>
+      <span>Gallery</span>
+    </nav>
+    <div class="tools">
+      <div class="search">
+        <img src="assets/search.svg" alt="">
+        <img src="assets/search-handle.svg" alt="">
+      </div>
+      <img class="menu" src="assets/menu.svg" alt="">
+    </div>
+
+    <div class="kicker">Paradise</div>
+    <div class="title">Caribe</div>
+
+    <div class="copy">
+      <h2>Endless Blue Horizons</h2>
+      <p>Turquoise waters, white sand beaches and warm tropical skies create the perfect destination for unforgettable luxury experiences and relaxation.</p>
+    </div>
+
+    <div class="scroll">
+      <img class="o" src="assets/scroll-outer.svg" alt="">
+      <img class="m" src="assets/scroll-mid.svg" alt="">
+      <img class="i" src="assets/scroll-inner.svg" alt="">
+      <div class="arrow">
+        <img src="assets/arrow-stem.svg" alt="">
+        <img src="assets/arrow-head.svg" alt="">
+      </div>
+    </div>
+
+    <div class="pager">
+      <span class="cur">01</span>
+      <span class="rule"></span>
+      <span class="tot">05</span>
+    </div>
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1440;
+      var scale = Math.min(1, width / 1440);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (810 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>

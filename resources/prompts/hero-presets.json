@@ -1,0 +1,1322 @@
+[
+  {
+    "id": "daily-hero-01",
+    "name": "Kazzoo",
+    "what": "playful character-world hero",
+    "structure": "full-bleed sky-to-forest gradient; stacked novelty display headline left; three floating character portrait cards right; pill nav; exploratory CTA",
+    "dna": [
+      "saturated gradient world",
+      "character cards as the product",
+      "friendly oversized type",
+      "toy-like depth"
+    ],
+    "motion": [
+      "staggered card pop-in",
+      "headline word reveal",
+      "gentle float on portraits"
+    ],
+    "palette": {
+      "bg": "#4aa3d8",
+      "ink": "#0b5030",
+      "mood": "sunlit adventure gradient"
+    },
+    "type_pairing": "display: rounded humanist sans with a spark of novelty (Trebuchet MS / Gill Sans). UI: 'Avenir Next', 'Segoe UI'.",
+    "fits_styles": [
+      "playful"
+    ],
+    "fits_site_types": [
+      "personal",
+      "event",
+      "landing"
+    ],
+    "fits_schemes": [
+      "light",
+      "auto"
+    ]
+  },
+  {
+    "id": "hero-01",
+    "name": "Bluebird",
+    "what": "airborne product-security hero",
+    "structure": "full-viewport cool sky gradient; giant faded serif wordmark behind a 3D object; stacked two-line headline left; floating glass solution cards; glowing primary CTA",
+    "dna": [
+      "weightless sky",
+      "giant ghost wordmark",
+      "glass cards in the scene",
+      "one bright tech accent"
+    ],
+    "motion": [
+      "wordmark fade-in",
+      "object float/bob",
+      "staggered card entrance",
+      "soft glow pulse on CTA"
+    ],
+    "palette": {
+      "bg": "#c5dce4",
+      "ink": "#1a3a4a",
+      "mood": "cool daylight tech"
+    },
+    "type_pairing": "display: Georgia / Palatino (huge serif wordmark). UI: 'Avenir Next', 'Helvetica Neue'.",
+    "fits_styles": [
+      "bold",
+      "corporate"
+    ],
+    "fits_site_types": [
+      "business",
+      "landing"
+    ],
+    "fits_schemes": [
+      "light",
+      "auto"
+    ]
+  },
+  {
+    "id": "hero-02",
+    "name": "Arboria",
+    "what": "editorial nature-brand hero",
+    "structure": "giant faded serif wordmark spanning the viewport; macro botanical photo occupying the lower two-thirds; stacked headline left; two overlapping glass story-cards right; small centered CTA and play control",
+    "dna": [
+      "warm olive dark",
+      "type behind photography",
+      "cards as objects in the landscape",
+      "macro texture as luxury"
+    ],
+    "motion": [
+      "slow ken-burns on the botanical",
+      "staggered card rise",
+      "headline fade-up"
+    ],
+    "palette": {
+      "bg": "#454640",
+      "ink": "#ffffff",
+      "mood": "warm olive cinematic"
+    },
+    "type_pairing": "display: Georgia / 'Iowan Old Style' / Palatino (monumental serif). UI: 'Gill Sans', 'Avenir Next'.",
+    "fits_styles": [
+      "elegant",
+      "bold"
+    ],
+    "fits_site_types": [
+      "business",
+      "restaurant",
+      "landing"
+    ],
+    "fits_schemes": [
+      "dark",
+      "auto"
+    ]
+  },
+  {
+    "id": "hero-03",
+    "name": "Wonder",
+    "what": "cinematic experience-studio hero",
+    "structure": "full-bleed atmospheric scene; three stacked serif words as the headline; play-demo control; partner strip; heavy vignette and grain",
+    "dna": [
+      "dark theatrical light",
+      "stacked poetic serif",
+      "one scene, not a collage",
+      "mystery over explanation"
+    ],
+    "motion": [
+      "headline line-by-line reveal",
+      "slow ken-burns on the scene",
+      "play button glow"
+    ],
+    "palette": {
+      "bg": "#160e05",
+      "ink": "#f4efe6",
+      "mood": "candlelit cinematic dark"
+    },
+    "type_pairing": "display: Georgia / Palatino italic-capable serif. UI: 'Gill Sans', 'Avenir Next'.",
+    "fits_styles": [
+      "elegant",
+      "bold"
+    ],
+    "fits_site_types": [
+      "event",
+      "landing",
+      "personal"
+    ],
+    "fits_schemes": [
+      "dark",
+      "auto"
+    ]
+  },
+  {
+    "id": "hero-04",
+    "name": "Spatial",
+    "what": "HUD product-reveal hero",
+    "structure": "dark stage; oversized stacked headline left; visor/product as the centerpiece; glass metric chips; thin tech nav",
+    "dna": [
+      "black stage, one object",
+      "HUD glass metrics",
+      "tight stacked type",
+      "spatial depth"
+    ],
+    "motion": [
+      "product light-sweep on load",
+      "metric chips stagger in",
+      "subtle cursor parallax on the object"
+    ],
+    "palette": {
+      "bg": "#303436",
+      "ink": "#ffffff",
+      "mood": "graphite spatial computing"
+    },
+    "type_pairing": "display: condensed geometric sans ('Avenir Next', 'Segoe UI'). UI: same family lighter weights.",
+    "fits_styles": [
+      "minimal",
+      "corporate"
+    ],
+    "fits_site_types": [
+      "landing",
+      "business"
+    ],
+    "fits_schemes": [
+      "dark",
+      "auto"
+    ]
+  },
+  {
+    "id": "hero-05",
+    "name": "Capitol",
+    "what": "monumental movement hero",
+    "structure": "near-black field; classical statue or strong figure; overlapping serif statement; circular gold accent; thumbnail rail; one glowing CTA",
+    "dna": [
+      "sculpture as authority",
+      "gold on near-black",
+      "overlapping display type",
+      "ceremonial scale"
+    ],
+    "motion": [
+      "statue slow ken-burns",
+      "headline overlap settle",
+      "halo pulse on the gold accent"
+    ],
+    "palette": {
+      "bg": "#091517",
+      "ink": "#fffdfb",
+      "mood": "nocturne with warm gold"
+    },
+    "type_pairing": "display: Georgia / 'Iowan Old Style'. UI: 'Avenir Next', Outfit-like sans via 'Segoe UI'.",
+    "fits_styles": [
+      "bold",
+      "corporate"
+    ],
+    "fits_site_types": [
+      "business",
+      "landing",
+      "event"
+    ],
+    "fits_schemes": [
+      "dark",
+      "auto"
+    ]
+  },
+  {
+    "id": "hero-06",
+    "name": "Vegtopia",
+    "what": "appetite-first food hero",
+    "structure": "saturated teal stage; huge condensed three-word stack; hero dish photography with splash energy; overlapping menu cards with price; add-to-cart CTA",
+    "dna": [
+      "food is the cinema",
+      "loud condensed type",
+      "cards overlapping the dish",
+      "one hungry accent color"
+    ],
+    "motion": [
+      "dish drop-in",
+      "card stagger",
+      "headline slam"
+    ],
+    "palette": {
+      "bg": "#009ca6",
+      "ink": "#ffffff",
+      "mood": "electric teal appetite"
+    },
+    "type_pairing": "display: heavy condensed sans (Impact-like via 'Arial Narrow' / 'Avenir Next' 700). UI: 'Avenir Next', 'Segoe UI'.",
+    "fits_styles": [
+      "playful",
+      "bold"
+    ],
+    "fits_site_types": [
+      "restaurant",
+      "landing"
+    ],
+    "fits_schemes": [
+      "light",
+      "auto"
+    ]
+  },
+  {
+    "id": "hero-07",
+    "name": "Abrany",
+    "what": "product-dashboard reveal hero",
+    "structure": "cool blue field; stacked headline; 3D/illustrated brain or product; floating gauge/insight cards; social-proof counter; dual CTAs",
+    "dna": [
+      "frosted blue intelligence",
+      "dashboard fragments in space",
+      "proof numbers in the hero",
+      "clinical but premium"
+    ],
+    "motion": [
+      "gauges count in",
+      "cards spring in",
+      "product light sweep"
+    ],
+    "palette": {
+      "bg": "#b5c9e5",
+      "ink": "#1c2740",
+      "mood": "cool steel-blue product"
+    },
+    "type_pairing": "display: tight grotesque sans ('Avenir Next', 'Helvetica Neue'). UI: same.",
+    "fits_styles": [
+      "corporate",
+      "bold"
+    ],
+    "fits_site_types": [
+      "business",
+      "landing",
+      "personal"
+    ],
+    "fits_schemes": [
+      "light",
+      "auto"
+    ]
+  },
+  {
+    "id": "hero-08",
+    "name": "DarkShield",
+    "what": "black-stage threat/product hero",
+    "structure": "pure black; four-line wide geometric headline top-left; one dramatic 3D/photo mass center; two small glass modules bottom-left; secondary statement bottom-right; almost no chrome",
+    "dna": [
+      "negative space as luxury",
+      "one object, one red accent",
+      "asymmetric HUD",
+      "cinematic darkness"
+    ],
+    "motion": [
+      "object slow rotate/parallax",
+      "headline stagger",
+      "module fade-up"
+    ],
+    "palette": {
+      "bg": "#000000",
+      "ink": "#ffffff",
+      "mood": "void with a single hot accent"
+    },
+    "type_pairing": "display: wide geometric sans ('Avenir Next', 'Segoe UI' tracking-out). UI: 'Segoe UI'.",
+    "fits_styles": [
+      "bold"
+    ],
+    "fits_site_types": [
+      "landing",
+      "business"
+    ],
+    "fits_schemes": [
+      "dark"
+    ]
+  },
+  {
+    "id": "hero-09",
+    "name": "Shakky",
+    "what": "product-splash commercial hero",
+    "structure": "cream/peach field; giant word behind a frozen splash product shot; glass product card with kcal/price; pill tags; pill nav; add-to-cart",
+    "dna": [
+      "product overlapping giant type",
+      "glassmorphism on a warm field",
+      "commercial freeze-frame",
+      "appetite and joy"
+    ],
+    "motion": [
+      "splash settle",
+      "card slide-up",
+      "tag stagger"
+    ],
+    "palette": {
+      "bg": "#ffe7cf",
+      "ink": "#5a1a1a",
+      "mood": "strawberry cream commercial"
+    },
+    "type_pairing": "display: chunky serif or novelty (Georgia bold). UI: rounded sans ('Avenir Next', 'Trebuchet MS').",
+    "fits_styles": [
+      "playful"
+    ],
+    "fits_site_types": [
+      "restaurant",
+      "landing"
+    ],
+    "fits_schemes": [
+      "light"
+    ]
+  },
+  {
+    "id": "hero-10",
+    "name": "D.O.N.E",
+    "what": "hardware object on a black stage",
+    "structure": "diagonal charcoal gradient; technical condensed headline; flying/physical product as hero; buy-now CTA; sparse data ticks",
+    "dna": [
+      "object fetish",
+      "military-technical type",
+      "almost no UI chrome",
+      "glitch as texture not decoration"
+    ],
+    "motion": [
+      "product drift",
+      "headline clip-reveal",
+      "CTA magnetic hover"
+    ],
+    "palette": {
+      "bg": "#0a0a0a",
+      "ink": "#f2f2f2",
+      "mood": "graphite hardware"
+    },
+    "type_pairing": "display: ultra-condensed grotesque. UI: 'Atkinson-like' humanist via 'Segoe UI', Georgia for tiny labels.",
+    "fits_styles": [
+      "bold",
+      "corporate"
+    ],
+    "fits_site_types": [
+      "landing",
+      "business"
+    ],
+    "fits_schemes": [
+      "dark"
+    ]
+  },
+  {
+    "id": "hero-11",
+    "name": "Exoform",
+    "what": "industrial form-meets-function hero",
+    "structure": "black field; stacked four-word headline; sculptural object; process word-rail (STRUCTURE FLOW PEAK\u2026); almost architectural grid",
+    "dna": [
+      "sculpture as brand",
+      "process words as ornament",
+      "severe black",
+      "craft and engineering"
+    ],
+    "motion": [
+      "object parallax",
+      "word-rail highlight on scroll",
+      "headline mask reveal"
+    ],
+    "palette": {
+      "bg": "#000000",
+      "ink": "#d1d1d1",
+      "mood": "industrial black"
+    },
+    "type_pairing": "display: condensed all-caps sans (Oswald-like via 'Arial Narrow' / 'Avenir Next'). UI: 'Segoe UI'.",
+    "fits_styles": [
+      "bold",
+      "minimal"
+    ],
+    "fits_site_types": [
+      "business",
+      "landing",
+      "portfolio"
+    ],
+    "fits_schemes": [
+      "dark"
+    ]
+  },
+  {
+    "id": "hero-13",
+    "name": "ProGravity",
+    "what": "kinetic community/movement hero",
+    "structure": "bright airy field; mixed-scale stacked headline; dancer/action photo; avatar cluster + stats; join CTA",
+    "dna": [
+      "body in motion",
+      "sky energy",
+      "social proof in the hero",
+      "exuberant type mix"
+    ],
+    "motion": [
+      "photo ken-burns",
+      "stat count-up",
+      "avatar stagger"
+    ],
+    "palette": {
+      "bg": "#99badf",
+      "ink": "#102033",
+      "mood": "daylight kinetic"
+    },
+    "type_pairing": "display: mixed \u2014 a display serif plus a geometric sans. UI: Montserrat-like via 'Avenir Next'.",
+    "fits_styles": [
+      "playful",
+      "bold"
+    ],
+    "fits_site_types": [
+      "event",
+      "personal",
+      "landing"
+    ],
+    "fits_schemes": [
+      "light",
+      "auto"
+    ]
+  },
+  {
+    "id": "hero-14",
+    "name": "Nrt.wrk",
+    "what": "street-fashion drop hero",
+    "structure": "dark navy stage; oversized attitude headline; product as hero; running marquee; cream/orange punch CTA; shop now",
+    "dna": [
+      "hype + craft",
+      "marquee energy",
+      "high-contrast cream on navy",
+      "one electric blue accent"
+    ],
+    "motion": [
+      "marquee loop",
+      "product tilt",
+      "headline kinetic skew"
+    ],
+    "palette": {
+      "bg": "#14161d",
+      "ink": "#fffce5",
+      "mood": "night market neon"
+    },
+    "type_pairing": "display: heavy geometric (Syne-like via 'Avenir Next' 800). UI: 'Segoe UI'.",
+    "fits_styles": [
+      "playful",
+      "bold"
+    ],
+    "fits_site_types": [
+      "landing",
+      "business"
+    ],
+    "fits_schemes": [
+      "dark"
+    ]
+  },
+  {
+    "id": "hero-15",
+    "name": "Bright",
+    "what": "numbered-chapter adventure hero",
+    "structure": "warm red-gold gradient; numbered side nav (01/ TOURS\u2026); huge condensed manifesto; cream type panel; expedition energy",
+    "dna": [
+      "chapter numbers as navigation",
+      "poster-scale type",
+      "warm campaign color",
+      "outdoor urgency"
+    ],
+    "motion": [
+      "number rail highlight",
+      "manifesto line reveal",
+      "gradient drift"
+    ],
+    "palette": {
+      "bg": "#c80403",
+      "ink": "#f3e6de",
+      "mood": "expedition red-gold"
+    },
+    "type_pairing": "display: bold geometric sans ('Avenir Next' 700). UI: same lighter.",
+    "fits_styles": [
+      "bold"
+    ],
+    "fits_site_types": [
+      "event",
+      "landing",
+      "business"
+    ],
+    "fits_schemes": [
+      "light",
+      "auto"
+    ]
+  },
+  {
+    "id": "hero-16",
+    "name": "X.create",
+    "what": "studio statement hero",
+    "structure": "charcoal field; giant serif studio name; thin service list; almost no imagery except texture; confident emptiness",
+    "dna": [
+      "type is the image",
+      "gallery quiet",
+      "one serif voice",
+      "restraint as flex"
+    ],
+    "motion": [
+      "name kinetic to cursor",
+      "service list stagger",
+      "slow vignette"
+    ],
+    "palette": {
+      "bg": "#23262b",
+      "ink": "#f4f4f2",
+      "mood": "studio charcoal"
+    },
+    "type_pairing": "display: Georgia / 'Iowan Old Style'. UI: 'Gill Sans', 'Avenir Next'.",
+    "fits_styles": [
+      "corporate",
+      "minimal"
+    ],
+    "fits_site_types": [
+      "business",
+      "portfolio",
+      "personal"
+    ],
+    "fits_schemes": [
+      "dark"
+    ]
+  },
+  {
+    "id": "hero-17",
+    "name": "big.Ether",
+    "what": "fintech keynote hero",
+    "structure": "black field; huge two-line promise; acid-lime proof chip; asset/stat callouts; register CTA; money as cinema",
+    "dna": [
+      "black + one toxic lime",
+      "a number as a character",
+      "keynote scale",
+      "zero clutter"
+    ],
+    "motion": [
+      "headline word reveal",
+      "stat count-up",
+      "lime underline draw"
+    ],
+    "palette": {
+      "bg": "#000000",
+      "ink": "#ffffff",
+      "mood": "black with acid lime"
+    },
+    "type_pairing": "display: geometric sans 700 ('Avenir Next'). UI: same.",
+    "fits_styles": [
+      "bold",
+      "corporate"
+    ],
+    "fits_site_types": [
+      "landing",
+      "business"
+    ],
+    "fits_schemes": [
+      "dark"
+    ]
+  },
+  {
+    "id": "hero-18",
+    "name": "VERA",
+    "what": "fashion essentials hero",
+    "structure": "pale cool grey; massive stacked 'own the fit'; apparel photography; collection tiles; orange accent CTA",
+    "dna": [
+      "clothes as architecture",
+      "stacked manifesto",
+      "one hot accent on ice",
+      "editorial crop"
+    ],
+    "motion": [
+      "image ken-burns",
+      "headline clip",
+      "tile hover swap"
+    ],
+    "palette": {
+      "bg": "#e4ebec",
+      "ink": "#111111",
+      "mood": "ice grey with amber"
+    },
+    "type_pairing": "display: ultra-black grotesque (Archivo-like via 'Arial Black' / 'Avenir Next' 800). UI: 'Segoe UI'.",
+    "fits_styles": [
+      "minimal",
+      "elegant"
+    ],
+    "fits_site_types": [
+      "landing",
+      "business"
+    ],
+    "fits_schemes": [
+      "light"
+    ]
+  },
+  {
+    "id": "hero-19",
+    "name": "\u00c9LAN",
+    "what": "cinematic property hero",
+    "structure": "full-bleed architectural scene; giant brand wordmark BEHIND the building; glass listing stats; pill nav; consultation CTA riding a light line",
+    "dna": [
+      "architecture in front of type",
+      "twilight mood",
+      "one neon warm accent",
+      "listings as HUD"
+    ],
+    "motion": [
+      "slow camera ken-burns",
+      "stat cards fade",
+      "accent line draw"
+    ],
+    "palette": {
+      "bg": "#1a1c22",
+      "ink": "#ffffff",
+      "mood": "twilight luxury with warm neon"
+    },
+    "type_pairing": "display: heavy geometric sans. UI: 'Avenir Next', 'Segoe UI'.",
+    "fits_styles": [
+      "elegant",
+      "bold"
+    ],
+    "fits_site_types": [
+      "business",
+      "landing"
+    ],
+    "fits_schemes": [
+      "dark",
+      "auto"
+    ]
+  },
+  {
+    "id": "hero-21",
+    "name": "Aqua Dreams",
+    "what": "ethereal motion-poem hero",
+    "structure": "deep aquatic field; poetic stacked lines; sequence/experience CTAs; almost no chrome; water as the whole world",
+    "dna": [
+      "submerged quiet",
+      "poetry not slogans",
+      "blue-hour water",
+      "UI that whispers"
+    ],
+    "motion": [
+      "caustic light drift",
+      "line-by-line fade",
+      "slow parallax depth"
+    ],
+    "palette": {
+      "bg": "#081425",
+      "ink": "#dbedf9",
+      "mood": "deep water blue hour"
+    },
+    "type_pairing": "display: 'Avenir Next' / Inter-like 'Segoe UI' at large sizes. UI: same thin.",
+    "fits_styles": [
+      "elegant",
+      "minimal"
+    ],
+    "fits_site_types": [
+      "portfolio",
+      "landing",
+      "personal"
+    ],
+    "fits_schemes": [
+      "dark"
+    ]
+  },
+  {
+    "id": "hero-22",
+    "name": "Atmos 2",
+    "what": "wearable product still-life hero",
+    "structure": "midnight navy; small object photographed like jewelry; quiet headline; pre-order CTA; one 24/7 proof line",
+    "dna": [
+      "tiny object, huge reverence",
+      "museum lighting",
+      "calm copy",
+      "product reflection"
+    ],
+    "motion": [
+      "object rotate/parallax",
+      "soft light sweep",
+      "CTA glow"
+    ],
+    "palette": {
+      "bg": "#0e0e27",
+      "ink": "#ffffff",
+      "mood": "midnight product studio"
+    },
+    "type_pairing": "display: thin geometric sans. UI: 'Avenir Next' 300\u2013500.",
+    "fits_styles": [
+      "minimal",
+      "corporate"
+    ],
+    "fits_site_types": [
+      "landing",
+      "business"
+    ],
+    "fits_schemes": [
+      "dark"
+    ]
+  },
+  {
+    "id": "hero-23",
+    "name": "Moriart",
+    "what": "legendary realm/event hero",
+    "structure": "stone-grey vignette; ornamental serif title; crest/character; claim-now CTA; chronicle nav; blood-red accent",
+    "dna": [
+      "mythic serif",
+      "crest and steel",
+      "game-cinematic",
+      "one crimson strike"
+    ],
+    "motion": [
+      "title fade with grain",
+      "crest settle",
+      "red accent shimmer"
+    ],
+    "palette": {
+      "bg": "#c4c7d0",
+      "ink": "#1a1214",
+      "mood": "steel legend with crimson"
+    },
+    "type_pairing": "display: Cinzel-like via Georgia / Palatino small-caps. UI: 'Georgia', 'Segoe UI'.",
+    "fits_styles": [
+      "bold",
+      "playful"
+    ],
+    "fits_site_types": [
+      "event",
+      "landing"
+    ],
+    "fits_schemes": [
+      "light",
+      "auto"
+    ]
+  },
+  {
+    "id": "hero-24",
+    "name": "Hidden Treasure",
+    "what": "museum-object hero",
+    "structure": "warm linen field; giant italic serif title; a single artifact; gold explore control; quiet collection nav",
+    "dna": [
+      "one object, worshipped",
+      "linen and gold",
+      "editorial italic",
+      "gallery hush"
+    ],
+    "motion": [
+      "artifact slow rotate/ken-burns",
+      "title fade",
+      "gold button magnetic"
+    ],
+    "palette": {
+      "bg": "#d8d2c6",
+      "ink": "#2a241c",
+      "mood": "museum linen"
+    },
+    "type_pairing": "display: italic serif (Georgia italic / Palatino). UI: Cabin-like via 'Gill Sans'.",
+    "fits_styles": [
+      "elegant"
+    ],
+    "fits_site_types": [
+      "portfolio",
+      "event",
+      "business"
+    ],
+    "fits_schemes": [
+      "light"
+    ]
+  },
+  {
+    "id": "hero-25",
+    "name": "Hiroshi",
+    "what": "editorial wanderer hero",
+    "structure": "split name with a mark in the gap; forest/figure photography; bilingual or dual-script whisper; archive nav; explore CTA",
+    "dna": [
+      "story over sell",
+      "mist and trees",
+      "typographic rupture",
+      "quiet honor"
+    ],
+    "motion": [
+      "mist drift",
+      "name letter-space in",
+      "photo ken-burns"
+    ],
+    "palette": {
+      "bg": "#f6f8fc",
+      "ink": "#4e405f",
+      "mood": "mist forest editorial"
+    },
+    "type_pairing": "display: 'Avenir Next' 700 with a serif companion for the poetic line (Georgia italic).",
+    "fits_styles": [
+      "elegant"
+    ],
+    "fits_site_types": [
+      "portfolio",
+      "personal"
+    ],
+    "fits_schemes": [
+      "light",
+      "auto"
+    ]
+  },
+  {
+    "id": "hero-26",
+    "name": "Velocity",
+    "what": "machine performance hero",
+    "structure": "pure black; vehicle/machine as the only image; huge 'Beyond Limits'; spec chips (range, speed); explore CTA",
+    "dna": [
+      "machine porn lighting",
+      "specifications as poetry",
+      "black void",
+      "speed as composition"
+    ],
+    "motion": [
+      "machine parallax",
+      "spec count-up",
+      "headline slam"
+    ],
+    "palette": {
+      "bg": "#000000",
+      "ink": "#ffffff",
+      "mood": "showroom black"
+    },
+    "type_pairing": "display: 'Avenir Next' / Outfit-like grotesque. UI: 'Segoe UI'.",
+    "fits_styles": [
+      "bold"
+    ],
+    "fits_site_types": [
+      "landing",
+      "business"
+    ],
+    "fits_schemes": [
+      "dark"
+    ]
+  },
+  {
+    "id": "hero-27",
+    "name": "Finddly",
+    "what": "destination horizon hero",
+    "structure": "dark photographic seascape; serif destination name; one-line promise; teal light in the water; gallery/experiences nav",
+    "dna": [
+      "horizon as the logo",
+      "travel melancholy",
+      "one teal glint",
+      "type sitting in the landscape"
+    ],
+    "motion": [
+      "horizon ken-burns",
+      "title fade",
+      "water shimmer"
+    ],
+    "palette": {
+      "bg": "#1a1a1a",
+      "ink": "#ffffff",
+      "mood": "endless-blue dusk"
+    },
+    "type_pairing": "display: Merriweather/Georgia serif. UI: 'Avenir Next', Syne-like geometric for the name.",
+    "fits_styles": [
+      "elegant",
+      "corporate"
+    ],
+    "fits_site_types": [
+      "landing",
+      "business",
+      "event"
+    ],
+    "fits_schemes": [
+      "dark",
+      "auto"
+    ]
+  },
+  {
+    "id": "hero-28",
+    "name": "Chrysant",
+    "what": "botanical specimen hero",
+    "structure": "slate-blue field; serif species title; hero bloom photography; glass specimen cards with lux/height stats; journal nav",
+    "dna": [
+      "flower as relic",
+      "scientific luxury",
+      "cool slate",
+      "cards like vitrines"
+    ],
+    "motion": [
+      "bloom ken-burns",
+      "vitrine cards rise",
+      "stat fade"
+    ],
+    "palette": {
+      "bg": "#576d93",
+      "ink": "#ffffff",
+      "mood": "cool botanical slate"
+    },
+    "type_pairing": "display: Cinzel/Playfair via Georgia / Palatino. UI: 'Gill Sans'.",
+    "fits_styles": [
+      "elegant"
+    ],
+    "fits_site_types": [
+      "restaurant",
+      "business",
+      "landing"
+    ],
+    "fits_schemes": [
+      "dark",
+      "auto"
+    ]
+  },
+  {
+    "id": "hero-29",
+    "name": "Cycle",
+    "what": "precision machine hero",
+    "structure": "black; bicycle/machine side-on; mono spec readout; geometric brand; experience CTA",
+    "dna": [
+      "engineering diagram energy",
+      "mono labels",
+      "silhouette product",
+      "future-sport"
+    ],
+    "motion": [
+      "machine slide-in",
+      "spec tick-up",
+      "mono flicker once"
+    ],
+    "palette": {
+      "bg": "#000000",
+      "ink": "#ffffff",
+      "mood": "velodrome black"
+    },
+    "type_pairing": "display: geometric sans 800. UI: ui-monospace / 'SF Mono' / Consolas for specs.",
+    "fits_styles": [
+      "bold",
+      "minimal"
+    ],
+    "fits_site_types": [
+      "landing",
+      "business"
+    ],
+    "fits_schemes": [
+      "dark"
+    ]
+  },
+  {
+    "id": "hero-30",
+    "name": "UniFokal",
+    "what": "philosophical photography hero",
+    "structure": "near-black teal; serif manifesto line; photographic subject; small Get Started; contact in the chrome",
+    "dna": [
+      "idea over product",
+      "photographic grain",
+      "one warm rim light",
+      "quiet confidence"
+    ],
+    "motion": [
+      "photo ken-burns",
+      "manifesto fade",
+      "warm light sweep"
+    ],
+    "palette": {
+      "bg": "#031113",
+      "ink": "#f3eee6",
+      "mood": "darkroom teal"
+    },
+    "type_pairing": "display: Cormorant/Garamond via Georgia / Palatino. UI: thin grotesque ('Avenir Next' 300).",
+    "fits_styles": [
+      "elegant",
+      "minimal"
+    ],
+    "fits_site_types": [
+      "portfolio",
+      "personal",
+      "business"
+    ],
+    "fits_schemes": [
+      "dark"
+    ]
+  },
+  {
+    "id": "hero-31",
+    "name": "byheart",
+    "what": "human-impact story hero",
+    "structure": "deep teal; condensed impact headline; supporting photo; proof metric; get-started; second-chance narrative band",
+    "dna": [
+      "care as cinema",
+      "a number with a pulse",
+      "human photography",
+      "hope without syrup"
+    ],
+    "motion": [
+      "metric count-up",
+      "headline slide",
+      "photo ken-burns"
+    ],
+    "palette": {
+      "bg": "#122832",
+      "ink": "#ffffff",
+      "mood": "cardiac teal"
+    },
+    "type_pairing": "display: condensed all-caps (Bebas-like via 'Arial Narrow' / 'Avenir Next'). UI: 'Segoe UI'.",
+    "fits_styles": [
+      "corporate",
+      "elegant"
+    ],
+    "fits_site_types": [
+      "business",
+      "landing",
+      "personal"
+    ],
+    "fits_schemes": [
+      "dark",
+      "auto"
+    ]
+  },
+  {
+    "id": "hero-32",
+    "name": "Glacius",
+    "what": "ice-light luxury hero",
+    "structure": "pale ice grey; frosted glass panels; serif brand; photographic cold landscape or product; get started",
+    "dna": [
+      "frosted glass on ice",
+      "cold daylight",
+      "whispered luxury",
+      "almost white-on-white"
+    ],
+    "motion": [
+      "frost panel fade",
+      "slow landscape ken-burns",
+      "glass refraction hover"
+    ],
+    "palette": {
+      "bg": "#f4f5f7",
+      "ink": "#3c4e6a",
+      "mood": "glacial daylight"
+    },
+    "type_pairing": "display: Marcellus/Cormorant via Palatino / Georgia. UI: 'Gill Sans', 'Avenir Next'.",
+    "fits_styles": [
+      "elegant",
+      "minimal"
+    ],
+    "fits_site_types": [
+      "business",
+      "landing"
+    ],
+    "fits_schemes": [
+      "light"
+    ]
+  },
+  {
+    "id": "hero-33",
+    "name": "Fractal Matter",
+    "what": "dimensional science-art hero",
+    "structure": "lilac-grey field; huge fractured wordmark; explore CTA; crystal/system chips; spectrum nav",
+    "dna": [
+      "broken letter as identity",
+      "iridescent accent",
+      "systems-art",
+      "curious not corporate"
+    ],
+    "motion": [
+      "letter fracture settle",
+      "chip stagger",
+      "iridescent shift"
+    ],
+    "palette": {
+      "bg": "#cdcedc",
+      "ink": "#1b1520",
+      "mood": "opal lilac"
+    },
+    "type_pairing": "display: Unbounded-like geometric ('Avenir Next' 800). UI: 'Segoe UI'.",
+    "fits_styles": [
+      "playful",
+      "bold"
+    ],
+    "fits_site_types": [
+      "landing",
+      "event"
+    ],
+    "fits_schemes": [
+      "light",
+      "auto"
+    ]
+  },
+  {
+    "id": "hero-34",
+    "name": "Smart Things",
+    "what": "one-action product hero",
+    "structure": "soft grey; product/key object; two-beat headline (Tap. Trigger.); proof chips; buy + explore; calm IoT",
+    "dna": [
+      "one verb",
+      "object on linen grey",
+      "blue as the only signal",
+      "domestic-future"
+    ],
+    "motion": [
+      "object click feedback",
+      "headline two-beat",
+      "chip fade"
+    ],
+    "palette": {
+      "bg": "#cfcfcf",
+      "ink": "#111111",
+      "mood": "soft grey with signal blue"
+    },
+    "type_pairing": "display: airy grotesque ('Avenir Next' 300\u2013600). UI: same.",
+    "fits_styles": [
+      "corporate",
+      "minimal"
+    ],
+    "fits_site_types": [
+      "landing",
+      "business"
+    ],
+    "fits_schemes": [
+      "light",
+      "auto"
+    ]
+  },
+  {
+    "id": "hero-35",
+    "name": "Junghans",
+    "what": "horology heritage hero",
+    "structure": "brushed grey; watch as relic; serif name; 'the future of Traditional'; dual CTAs (know more / watch demo)",
+    "dna": [
+      "metal grain",
+      "heritage serif",
+      "object macro",
+      "restraint of a maison"
+    ],
+    "motion": [
+      "second-hand tick (once, subtle)",
+      "macro ken-burns",
+      "CTA underline"
+    ],
+    "palette": {
+      "bg": "#bdc0c9",
+      "ink": "#2a2a2a",
+      "mood": "brushed steel heritage"
+    },
+    "type_pairing": "display: Ibarra/Georgia serif. UI: 'Avenir Next', Syne-like geometric for the name.",
+    "fits_styles": [
+      "elegant",
+      "corporate"
+    ],
+    "fits_site_types": [
+      "business",
+      "landing"
+    ],
+    "fits_schemes": [
+      "light",
+      "auto"
+    ]
+  },
+  {
+    "id": "hero-36",
+    "name": "Kenneth",
+    "what": "lookbook numbered-nav hero",
+    "structure": "cool grey photography; 01/ HOME numbered rail; huge condensed name; three-word stack (Smart Light Style); model/garment as the page",
+    "dna": [
+      "fashion photography full-bleed",
+      "numbered chapters",
+      "poster type",
+      "attitude crop"
+    ],
+    "motion": [
+      "photo ken-burns",
+      "number rail",
+      "title rise"
+    ],
+    "palette": {
+      "bg": "#909b9f",
+      "ink": "#111111",
+      "mood": "concrete lookbook"
+    },
+    "type_pairing": "display: Anton/Barlow condensed via 'Arial Narrow' / 'Avenir Next' 800. UI: same.",
+    "fits_styles": [
+      "bold"
+    ],
+    "fits_site_types": [
+      "business",
+      "personal",
+      "landing"
+    ],
+    "fits_schemes": [
+      "light",
+      "auto"
+    ]
+  },
+  {
+    "id": "hero-37",
+    "name": "Midway Hotel",
+    "what": "hospitality arrival hero",
+    "structure": "photographic interior/exterior; blush accent; reserve-now as the only loud control; quiet type; hotel hush",
+    "dna": [
+      "arrival feeling",
+      "blush on stone",
+      "one reservation verb",
+      "soft luxury"
+    ],
+    "motion": [
+      "slow interior ken-burns",
+      "CTA magnetic",
+      "type fade"
+    ],
+    "palette": {
+      "bg": "#909b9f",
+      "ink": "#27171b",
+      "mood": "stone with blush"
+    },
+    "type_pairing": "display: 'Avenir Next' 600. UI: same. Optional Georgia for room names.",
+    "fits_styles": [
+      "elegant"
+    ],
+    "fits_site_types": [
+      "restaurant",
+      "business",
+      "event"
+    ],
+    "fits_schemes": [
+      "light",
+      "auto"
+    ]
+  },
+  {
+    "id": "hero-38",
+    "name": "S5motors",
+    "what": "night-violet performance hero",
+    "structure": "deep purple void; machine or wordmark; magenta-violet gradient wash; one brand lockup; speed implied by light",
+    "dna": [
+      "violet night",
+      "light streaks",
+      "club-performance",
+      "type inside the glow"
+    ],
+    "motion": [
+      "gradient drift",
+      "light-streak",
+      "logo settle"
+    ],
+    "palette": {
+      "bg": "#0f0424",
+      "ink": "#d8bdff",
+      "mood": "violet afterburn"
+    },
+    "type_pairing": "display: wide geometric ('Avenir Next' / Lexend-like 'Segoe UI'). UI: same.",
+    "fits_styles": [
+      "bold"
+    ],
+    "fits_site_types": [
+      "landing",
+      "business"
+    ],
+    "fits_schemes": [
+      "dark"
+    ]
+  },
+  {
+    "id": "hero-39",
+    "name": "Unleash",
+    "what": "jewelry still-life shop hero",
+    "structure": "pale grey; pieces as relics with names; buy/explore; oceanic accents; quiet luxury commerce",
+    "dna": [
+      "jewels on air",
+      "named pieces",
+      "sea-light accents",
+      "shop without shouting"
+    ],
+    "motion": [
+      "piece glint on hover",
+      "name fade",
+      "CTA magnetic"
+    ],
+    "palette": {
+      "bg": "#dfe4ea",
+      "ink": "#1a2430",
+      "mood": "tide-grey jewelry"
+    },
+    "type_pairing": "display: Cormorant/Georgia serif. UI: 'Avenir Next'.",
+    "fits_styles": [
+      "elegant",
+      "bold"
+    ],
+    "fits_site_types": [
+      "landing",
+      "business"
+    ],
+    "fits_schemes": [
+      "light"
+    ]
+  }
+]

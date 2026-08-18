@@ -1,6 +1,6 @@
 <site_type_blueprint type="landing">
 Structural recipe for single-goal landing pages. Follow the structure; visuals come from the
-brief, style guide, and design_seed. Distill ONE conversion action from the description and
+brief, style guide, and hero_reference. Distill ONE conversion action from the description and
 drive every section toward it.
 
 ## Page skeleton (index.html)

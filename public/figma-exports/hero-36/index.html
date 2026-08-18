@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kenneth — Daily Hero 36 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: 'Barlow Condensed', sans-serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1440px;
+    height: 810px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: #909b9f;
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .ring {
+    position: absolute;
+    left: 405px;
+    top: 45px;
+    width: 720px;
+    height: 720px;
+    pointer-events: none;
+  }
+  .ring img { width: 100%; height: 100%; }
+  .wordmark {
+    position: absolute;
+    left: 50%;
+    top: 168px;
+    transform: translateX(-50%);
+    font-family: Anton, sans-serif;
+    font-size: 279px;
+    letter-spacing: -8.37px;
+    line-height: 1;
+    color: #b5c1c7;
+    text-align: center;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .jacket {
+    position: absolute;
+    left: 415px;
+    top: 0;
+    width: 647px;
+    height: 810px;
+    object-fit: cover;
+    pointer-events: none;
+  }
+  .cross {
+    position: absolute;
+    left: 622px;
+    top: 263px;
+    width: 284px;
+    height: 284px;
+    pointer-events: none;
+  }
+  .cross img { width: 100%; height: 100%; }
+  .vline {
+    position: absolute;
+    left: 764px;
+    top: 264px;
+    width: 1px;
+    height: 283px;
+    background: rgba(255,255,255,0.55);
+    pointer-events: none;
+  }
+  .dline-a, .dline-b {
+    position: absolute;
+    background: rgba(255,255,255,0.45);
+    transform-origin: top left;
+    pointer-events: none;
+  }
+  .dline-a {
+    left: 1018px;
+    top: 151px;
+    width: 218px;
+    height: 1px;
+    transform: rotate(45deg);
+  }
+  .dline-b {
+    left: 399px;
+    top: 505px;
+    width: 375px;
+    height: 1px;
+    transform: rotate(45deg);
+  }
+
+  .logo {
+    position: absolute;
+    left: 24px;
+    top: 17px;
+    width: 33px;
+    height: 27px;
+    overflow: hidden;
+  }
+  .logo img {
+    position: absolute;
+    width: 196%;
+    height: 361%;
+    left: -48%;
+    top: -126%;
+    max-width: none;
+    transform: scaleY(-1);
+  }
+  nav {
+    position: absolute;
+    left: 50%;
+    top: 26px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 90px;
+    font-size: 12px;
+    letter-spacing: -0.24px;
+    color: #fff;
+    white-space: nowrap;
+  }
+  nav span { opacity: 0.3; margin-right: 5px; }
+  .menu {
+    position: absolute;
+    left: 1390px;
+    top: 28px;
+    width: 26px;
+    height: 6px;
+  }
+  .menu img { width: 100%; height: 100%; }
+
+  .name {
+    position: absolute;
+    left: 50%;
+    top: 393px;
+    transform: translateX(-50%);
+    font-family: Anton, sans-serif;
+    font-size: 19.4px;
+    letter-spacing: 7.38px;
+    color: #fff;
+    white-space: nowrap;
+  }
+
+  .card {
+    position: absolute;
+    left: 287px;
+    top: 320px;
+    width: 196px;
+    height: 252px;
+  }
+  .card .shape {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: scaleY(-1);
+  }
+  .card .photo {
+    position: absolute;
+    left: 17px;
+    top: 5px;
+    width: 127px;
+    height: 123px;
+    border-radius: 7px;
+    object-fit: cover;
+    transform: scaleY(-1);
+  }
+  .card h3 {
+    position: absolute;
+    left: 68px;
+    top: 141px;
+    width: 98px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1.96px;
+    line-height: 1.36;
+    text-transform: uppercase;
+    color: #463c52;
+  }
+  .card .go {
+    position: absolute;
+    left: 16px;
+    top: 207px;
+    width: 32px;
+    height: 32px;
+  }
+  .card .go img { position: absolute; }
+  .card .go .al { left: 7px; top: 7px; width: 18px; height: 18px; }
+  .card .go .ah { left: 10px; top: 7px; width: 15px; height: 15px; }
+
+  .feat {
+    position: absolute;
+    left: 23px;
+    top: 539px;
+    width: 167px;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1;
+    text-transform: uppercase;
+    text-align: right;
+    color: #fff;
+  }
+  .copy-l {
+    position: absolute;
+    left: 210px;
+    top: 640px;
+    width: 116px;
+    font-size: 13px;
+    line-height: 1.3;
+    letter-spacing: -0.25px;
+    color: #fff;
+  }
+  .idx {
+    position: absolute;
+    left: 1140px;
+    top: 529px;
+    color: #fff;
+  }
+  .idx .n {
+    font-size: 13px;
+    letter-spacing: -0.25px;
+  }
+  .idx .w {
+    position: absolute;
+    left: 41px;
+    top: 1px;
+    font-size: 30px;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 1.02;
+  }
+  .copy-r {
+    position: absolute;
+    left: 1278px;
+    top: 640px;
+    width: 116px;
+    font-size: 13px;
+    line-height: 1.3;
+    letter-spacing: -0.25px;
+    color: #fff;
+  }
+
+  .scroll {
+    position: absolute;
+    left: 385px;
+    top: 699px;
+    width: 82px;
+    height: 82px;
+  }
+  .scroll img { width: 100%; height: 100%; }
+  .scroll .txt {
+    position: absolute;
+    left: -9px;
+    top: -9px;
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+  }
+
+  .card .go { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); }
+  .card:hover .go { transform: rotate(12deg) scale(1.1); }
+  @media (prefers-reduced-motion: no-preference) {
+    .wordmark { animation: fadeIn 1.4s cubic-bezier(0.22,1,0.36,1) both; }
+    .jacket { animation: rise 1.6s cubic-bezier(0.22,1,0.36,1) both; }
+    .card { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.5s both; }
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <div class="ring"><img src="assets/ring.svg" alt=""></div>
+    <div class="wordmark">move</div>
+    <img class="jacket" src="assets/jacket.png" alt="Kenneth jacket">
+    <div class="cross"><img src="assets/crosshair.svg" alt=""></div>
+    <div class="vline"></div>
+    <div class="dline-a"></div>
+    <div class="dline-b"></div>
+
+    <a class="logo" href="#"><img src="assets/logo.png" alt="Kenneth"></a>
+    <nav>
+      <a href="#"><span>01/</span>HOME</a>
+      <a href="#"><span>02/</span>STORY</a>
+      <a href="#"><span>03/</span>MODELS</a>
+      <a href="#"><span>04/</span>CONTACT</a>
+    </nav>
+    <a class="menu" href="#"><img src="assets/menu.svg" alt=""></a>
+
+    <div class="name">Kenneth</div>
+
+    <a class="card" href="#">
+      <img class="shape" src="assets/union.svg" alt="">
+      <img class="photo" src="assets/card-photo.png" alt="">
+      <h3>Smart<br>Light<br>Style</h3>
+      <span class="go"><img class="al" src="assets/arrow-line.svg" alt=""><img class="ah" src="assets/arrow-head.svg" alt=""></span>
+    </a>
+
+    <div class="feat">multiple pockets for convenience</div>
+    <p class="copy-l">Imagine a sleek, futuristic jacket in vibrant orange and gray, perfect for urban explorers.</p>
+    <div class="idx">
+      <div class="n">003</div>
+      <div class="w">as<br>ce<br>nt</div>
+    </div>
+    <p class="copy-r">This jacket boasts water-resistant fabric, breathable mesh lining, and multiple pockets for convenience.</p>
+
+    <div class="scroll">
+      <img src="assets/scroll-ring.svg" alt="">
+      <img class="txt" src="assets/scroll-text.png" alt="Scroll down">
+    </div>
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1440;
+      var scale = Math.min(1, width / 1440);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (810 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>

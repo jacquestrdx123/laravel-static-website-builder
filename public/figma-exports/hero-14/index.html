@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nrt.wrk — Daily Hero 14 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=KoHo:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: KoHo, sans-serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: #14161d;
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .blue {
+    position: absolute;
+    left: 8px;
+    top: 97px;
+    width: 1306px;
+    height: 752px;
+  }
+  .blue img { width: 100%; height: 100%; }
+
+  .logo {
+    position: absolute;
+    left: 50px;
+    top: 35px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fffce5;
+    font-family: Syne, sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: -0.16px;
+    text-transform: uppercase;
+  }
+  .logo img { width: 25px; height: 27px; transform: rotate(-90deg); }
+
+  .shop {
+    position: absolute;
+    left: 1693px;
+    top: 23px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .shop span {
+    background: #2b2f40;
+    color: #fff;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: -0.16px;
+    text-transform: uppercase;
+    padding: 20px;
+    border-radius: 999px;
+  }
+  .shop img { width: 48px; height: 48px; }
+
+  .pill {
+    position: absolute;
+    left: 88px;
+    top: 194px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px 12px 8px;
+    border: 1px solid rgba(255,255,255,0.17);
+    border-radius: 999px;
+    color: #fffce5;
+    font-size: 18px;
+    white-space: nowrap;
+  }
+  .pill img { width: 50px; height: 19px; }
+
+  .line {
+    position: absolute;
+    font-family: Syne, sans-serif;
+    font-weight: 800;
+    font-size: 104px;
+    line-height: 1;
+    letter-spacing: -6.24px;
+    color: #fffce5;
+    white-space: nowrap;
+  }
+  .line.a { left: 88px; top: 288px; }
+  .line.b { left: 358px; top: 390px; }
+  .line.c { left: 92px; top: 493px; }
+
+  .faces {
+    position: absolute;
+    left: 181px;
+    top: 366px;
+    width: 282px;
+    height: 212px;
+  }
+  .faces .f {
+    position: absolute;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  .faces .f img { width: 100%; height: 100%; object-fit: cover; }
+  .faces .c { left: 165px; top: 35px; width: 102px; height: 102px; transform: rotate(-162.52deg); opacity: 0.4; background: #597afa; }
+  .faces .c img { opacity: 0.5; }
+  .faces .b { left: 113px; top: 3px; width: 102px; height: 102px; transform: rotate(-178deg); }
+  .faces .a { left: 0; top: 0; width: 102px; height: 102px; transform: rotate(154deg); }
+
+  .lede {
+    position: absolute;
+    left: 88px;
+    top: 656px;
+    width: 478px;
+    color: #fffce5;
+    font-size: 24px;
+    line-height: 1.2;
+  }
+  .lede b { font-weight: 700; }
+
+  .cta {
+    position: absolute;
+    left: 608px;
+    top: 640px;
+    padding: 12px;
+    border: 1px solid #fffce5;
+    border-radius: 999px;
+  }
+  .cta .inner {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 12px 12px 12px 32px;
+    background: #fffce5;
+    border-radius: 999px;
+    color: #14161d;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: -0.16px;
+    text-transform: uppercase;
+  }
+  .cta img { width: 60px; height: 60px; }
+
+  .cream {
+    position: absolute;
+    left: 1322px;
+    top: 97px;
+    width: 590px;
+    height: 595px;
+    background: #fffce5;
+    border-radius: 40px;
+    overflow: hidden;
+  }
+  .cream .photo {
+    position: absolute;
+    left: 66px;
+    top: -68px;
+    width: 658px;
+    height: 663px;
+    object-fit: cover;
+    transform: scaleY(-1) rotate(180deg);
+    border-radius: 40px;
+  }
+  .cream h2 {
+    position: absolute;
+    left: 66px;
+    top: 215px;
+    width: 198px;
+    font-family: Syne, sans-serif;
+    font-weight: 800;
+    font-size: 36px;
+    line-height: 1;
+    letter-spacing: -2.16px;
+    color: #14161d;
+  }
+  .cream .pct {
+    position: absolute;
+    left: 66px;
+    top: 342px;
+    font-family: Syne, sans-serif;
+    font-weight: 800;
+    font-size: 80px;
+    letter-spacing: -4.8px;
+    color: #2f59ff;
+  }
+  .cream .arr {
+    position: absolute;
+    left: 20px;
+    top: 462px;
+    width: 113px;
+    height: 113px;
+  }
+
+  .orange {
+    position: absolute;
+    left: 1004px;
+    top: 566px;
+    width: 310px;
+    height: 283px;
+    background: #ff9b18;
+    border-radius: 32px;
+  }
+  .orange svg.ring { position: absolute; left: 16px; top: 16px; width: 278px; height: 251px; }
+  .orange .arrow {
+    position: absolute;
+    left: 124px;
+    top: 110px;
+    width: 62px;
+    height: 62px;
+  }
+  .dot {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #fffce5;
+    border-radius: 50%;
+  }
+
+  .bl { position: absolute; left: 8px; top: 857px; width: 350px; height: 215px; border-radius: 40px; overflow: hidden; }
+  .bl img { width: 100%; height: 100%; object-fit: cover; }
+
+  .bm {
+    position: absolute;
+    left: 366px;
+    top: 857px;
+    width: 630px;
+    height: 215px;
+    background: #fffce5;
+    border-radius: 40px;
+    overflow: hidden;
+  }
+  .bm .g {
+    position: absolute;
+    left: -70px;
+    top: -27px;
+    width: 358px;
+    height: 269px;
+    object-fit: contain;
+    transform: scaleY(-1) rotate(180deg);
+  }
+  .bm h3 {
+    position: absolute;
+    left: 331px;
+    top: 59px;
+    width: 261px;
+    font-family: Syne, sans-serif;
+    font-weight: 800;
+    font-size: 36px;
+    line-height: 1;
+    letter-spacing: -2.16px;
+    color: #14161d;
+  }
+  .bm h3 i { color: #e7e1b5; font-style: normal; }
+
+  .br {
+    position: absolute;
+    left: 1004px;
+    top: 700px;
+    width: 908px;
+    height: 372px;
+  }
+  .br img { width: 100%; height: 100%; object-fit: cover; }
+
+  .cta, .shop { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); }
+  .cta:hover { transform: translateY(-3px); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .line, .lede, .cta { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.2s both; }
+    .cream { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.45s both; }
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <div class="blue"><img src="assets/union-blue.svg" alt=""></div>
+    <div class="br"><img src="assets/union-photo.png" alt=""></div>
+
+    <a class="logo" href="#"><img src="assets/logo-mark.svg" alt="">Nrt.wrk</a>
+    <a class="shop" href="#"><span>Shop Now</span><img src="assets/shop-arrow.svg" alt=""></a>
+
+    <div class="pill"><img src="assets/toggle.svg" alt="">See the world</div>
+    <div class="line a">Awesome easy</div>
+    <div class="line b">eyewear</div>
+    <div class="line c">and clarity</div>
+    <div class="faces">
+      <div class="f c"><img src="assets/face-a.png" alt=""></div>
+      <div class="f b"><img src="assets/face-a.png" alt=""></div>
+      <div class="f a"><img src="assets/face-b.png" alt=""></div>
+    </div>
+    <p class="lede">At <b>Nrt.wrk</b>, we craft premium eyewear, blending modern design with everyday comfort to help you see clearly and stand out.</p>
+    <a class="cta" href="#"><span class="inner">START YOUR STYLE <img src="assets/cta-arrow.svg" alt=""></span></a>
+
+    <div class="cream">
+      <img class="photo" src="assets/portrait-right.png" alt="">
+      <h2>Urban<br>Dapper<br>Frames</h2>
+      <div class="pct">25%</div>
+      <img class="arr" src="assets/arrow-circle.svg" alt="">
+    </div>
+
+    <div class="orange">
+      <svg class="ring" viewBox="0 0 278 251" aria-hidden="true">
+        <defs>
+          <path id="ringpath" d="M139,20 a 100,100 0 1,1 0,0.01"/>
+        </defs>
+        <text fill="#14161d" font-family="Syne, sans-serif" font-size="11" font-weight="700" letter-spacing="3">
+          <textPath href="#ringpath">NRT.WRK  FUTURE  NETWORK  BRIGHTER  EMPOWER  CRAFTING  REDEFINE  TECH  </textPath>
+        </text>
+      </svg>
+      <img class="arrow" src="assets/ring-arrow.svg" alt="">
+    </div>
+    <i class="dot" style="left:1088px;top:591px"></i>
+    <i class="dot" style="left:1199px;top:591px"></i>
+    <i class="dot" style="left:1285px;top:628px"></i>
+    <i class="dot" style="left:1285px;top:747px"></i>
+    <i class="dot" style="left:1221px;top:821px"></i>
+    <i class="dot" style="left:1099px;top:821px"></i>
+    <i class="dot" style="left:1029px;top:752px"></i>
+    <i class="dot" style="left:1029px;top:633px"></i>
+
+    <div class="bl"><img src="assets/portrait-bl.png" alt=""></div>
+    <div class="bm">
+      <img class="g" src="assets/glasses.png" alt="">
+      <h3>KEEP<br><i>/</i>NRT.WRK<br>STYLE</h3>
+    </div>
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1920;
+      var scale = Math.min(1, width / 1920);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (1080 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>

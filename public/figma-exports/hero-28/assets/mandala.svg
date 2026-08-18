@@ -1,0 +1,24 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="78.644" height="78.644" viewBox="0 0 78.644 78.644" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="Repeat group 1">
+<g id="Repeat group 1_inner" data-figma-trr="r12u1.2-0f">
+<path id="Ellipse 8" d="M42.4019 3.85802C43.1224 3.11123 44.322 3.37274 44.6704 4.359C46.3162 9.02153 49.3383 18.5307 49.3384 25.3854C49.3384 30.1289 48.6932 32.6098 47.7583 33.9059C46.8691 35.1386 45.654 35.3775 44.1226 35.3776C42.5746 35.3776 38.8205 35.1345 35.4731 33.7369C32.1402 32.3453 29.3062 29.8613 29.3062 25.3854C29.3064 21.8972 31.4835 17.6252 34.2651 13.6188C37.0289 9.63802 40.3168 6.01888 42.4019 3.85802Z" stroke="url(#paint0_linear_0_36)"/>
+</g>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(24.9292 -14.3929) rotate(30)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(53.7149 -14.3929) rotate(60)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(78.6442 -0.000102436) rotate(90)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(93.0371 24.9291) rotate(120)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(93.0371 53.7148) rotate(150)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(78.6442 78.644) rotate(-180)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(53.7151 93.037) rotate(-150)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(24.9293 93.037) rotate(-120)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(0.000103686 78.6441) rotate(-90)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(-14.3928 53.715) rotate(-60)"/>
+<use xlink:href="#Repeat%20group%201_inner" transform="translate(-14.3928 24.9292) rotate(-30)"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_36" x1="41.2104" y1="-4.48636" x2="16.0159" y2="19.5854" gradientUnits="userSpaceOnUse">
+<stop stop-color="white" stop-opacity="0.05"/>
+<stop offset="1" stop-color="white"/>
+</linearGradient>
+</defs>
+</svg>

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VERA — Daily Hero 18 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Sans:wght@100;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: 'IBM Plex Sans', sans-serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1440px;
+    height: 810px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: #e4ebec;
+    border-radius: 28px;
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .glow {
+    position: absolute;
+    left: 50%;
+    top: -91px;
+    transform: translateX(-50%);
+    width: 230px;
+    height: 893px;
+    background: #faa212;
+    filter: blur(50px);
+    pointer-events: none;
+  }
+
+  .word {
+    position: absolute;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 180px;
+    line-height: 0.77;
+    text-transform: uppercase;
+    color: #000;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .word i { color: #c8cfd0; font-style: normal; }
+  .word.own-l { left: 48px; top: 112px; }
+  .word.fit { left: 120px; top: 254px; }
+  .word.own-r { left: 1132px; top: 254px; }
+  .word.day { left: 868px; top: 388px; }
+
+  .figure {
+    position: absolute;
+    left: 50%;
+    bottom: -10px;
+    transform: translateX(-50%);
+    width: 611px;
+    height: 739px;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .figure img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleY(-1) rotate(180deg);
+  }
+
+  .logo {
+    position: absolute;
+    left: 49px;
+    top: 43px;
+    width: 60px;
+    height: 11px;
+    z-index: 5;
+  }
+  .logo img { width: 100%; height: 100%; }
+
+  nav {
+    position: absolute;
+    left: 50%;
+    top: 24px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 40px;
+    padding: 20px 40px;
+    background: #fff;
+    border-radius: 999px;
+    color: #000;
+    font-size: 14px;
+    white-space: nowrap;
+    z-index: 5;
+  }
+  nav a { font-weight: 500; }
+  nav a.active { font-weight: 700; }
+
+  .icon-btn {
+    position: absolute;
+    top: 24px;
+    width: 50px;
+    height: 50px;
+    background: #fff;
+    border-radius: 999px;
+    z-index: 5;
+  }
+  .icon-btn.search { left: 1316px; }
+  .icon-btn.cart { left: 1366px; }
+  .icon-btn .ico {
+    position: absolute;
+    left: 15px;
+    top: 15px;
+    width: 20px;
+    height: 20px;
+  }
+  .icon-btn .ico img { position: absolute; }
+  .icon-btn .dot {
+    position: absolute;
+    left: 33px;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+  }
+
+  .stat {
+    position: absolute;
+    left: 1135px;
+    top: 150px;
+    width: 128px;
+    color: #000;
+    z-index: 4;
+  }
+  .stat b { display: block; font-weight: 600; font-size: 20px; }
+  .stat span { display: block; margin-top: 4px; font-weight: 100; font-size: 20px; line-height: 1.1; }
+
+  .lede {
+    position: absolute;
+    left: 120px;
+    top: 500px;
+    width: 240px;
+    color: #000;
+    font-weight: 500;
+    font-size: 16px;
+    z-index: 4;
+  }
+
+  .cta {
+    position: absolute;
+    left: 118px;
+    top: 575px;
+    display: flex;
+    align-items: center;
+    z-index: 4;
+  }
+  .cta .t {
+    padding: 20px;
+    background: #000;
+    color: #fff;
+    font-size: 18px;
+    border-radius: 999px;
+  }
+  .cta .a {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    background: #000;
+    border-radius: 999px;
+  }
+  .cta .a .ico { position: absolute; left: 15px; top: 15px; width: 20px; height: 20px; }
+  .cta .a .ico img { position: absolute; }
+
+  .pixels {
+    position: absolute;
+    left: 989px;
+    top: 276px;
+    width: 31px;
+    height: 52px;
+    z-index: 3;
+  }
+  .pixels i {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #c8cfd0;
+  }
+
+  .cards {
+    position: absolute;
+    right: 24px;
+    top: 623px;
+    display: flex;
+    gap: 8px;
+    z-index: 5;
+  }
+  .card {
+    position: relative;
+    width: 264px;
+    height: 144px;
+    background: #fff;
+    border-radius: 32px;
+    overflow: hidden;
+  }
+  .card .thumb {
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    width: 107px;
+    height: 136px;
+    background: #efefef;
+    border-radius: 28px;
+    overflow: hidden;
+  }
+  .card .thumb img {
+    position: absolute;
+    left: -15px;
+    top: 0;
+    width: 136px;
+    height: 136px;
+    object-fit: cover;
+    transform: scaleY(-1) rotate(180deg);
+  }
+  .card h3 {
+    position: absolute;
+    left: 125px;
+    top: 29px;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 1;
+  }
+  .card h3 em { display: block; font-style: normal; font-weight: 100; margin-top: 4px; }
+  .card p {
+    position: absolute;
+    left: 125px;
+    top: 83px;
+    width: 117px;
+    font-size: 12px;
+    line-height: 1.15;
+  }
+  .card .go {
+    position: absolute;
+    left: 231px;
+    top: 19px;
+    width: 20px;
+    height: 20px;
+  }
+  .card .go img { position: absolute; }
+  .more {
+    width: 145px;
+    height: 144px;
+    border: 1px solid #000;
+    border-radius: 32px;
+    position: relative;
+  }
+  .more i {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    background: #000;
+  }
+
+  .cta, .card, .icon-btn { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); }
+  .cta:hover, .card:hover { transform: translateY(-3px); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .word { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.1s both; }
+    .figure { animation: fadeUp 1.2s cubic-bezier(0.22,1,0.36,1) 0.2s both; }
+    .cards { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.55s both; }
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <div class="glow"></div>
+    <div class="word own-l">Own</div>
+    <div class="word fit">the<i>/</i>fit</div>
+    <div class="word own-r">own</div>
+    <div class="word day">the<i>/</i>day</div>
+    <div class="figure"><img src="assets/figure.png" alt=""></div>
+
+    <a class="logo" href="#"><img src="assets/logo.svg" alt="VERA"></a>
+    <nav>
+      <a class="active" href="#">Home</a>
+      <a href="#">Shop</a>
+      <a href="#">Collections</a>
+      <a href="#">About</a>
+      <a href="#">Journal</a>
+    </nav>
+    <a class="icon-btn search" href="#" aria-label="Search">
+      <span class="ico">
+        <img src="assets/search-a.svg" alt="" style="left:13%;top:13%;width:62%;height:62%">
+        <img src="assets/search-b.svg" alt="" style="left:66%;top:66%;width:22%;height:22%">
+      </span>
+    </a>
+    <a class="icon-btn cart" href="#" aria-label="Cart">
+      <span class="ico">
+        <img src="assets/basket-e.svg" alt="" style="left:9%;top:34%;width:81%;height:47%">
+        <img src="assets/basket-b.svg" alt="" style="left:28%;top:9%;width:44%;height:25%">
+        <img src="assets/basket-a.svg" alt="" style="left:50%;top:47%;width:2px;height:22%">
+        <img src="assets/basket-c.svg" alt="" style="left:68%;top:47%;width:3%;height:22%">
+        <img src="assets/basket-d.svg" alt="" style="left:29%;top:47%;width:3%;height:22%">
+      </span>
+      <img class="dot" src="assets/badge.svg" alt="">
+    </a>
+
+    <div class="stat"><b>200k+</b><span>Sustainable fabrics</span></div>
+    <p class="lede">Step into effortless style with our refined and comfortable essentials</p>
+    <a class="cta" href="#">
+      <span class="t">Explore Our Store</span>
+      <span class="a"><span class="ico">
+        <img src="assets/cta-a.svg" alt="" style="inset:25%;width:50%;height:50%">
+        <img src="assets/cta-b.svg" alt="" style="left:34%;top:25%;width:41%;height:41%">
+      </span></span>
+    </a>
+
+    <div class="pixels" aria-hidden="true">
+      <i style="left:10px;top:0"></i>
+      <i style="left:21px;top:10px"></i>
+      <i style="left:10px;top:31px"></i>
+      <i style="left:0;top:42px"></i>
+      <i style="left:0;top:10px"></i>
+    </div>
+
+    <div class="cards">
+      <a class="card" href="#">
+        <span class="thumb"><img src="assets/thumb-men.png" alt=""></span>
+        <h3>Men's<em>Collection</em></h3>
+        <p>The Essence of Modern Sophistication</p>
+        <span class="go">
+          <img src="assets/arrow-a.svg" alt="" style="inset:25%;width:50%;height:50%">
+          <img src="assets/arrow-b.svg" alt="" style="left:34%;top:25%;width:41%;height:41%">
+        </span>
+      </a>
+      <a class="card" href="#">
+        <span class="thumb"><img src="assets/thumb-girls.png" alt=""></span>
+        <h3>Girl's<em>Collection</em></h3>
+        <p>The Essence of Modern Sophistication</p>
+        <span class="go">
+          <img src="assets/arrow-a.svg" alt="" style="inset:25%;width:50%;height:50%">
+          <img src="assets/arrow-b.svg" alt="" style="left:34%;top:25%;width:41%;height:41%">
+        </span>
+      </a>
+      <a class="card" href="#">
+        <span class="thumb"><img src="assets/thumb-casual.png" alt=""></span>
+        <h3>Casual<em>Collection</em></h3>
+        <p>The Essence of Modern Sophistication</p>
+        <span class="go">
+          <img src="assets/arrow-a.svg" alt="" style="inset:25%;width:50%;height:50%">
+          <img src="assets/arrow-b.svg" alt="" style="left:34%;top:25%;width:41%;height:41%">
+        </span>
+      </a>
+      <a class="more" href="#" aria-label="Next">
+        <i style="left:69px;top:75px"></i>
+        <i style="left:63px;top:82px"></i>
+        <i style="left:69px;top:62px"></i>
+        <i style="left:63px;top:55px"></i>
+        <i style="left:76px;top:69px"></i>
+      </a>
+    </div>
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1440;
+      var scale = Math.min(1, width / 1440);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (810 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>

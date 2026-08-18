@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chains of Moriart — Daily Hero 23 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Noto+Serif:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: 'Noto Serif', serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1440px;
+    height: 810px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: radial-gradient(circle at 50% 50%, #f7f7f9 39%, #c4c7d0 70%, #9096a6 100%);
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .grid {
+    position: absolute;
+    inset: 0;
+    width: 1440px;
+    height: 810px;
+    pointer-events: none;
+  }
+  .mist {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 1510px;
+    height: 846px;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: screen;
+    opacity: 0.6;
+    object-fit: cover;
+    pointer-events: none;
+  }
+  .splatter {
+    position: absolute;
+    left: -122px;
+    top: -112px;
+    width: 342px;
+    height: 271px;
+    transform: rotate(-28.45deg);
+    filter: blur(20px);
+    object-fit: contain;
+    pointer-events: none;
+  }
+  .knight {
+    position: absolute;
+    left: 53px;
+    top: -31px;
+    width: 1496px;
+    height: 841px;
+    object-fit: contain;
+    object-position: bottom;
+    pointer-events: none;
+  }
+  .embers {
+    position: absolute;
+    left: 235px;
+    top: 287px;
+    width: 531px;
+    height: 796px;
+    transform: rotate(90deg);
+    transform-origin: top left;
+    mix-blend-mode: screen;
+    filter: blur(6px);
+    object-fit: cover;
+    pointer-events: none;
+  }
+  .petals {
+    position: absolute;
+    left: 1175px;
+    top: -171px;
+    width: 374px;
+    height: 524px;
+    transform: rotate(4.97deg);
+    filter: blur(6px);
+    object-fit: cover;
+    pointer-events: none;
+  }
+
+  .logo {
+    position: absolute;
+    left: 24px;
+    top: 13px;
+    width: 43px;
+    height: 43px;
+    mix-blend-mode: screen;
+    overflow: hidden;
+  }
+  .logo img { width: 138%; height: 137%; margin-left: -19%; margin-top: -18%; max-width: none; }
+
+  nav {
+    position: absolute;
+    left: 50%;
+    top: 29px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 60px;
+    font-size: 12px;
+    color: #000;
+    white-space: nowrap;
+  }
+
+  .claim {
+    position: absolute;
+    right: 24px;
+    top: 13px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 24px;
+    background: #fff;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #000;
+  }
+  .claim .chev {
+    width: 6px;
+    height: 9px;
+    display: grid;
+    grid-template-columns: 2.4px 2.4px;
+    gap: 1px;
+  }
+  .claim .chev i { width: 2.4px; height: 2.4px; background: #000; }
+
+  .kicker {
+    position: absolute;
+    left: 58px;
+    top: 214px;
+    width: 73px;
+    font-size: 12px;
+    letter-spacing: 5.76px;
+    text-transform: uppercase;
+    text-align: right;
+    color: #000;
+    line-height: 1.2;
+  }
+  .title {
+    position: absolute;
+    left: 170px;
+    top: 197px;
+    font-family: Cinzel, serif;
+    font-size: 105px;
+    line-height: 0.85;
+    letter-spacing: 8.4px;
+    background: linear-gradient(119deg, #6d3542 30%, #b7212f 75%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    white-space: nowrap;
+  }
+  .title.b { left: 26px; top: 288px; background: linear-gradient(137deg, #6d3542 30%, #b7212f 75%); }
+
+  .drop {
+    position: absolute;
+    font-family: Cinzel, serif;
+    font-size: 58px;
+    letter-spacing: 4.67px;
+    background: linear-gradient(95deg, #6d3542 30%, #b7212f 75%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    line-height: 1;
+  }
+  .copy {
+    position: absolute;
+    font-size: 18px;
+    letter-spacing: 1.44px;
+    text-transform: uppercase;
+    color: #000;
+    opacity: 0.8;
+    line-height: 1.35;
+  }
+  .drop.t { left: 244px; top: 481px; }
+  .copy.t { left: 239px; top: 481px; width: 241px; }
+  .drop.w { left: 1131px; top: 556px; }
+  .copy.w { left: 1126px; top: 556px; width: 276px; }
+
+  .mosaic { position: absolute; left: 24px; top: 432px; width: 284px; height: 378px; }
+  .mosaic img { position: absolute; object-fit: cover; }
+  .mosaic .bg { left: 2px; top: 3px; width: 191px; height: 191px; opacity: 0.4; }
+  .mosaic .p1 { left: 0; top: 109px; width: 96px; height: 109px; }
+  .mosaic .p2 { left: 96px; top: 0; width: 96px; height: 109px; }
+  .mosaic .p3 { left: 96px; top: 217px; width: 188px; height: 161px; }
+
+  .side {
+    position: absolute;
+    left: 1251px;
+    top: 349px;
+    width: 166px;
+    height: 176px;
+    object-fit: cover;
+  }
+
+  .play {
+    position: absolute;
+    left: 520px;
+    top: 545px;
+    width: 130px;
+    height: 130px;
+  }
+  .play img { width: 154%; height: 122%; }
+
+  .pager {
+    position: absolute;
+    left: 1296px;
+    top: 724px;
+    color: #fff;
+    font-family: Cinzel, serif;
+    white-space: nowrap;
+  }
+  .pager b { font-size: 85px; letter-spacing: -4.25px; font-weight: 400; }
+  .pager span { font-size: 41px; letter-spacing: -0.4px; opacity: 0.6; margin-left: 8px; }
+
+  .claim { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); }
+  .claim:hover { transform: translateY(-2px); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .title, .kicker { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.2s both; }
+    .copy, .drop { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.5s both; }
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <img class="grid" src="assets/grid.svg" alt="">
+    <img class="mist" src="assets/mist.png" alt="">
+    <img class="splatter" src="assets/splatter.png" alt="">
+    <img class="knight" src="assets/knight.png" alt="">
+    <img class="embers" src="assets/embers.png" alt="">
+    <img class="petals" src="assets/petals.png" alt="">
+
+    <a class="logo" href="#"><img src="assets/logo.png" alt="Chains of Moriart"></a>
+    <nav>
+      <a href="#">Realm</a>
+      <a href="#">Chronicles</a>
+      <a href="#">Kingdoms</a>
+      <a href="#">Armory</a>
+    </nav>
+    <a class="claim" href="#">Claim Now <span class="chev" aria-hidden="true"><i></i><i></i><i></i></span></a>
+
+    <p class="kicker">The<br>Silver<br>Order</p>
+    <div class="title">Chains</div>
+    <div class="title b">of moriart</div>
+
+    <div class="drop t">t</div>
+    <p class="copy t">he Knight Woman of Chains of Moriart and Her Hidden Strengths.</p>
+    <div class="drop w">w</div>
+    <p class="copy w">here legends bleed and kingdoms awaken.</p>
+
+    <div class="mosaic">
+      <img class="bg" src="assets/portrait-bg.png" alt="">
+      <img class="p1" src="assets/portrait-1.png" alt="">
+      <img class="p2" src="assets/portrait-2.png" alt="">
+      <img class="p3" src="assets/portrait-3.png" alt="">
+    </div>
+    <img class="side" src="assets/portrait-4.png" alt="">
+    <a class="play" href="#"><img src="assets/play.svg" alt=""></a>
+    <div class="pager"><b>01</b><span>/05</span></div>
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1440;
+      var scale = Math.min(1, width / 1440);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (810 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>

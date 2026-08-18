@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Things — Daily Hero 34 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@200;300;400;500;600&family=Outfit:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: 'Bai Jamjuree', sans-serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1440px;
+    height: 810px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: #cfcfcf;
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .glow-l {
+    position: absolute;
+    left: -478px;
+    top: -392px;
+    width: 1027px;
+    height: 1329px;
+    pointer-events: none;
+  }
+  .glow-l img { width: 100%; height: 100%; }
+  .glow-r {
+    position: absolute;
+    left: 804px;
+    top: 695px;
+    width: 920px;
+    height: 909px;
+    mix-blend-mode: screen;
+    transform: rotate(-33.41deg);
+    pointer-events: none;
+  }
+  .glow-r img { width: 100%; height: 100%; }
+  .tint {
+    position: absolute;
+    inset: 0;
+    background: #0f82d4;
+    mix-blend-mode: soft-light;
+    pointer-events: none;
+  }
+  .switch {
+    position: absolute;
+    left: 710px;
+    top: -75px;
+    width: 768px;
+    height: 909px;
+    object-fit: contain;
+    pointer-events: none;
+  }
+
+  .logo {
+    position: absolute;
+    left: 29px;
+    top: 24px;
+    width: 37px;
+    height: 33px;
+    overflow: hidden;
+  }
+  .logo img {
+    position: absolute;
+    width: 233%;
+    height: 259%;
+    left: -67%;
+    top: -79%;
+    max-width: none;
+  }
+
+  nav {
+    position: absolute;
+    left: 50%;
+    top: 25px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    font-family: Outfit, sans-serif;
+    font-size: 12px;
+    color: #000;
+    white-space: nowrap;
+  }
+  nav a.active {
+    background: #fff;
+    border-radius: 99px;
+    padding: 12px;
+  }
+  .menu {
+    position: absolute;
+    left: 1213px;
+    top: 10px;
+    width: 181px;
+    height: 62px;
+  }
+  .menu img { width: 100%; height: 100%; }
+
+  .h1a {
+    position: absolute;
+    left: 66px;
+    top: 202px;
+    font-size: 61.411px;
+    line-height: 1;
+    letter-spacing: -1.84px;
+    text-transform: uppercase;
+    color: #000;
+    white-space: nowrap;
+  }
+  .h1b {
+    position: absolute;
+    left: 385px;
+    top: 263px;
+    font-size: 61.411px;
+    line-height: 1;
+    letter-spacing: -1.84px;
+    text-transform: uppercase;
+    color: #000;
+    white-space: nowrap;
+  }
+  .brack-l, .brack-r {
+    position: absolute;
+    top: 266px;
+    font-size: 49.062px;
+    line-height: 1;
+    letter-spacing: -1.47px;
+    text-transform: uppercase;
+    color: #000;
+  }
+  .brack-l { left: 158px; }
+  .brack-r { left: 365px; transform: scaleY(-1) rotate(180deg); }
+  .h1c {
+    position: absolute;
+    left: 114px;
+    top: 324px;
+    font-size: 61.411px;
+    line-height: 1;
+    letter-spacing: -1.84px;
+    text-transform: uppercase;
+    color: #000;
+    white-space: nowrap;
+  }
+  .keys {
+    position: absolute;
+    left: 175px;
+    top: 260px;
+    width: 179px;
+    height: 53px;
+  }
+  .keys img { position: absolute; object-fit: contain; object-position: bottom; }
+  .keys .k1 { left: 0; top: 2px; width: 39px; height: 49px; }
+  .keys .k2 { left: 38px; top: 5px; width: 35px; height: 43px; }
+  .keys .k3 { left: 72px; top: 0; width: 33px; height: 53px; }
+  .keys .k4 { left: 104px; top: 3px; width: 35px; height: 47px; }
+  .keys .k5 { left: 138px; top: 4px; width: 41px; height: 46px; }
+
+  .tag {
+    position: absolute;
+    left: 537px;
+    top: 324px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 20px 4px 4px;
+    border: 1px solid rgba(255,255,255,0.17);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.17);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.14px;
+    color: #000;
+    opacity: 0.85;
+  }
+  .tag img { width: 19px; height: 19px; }
+
+  .lede {
+    position: absolute;
+    left: 114px;
+    top: 437px;
+    width: 399px;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.18px;
+    color: #000;
+    opacity: 0.6;
+  }
+
+  .cta-row {
+    position: absolute;
+    left: 116px;
+    top: 525px;
+    display: flex;
+    align-items: center;
+  }
+  .buy {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    padding: 0 19px;
+    background: #fff;
+    border-radius: 99px;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.18px;
+    color: #000;
+  }
+  .buy-ico {
+    width: 60px;
+    height: 60px;
+    border-radius: 99px;
+    background: #bbd0e9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .buy-ico img { width: 19px; height: 19px; filter: brightness(0); }
+  .explore {
+    margin-left: 18px;
+    display: flex;
+    align-items: center;
+    height: 60px;
+    padding: 0 19px;
+    border: 1px solid #000;
+    border-radius: 99px;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.18px;
+    color: #000;
+  }
+
+  .stat {
+    position: absolute;
+    padding: 42px;
+    border-radius: 40px;
+    background: rgba(131,163,198,0.11);
+    backdrop-filter: blur(40px);
+    color: #fff;
+  }
+  .stat b {
+    display: block;
+    font-weight: 300;
+    font-size: 61.411px;
+    line-height: 1;
+    letter-spacing: -1.84px;
+    text-transform: uppercase;
+  }
+  .stat span {
+    display: block;
+    margin-top: 16px;
+    font-weight: 500;
+    font-size: 24px;
+    letter-spacing: -0.24px;
+  }
+  .stat-a { left: 725px; top: 449px; width: 274px; height: 161px; }
+  .stat-b { left: 1091px; top: 188px; width: 281px; height: 161px; }
+
+  .foot {
+    position: absolute;
+    left: 35px;
+    top: 699px;
+    width: 283px;
+    height: 76px;
+  }
+  .foot .globe {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 76px;
+    height: 76px;
+  }
+  .foot .n {
+    position: absolute;
+    left: 98px;
+    top: 5px;
+    font-weight: 300;
+    font-size: 61.411px;
+    line-height: 1;
+    letter-spacing: -1.84px;
+    text-transform: uppercase;
+    color: #000;
+  }
+  .foot .pct {
+    position: absolute;
+    left: 160px;
+    top: 5px;
+    font-weight: 200;
+    font-size: 41px;
+    letter-spacing: -1.23px;
+    text-transform: uppercase;
+    color: #000;
+    opacity: 0.2;
+  }
+  .foot .lbl {
+    position: absolute;
+    left: 98px;
+    top: 60px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.14px;
+    color: #000;
+  }
+
+  .tab-a, .tab-b, .tab-c {
+    position: absolute;
+    top: 693px;
+    height: 107px;
+  }
+  .tab-a { left: 634px; width: 407px; }
+  .tab-b { left: 930px; width: 307px; }
+  .tab-c { left: 1133px; width: 307px; }
+  .tab-a img, .tab-b img, .tab-c img { width: 100%; height: 100%; }
+  .tab-copy {
+    position: absolute;
+    top: 729px;
+    width: 117px;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.18px;
+    color: #fffcfc;
+  }
+  .tab-copy.mid { left: 1055px; }
+  .tab-copy.right { left: 1256px; }
+  .tab-copy.left {
+    left: 820px;
+    top: 727px;
+    color: #000;
+  }
+  .card-sw {
+    position: absolute;
+    left: 736px;
+    top: 664px;
+    width: 137px;
+    height: 144px;
+    transform: rotate(17.25deg);
+    object-fit: cover;
+  }
+  .dots {
+    position: absolute;
+    width: 23px;
+    height: 23px;
+  }
+  .dots i {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #fff;
+    transform: rotate(-45deg);
+  }
+  .dots.d1 { left: 980px; top: 730px; }
+  .dots.d1 i { background: #060606; }
+  .dots.d2 { left: 1182px; top: 729px; }
+  .dots.d3 { left: 1385px; top: 727px; }
+  .dots i:nth-child(1) { left: 12px; top: 12px; }
+  .dots i:nth-child(2) { left: 12px; top: 4px; }
+  .dots i:nth-child(3) { left: 4px; top: 4px; }
+
+  .buy, .explore, .buy-ico { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); }
+  .buy:hover, .explore:hover { transform: translateY(-3px); }
+  @media (prefers-reduced-motion: no-preference) {
+    .h1a, .h1b, .h1c, .lede, .cta-row { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.2s both; }
+    .stat-b { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.5s both; }
+    .stat-a { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.7s both; }
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <div class="glow-l"><img src="assets/glow-left.svg" alt=""></div>
+    <div class="glow-r"><img src="assets/glow-right.svg" alt=""></div>
+    <div class="tint"></div>
+    <video class="switch" src="assets/hero-video.mp4" poster="assets/switch.png" autoplay muted loop playsinline></video>
+
+    <a class="logo" href="#"><img src="assets/logo.png" alt="Smart Things"></a>
+    <nav>
+      <a class="active" href="#">Home</a>
+      <a href="#">Dimensions</a>
+      <a href="#">Functions</a>
+      <a href="#">Colors</a>
+      <a href="#">Infinity</a>
+    </nav>
+    <a class="menu" href="#"><img src="assets/menu.svg" alt=""></a>
+
+    <div class="h1a">One-Key Environment</div>
+    <div class="brack-l">[</div>
+    <div class="keys">
+      <img class="k1" src="assets/key-purple.png" alt="">
+      <img class="k2" src="assets/key-silver.png" alt="">
+      <img class="k3" src="assets/key-blue.png" alt="">
+      <img class="k4" src="assets/key-orange.png" alt="">
+      <img class="k5" src="assets/key-pink.png" alt="">
+    </div>
+    <div class="brack-r">[</div>
+    <div class="h1b">Triggering</div>
+    <div class="h1c">Smart Things</div>
+    <div class="tag"><img src="assets/dot.svg" alt="">Tap. Trigger.</div>
+    <p class="lede">Press once, and your whole space transforms. Lights, music, scenes respond.</p>
+
+    <div class="cta-row">
+      <a class="buy" href="#">Buy Now</a>
+      <a class="buy-ico" href="#"><img src="assets/arrow-head.svg" alt=""></a>
+      <a class="explore" href="#">Explore More</a>
+    </div>
+
+    <div class="stat stat-a"><b>42</b><span>Scenes activated</span></div>
+    <div class="stat stat-b"><b>250+</b><span>Custom shortcuts</span></div>
+
+    <div class="foot">
+      <img class="globe" src="assets/globe.svg" alt="">
+      <span class="n">78</span>
+      <span class="pct">%</span>
+      <span class="lbl">Triggers created</span>
+    </div>
+
+    <div class="tab-a"><img src="assets/tab-a.svg" alt=""></div>
+    <div class="tab-b"><img src="assets/tab-b.svg" alt=""></div>
+    <div class="tab-c"><img src="assets/tab-c.svg" alt=""></div>
+    <img class="card-sw" src="assets/card-switch.png" alt="">
+    <p class="tab-copy left">Single key, full scene</p>
+    <p class="tab-copy mid">Smart key, zero effort</p>
+    <p class="tab-copy right">One key, all rooms set</p>
+    <div class="dots d1" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="dots d2" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="dots d3" aria-hidden="true"><i></i><i></i><i></i></div>
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1440;
+      var scale = Math.min(1, width / 1440);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (810 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>

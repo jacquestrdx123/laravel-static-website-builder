@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D.O.N.E — Daily Hero 10 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=BBH+Bartle&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: 'Atkinson Hyperlegible', sans-serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: linear-gradient(-60deg, #1c1c1c 2%, #000 72%, #1d1d1d 99%);
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .sky {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 1976px;
+    height: 1108px;
+    transform: translate(-50%, -50%);
+    filter: blur(10px);
+  }
+  .sky img, .sky video { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+
+  .wordmark {
+    position: absolute;
+    left: 50%;
+    top: 343px;
+    transform: translateX(-50%);
+    font-family: 'BBH Bartle', sans-serif;
+    font-size: 301px;
+    line-height: 1;
+    color: rgba(255,255,255,0.12);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .vline {
+    position: absolute;
+    top: 0;
+    width: 1px;
+    height: 1080px;
+    background: rgba(255,255,255,0.08);
+    pointer-events: none;
+  }
+  .vline.a { left: 0; } .vline.b { left: 320px; } .vline.c { left: 640px; }
+  .vline.d { left: 960px; } .vline.e { left: 1280px; } .vline.f { left: 1600px; } .vline.g { left: 1919px; }
+
+  .glitch {
+    position: absolute;
+    width: 18px;
+    height: 140px;
+    overflow: hidden;
+    mix-blend-mode: lighten;
+    opacity: 0.6;
+  }
+  .glitch img { position: absolute; left: 0; top: -76%; width: 100%; height: 190%; }
+  .glitch.a { left: 311px; top: 273px; }
+  .glitch.b { left: 631px; top: 438px; mix-blend-mode: plus-lighter; }
+  .glitch.c { left: 1271px; top: 381px; }
+  .glitch.d { left: 1591px; top: 508px; opacity: 1; }
+
+  .drone {
+    position: absolute;
+    left: 50%;
+    top: 370px;
+    transform: translateX(-50%);
+    width: 962px;
+    height: 641px;
+    object-fit: contain;
+    pointer-events: none;
+  }
+
+  .model {
+    position: absolute;
+    left: 50%;
+    top: 254px;
+    transform: translateX(-50%);
+    font-family: 'BBH Bartle', sans-serif;
+    font-size: 82px;
+    line-height: 1;
+    color: rgba(255,255,255,0.48);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .logo {
+    position: absolute;
+    left: 48px;
+    top: 41px;
+    width: 70px;
+    height: 11px;
+  }
+  .logo img { width: 100%; height: 100%; }
+
+  nav {
+    position: absolute;
+    left: 50%;
+    top: 22px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    padding: 8px;
+    border-radius: 999px;
+    background: rgba(0,0,0,0.4);
+  }
+  nav a {
+    padding: 12px 20px;
+    border-radius: 999px;
+    color: #fff;
+    font-size: 14px;
+    line-height: 1.4;
+    text-transform: uppercase;
+    opacity: 0.2;
+  }
+  nav a.active { background: rgba(255,255,255,0.11); font-weight: 700; opacity: 0.6; }
+
+  .actions {
+    position: absolute;
+    left: 1653px;
+    top: 29px;
+    display: flex;
+    align-items: center;
+    gap: 60px;
+  }
+  .actions .login { color: #fff; font-size: 14px; font-weight: 700; text-transform: uppercase; opacity: 0.6; }
+  .actions .buy {
+    padding: 12px 20px;
+    border-radius: 999px;
+    background: rgba(176,177,179,0.4);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .lede {
+    position: absolute;
+    left: 0;
+    top: 723px;
+    width: 319px;
+    font-family: 'BBH Bartle', sans-serif;
+    font-size: 24px;
+    line-height: 1;
+    text-align: right;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+  }
+  .lede em { color: #fff; font-style: normal; }
+
+  .copy {
+    position: absolute;
+    left: 247px;
+    top: 855px;
+    width: 160px;
+    color: #fff;
+    font-size: 16px;
+    line-height: 1.2;
+    opacity: 0.7;
+  }
+
+  .pixels {
+    position: absolute;
+    left: 128px;
+    top: 858px;
+    width: 80px;
+    height: 80px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+  }
+  .pixels i {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    background: #fff;
+    opacity: 0.7;
+    border-radius: 1.4px;
+  }
+
+  .panel {
+    position: absolute;
+    left: 1448px;
+    top: 712px;
+    width: 464px;
+    height: 359px;
+  }
+  .panel .shape {
+    position: absolute;
+    left: 74px;
+    top: 43px;
+    width: 390px;
+    height: 316px;
+  }
+  .panel .mini {
+    position: absolute;
+    left: 48px;
+    top: 0;
+    width: 266px;
+    height: 177px;
+    transform: rotate(15.95deg);
+    object-fit: cover;
+  }
+  .panel .p1 {
+    position: absolute;
+    left: 111px;
+    top: 252px;
+    width: 195px;
+    color: #fff;
+    font-size: 16px;
+    line-height: 1.2;
+    opacity: 0.7;
+  }
+  .panel .p2 {
+    position: absolute;
+    left: 305px;
+    top: 84px;
+    width: 146px;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.2;
+    opacity: 0.7;
+  }
+  .panel .stat {
+    position: absolute;
+    left: 329px;
+    top: 272px;
+    color: #fff;
+    font-size: 82px;
+    font-weight: 700;
+    letter-spacing: -7.38px;
+    line-height: 1;
+    opacity: 0.9;
+  }
+  .panel .k {
+    position: absolute;
+    left: 398px;
+    top: 291px;
+    font-size: 52px;
+    font-weight: 700;
+    background: linear-gradient(-90deg, #fff 19%, rgba(255,255,255,0) 95%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    opacity: 0.2;
+  }
+
+  .scroll {
+    position: absolute;
+    left: 948px;
+    top: 1019px;
+    width: 25px;
+    height: 36px;
+    border: 1px solid #fff;
+    border-radius: 999px;
+  }
+  .scroll i {
+    position: absolute;
+    left: 12px;
+    top: 14px;
+    width: 1px;
+    height: 7px;
+    background: #fff;
+    border-radius: 99px;
+  }
+
+  .buy, .pixels { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); }
+  .buy:hover, .pixels:hover { transform: translateY(-3px); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .model, .lede, .copy { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.2s both; }
+    .drone { animation: fadeUp 1.2s cubic-bezier(0.22,1,0.36,1) 0.15s both; }
+    .panel { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.6s both; }
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <div class="sky"><video src="assets/hero-video.mp4" poster="assets/bg.png" autoplay muted loop playsinline></video></div>
+    <div class="wordmark">orbYt</div>
+    <div class="vline a"></div><div class="vline b"></div><div class="vline c"></div>
+    <div class="vline d"></div><div class="vline e"></div><div class="vline f"></div><div class="vline g"></div>
+    <div class="glitch a"><img src="assets/glitch.png" alt=""></div>
+    <div class="glitch b"><img src="assets/glitch.png" alt=""></div>
+    <div class="glitch c"><img src="assets/glitch.png" alt=""></div>
+    <div class="glitch d"><img src="assets/glitch.png" alt=""></div>
+    <img class="drone" src="assets/drone.png" alt="AX/724 drone">
+    <div class="model">ax/724</div>
+
+    <a class="logo" href="#"><img src="assets/logo.svg" alt="D.O.N.E"></a>
+    <nav>
+      <a class="active" href="#">Home</a>
+      <a href="#">About us</a>
+      <a href="#">contact</a>
+    </nav>
+    <div class="actions">
+      <a class="login" href="#">Login</a>
+      <a class="buy" href="#">buy now</a>
+    </div>
+
+    <p class="lede">Dynamic <em>Orbital</em> Navegation Engine</p>
+    <p class="copy">Advanced aerial system built for precision, stability and intelligent tracking in real-time.</p>
+    <a class="pixels" href="#" aria-label="Next">
+      <i style="left:31px;top:19px"></i>
+      <i style="left:31px;top:54px"></i>
+      <i style="left:38px;top:26px"></i>
+      <i style="left:38px;top:47px"></i>
+      <i style="left:45px;top:36px"></i>
+    </a>
+
+    <div class="panel">
+      <img class="shape" src="assets/card-shape.svg" alt="">
+      <img class="mini" src="assets/drone-card.png" alt="">
+      <p class="p2">An advanced aerial system designed for exceptional</p>
+      <p class="p1">Remarkable stability, intelligent real-time tracking, and adaptable performance capabilities.</p>
+      <span class="stat">12</span>
+      <span class="k">K</span>
+    </div>
+    <div class="scroll" aria-hidden="true"><i></i></div>
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1920;
+      var scale = Math.min(1, width / 1920);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (1080 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>

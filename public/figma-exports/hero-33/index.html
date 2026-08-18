@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fractal Matter — Daily Hero 33 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700&family=Outfit:wght@400;500&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: Outfit, sans-serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1440px;
+    height: 810px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: #cdcedc;
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .sphere {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    width: 1796px; height: 1010px;
+  }
+  .sphere img, .sphere video { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+  .rings {
+    position: absolute;
+    left: 24px; top: -303px;
+    width: 1392px; height: 1392px;
+    pointer-events: none;
+  }
+
+  .logo {
+    position: absolute;
+    left: 24px; top: 10px;
+    width: 50px; height: 50px;
+    overflow: hidden;
+  }
+  .logo img {
+    position: absolute;
+    width: 235%; height: 235%;
+    left: -67%; top: -67%;
+    max-width: none;
+  }
+  nav {
+    position: absolute;
+    left: 50%; top: 30px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 70px;
+    font-size: 14px;
+    color: #fff;
+  }
+  .burger {
+    position: absolute;
+    left: 1384px; top: 28px;
+    width: 31px; height: 13px;
+  }
+
+  .title {
+    position: absolute;
+    left: 52px; top: 150px;
+    font-family: Unbounded, sans-serif;
+    font-weight: 500;
+    font-size: 100px;
+    letter-spacing: -1px;
+    line-height: 0.82;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .title .row2 { margin-left: 85px; letter-spacing: 0.12em; }
+  .lead {
+    position: absolute;
+    left: 132px; top: 374px;
+    width: 271px;
+    font-size: 20px;
+    letter-spacing: -0.2px;
+    line-height: 1.2;
+    color: #fff;
+  }
+  .cta {
+    position: absolute;
+    left: 122px; top: 513px;
+    background: #fff;
+    color: #1a1a1a;
+    font-weight: 500;
+    font-size: 20px;
+    letter-spacing: -0.6px;
+    padding: 32px 40px;
+    border-radius: 999px;
+  }
+
+  .n {
+    position: absolute;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .n04 { left: 1170px; top: 56px; font-size: 34px; letter-spacing: -0.34px; opacity: 0.3; }
+  .n03 { left: 1250px; top: 193px; font-size: 53px; letter-spacing: -0.53px; opacity: 0.5; }
+  .n02 { left: 1267px; top: 376px; font-size: 80px; letter-spacing: -0.8px; }
+  .n01 { left: 1225px; top: 610px; font-size: 53px; letter-spacing: -0.53px; opacity: 0.5; }
+
+  .thumbs {
+    position: absolute;
+    left: 1088px; top: 196px;
+    width: 120px; height: 430px;
+  }
+  .thumbs img {
+    position: absolute;
+    width: 114px; height: 118px;
+    object-fit: cover;
+    border-radius: 16px;
+  }
+  .thumbs .t1 { top: 0; }
+  .thumbs .t2 { top: 148px; }
+  .thumbs .t3 { top: 296px; }
+
+  .bar {
+    position: absolute;
+    left: 0; top: 689px;
+    width: 907px; height: 121px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%);
+    backdrop-filter: blur(49px);
+    border-top-right-radius: 20px;
+    color: #fff;
+  }
+  .bar-tab {
+    position: absolute;
+    left: 911px; top: 685px;
+    width: 58px; height: 55px;
+    background: #f3acff;
+    border-top-left-radius: 24px;
+  }
+  .bar .more {
+    position: absolute;
+    left: 55px; top: 44px;
+    font-family: Unbounded, sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.2px;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .col {
+    position: absolute;
+    top: 44px;
+  }
+  .col-a { left: 221px; }
+  .col-b { left: 446px; }
+  .col-c { left: 671px; }
+  .col h3 { font-weight: 500; font-size: 18px; letter-spacing: -0.18px; }
+  .col p { margin-top: 11px; font-size: 14px; letter-spacing: -0.14px; opacity: 0.7; }
+
+  .ctrls {
+    position: absolute;
+    left: 1264px; top: 723px;
+    display: flex;
+    gap: 6px;
+  }
+  .ctrls button {
+    width: 44px; height: 44px;
+    border: 0;
+    border-radius: 999px;
+    background: #fffcf3;
+    position: relative;
+    cursor: pointer;
+  }
+  .ctrls button img {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 18px; height: 18px;
+    transform: translate(-50%, -50%);
+  }
+  .ctrls .next img { transform: translate(-50%, -50%) scaleX(-1); }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <div class="sphere"><video src="assets/hero-video.mp4" poster="assets/sphere.png" autoplay muted loop playsinline></video></div>
+    <img class="rings" src="assets/rings.svg" alt="">
+
+    <a class="logo" href="#"><img src="assets/logo.png" alt=""></a>
+    <nav>
+      <a href="#">Origins</a>
+      <a href="#">Dimensions</a>
+      <a href="#">Artifacts</a>
+      <a href="#">Spectrum</a>
+      <a href="#">Infinity</a>
+    </nav>
+    <img class="burger" src="assets/menu.svg" alt="">
+
+    <h1 class="title">FRACTAL<br><span class="row2">M TTER</span></h1>
+    <p class="lead">Explore New Dimensions<br>Shape Tomorrow Through<br>Infinite Possibilities Ahead!</p>
+    <a class="cta" href="#">Discover now</a>
+
+    <div class="n n04">04</div>
+    <div class="n n03">03</div>
+    <div class="n n02">02</div>
+    <div class="n n01">01</div>
+
+    <div class="thumbs">
+      <img class="t1" src="assets/thumb-a.png" alt="">
+      <img class="t2" src="assets/thumb-b.png" alt="">
+      <img class="t3" src="assets/thumb-c.png" alt="">
+    </div>
+
+    <div class="bar-tab"></div>
+    <div class="bar">
+      <div class="more">More<br>Content</div>
+      <div class="col col-a">
+        <h3>Crystal logic</h3>
+        <p>Emerging systems evolve</p>
+      </div>
+      <div class="col col-b">
+        <h3>Future patterns</h3>
+        <p>Reality shifts through data</p>
+      </div>
+      <div class="col col-c">
+        <h3>Digital echoes</h3>
+        <p>Signals shape new worlds</p>
+      </div>
+    </div>
+
+    <div class="ctrls">
+      <button type="button"><img src="assets/caret.svg" alt=""></button>
+      <button class="next" type="button"><img src="assets/caret-r.svg" alt=""></button>
+    </div>
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1440;
+      var scale = Math.min(1, width / 1440);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (810 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>

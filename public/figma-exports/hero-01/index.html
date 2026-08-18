@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bluebird — Hero 01 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@300;400;500;700&family=Playfair+Display:wght@400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: 'Host Grotesk', sans-serif; }
+
+  /* 1920x1080 design stage, scaled to fit the viewport width */
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: linear-gradient(180deg, #c5dce4 38.64%, #467389 116%);
+  }
+  .stage img { display: block; }
+
+  /* ---------- backdrop ---------- */
+  .glow {
+    position: absolute;
+    left: -167.5px;
+    top: 81px;
+    width: 2218.93px;
+    height: 1757.2px;
+    pointer-events: none;
+  }
+  .wordmark {
+    position: absolute;
+    left: 50%;
+    top: 233px;
+    transform: translateX(-50%);
+    font-family: 'Playfair Display', serif;
+    font-size: 364.82px;
+    line-height: 1;
+    letter-spacing: -10px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    background: linear-gradient(180deg, rgba(255,255,255,0.85) 55%, rgba(255,255,255,0) 102%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .bird {
+    position: absolute;
+    left: 205px;
+    top: -75px;
+    width: 1290px;
+    height: 1596.33px;
+    object-fit: cover;
+    -webkit-mask-image: linear-gradient(180deg, #000 58%, rgba(0,0,0,0.4) 74%, transparent 88%);
+    mask-image: linear-gradient(180deg, #000 58%, rgba(0,0,0,0.4) 74%, transparent 88%);
+  }
+
+  /* ---------- top bar ---------- */
+  .logo {
+    position: absolute;
+    left: 60px;
+    top: 47.96px;
+    width: 73.38px;
+    height: 22.92px;
+    overflow: hidden;
+  }
+  .logo img {
+    position: absolute;
+    width: 159.46%;
+    height: 384.58%;
+    left: -25.96%;
+    top: -143.39%;
+    max-width: none;
+  }
+  nav {
+    position: absolute;
+    left: 50%;
+    top: 37.92px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+  nav a {
+    display: flex;
+    align-items: center;
+    padding: 12px 18px;
+    border-radius: 999px;
+    font-size: 16px;
+    line-height: 1.2;
+    color: #577a8b;
+    opacity: 0.8;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  nav a.active {
+    font-weight: 700;
+    border: 1px solid rgba(86,122,139,0.2);
+  }
+  .resources {
+    position: absolute;
+    left: 1746.38px;
+    top: 37.92px;
+    padding: 12px 18px;
+    background: #fff;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #577a8b;
+    opacity: 0.8;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  /* ---------- left copy ---------- */
+  .h-line1, .h-line2 {
+    position: absolute;
+    font-size: 62px;
+    line-height: 1;
+    letter-spacing: -1.86px;
+    color: #fff;
+    white-space: nowrap;
+  }
+  .h-line1 { left: 334px; top: 627.69px; transform: translateX(-100%); }
+  .h-line2 { left: 396.49px; top: 689.69px; transform: translateX(-100%); }
+  .h-line2 .amp { color: rgba(255,255,255,0.33); }
+  .lede {
+    position: absolute;
+    left: 123.49px;
+    top: 783.69px;
+    width: 300px;
+    font-size: 16px;
+    line-height: 1.2;
+    color: #fff;
+    opacity: 0.8;
+  }
+  .cta-row {
+    position: absolute;
+    left: 123.49px;
+    top: 881.69px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .btn-primary {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    padding: 12px 12px 12px 24px;
+    border-radius: 999px;
+    background: linear-gradient(75.25deg, #0172f8 9.39%, #019dcf 110.07%);
+    text-decoration: none;
+  }
+  .btn-primary span {
+    font-size: 21px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.42px;
+    color: #fff;
+    white-space: nowrap;
+  }
+  .btn-primary .disc {
+    width: 47.97px;
+    height: 47.97px;
+    border-radius: 50%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .btn-secondary {
+    padding: 22px 24px;
+    border-radius: 999px;
+    background: #fff;
+    font-size: 21px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.42px;
+    color: #567a8b;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  /* ---------- glass cards ---------- */
+  .glass {
+    position: absolute;
+    width: 396px;
+    height: 230px;
+    border-radius: 40px;
+    border: 1px solid rgba(255,255,255,0.21);
+    background: linear-gradient(52.1deg, rgba(255,255,255,0.2) 12.97%, rgba(129,163,180,0.2) 76.8%);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    overflow: hidden;
+  }
+  .arrow-btn {
+    position: absolute;
+    top: 10.73px;
+    width: 47.97px;
+    height: 47.97px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* card: perfect security */
+  .card-security { left: 720px; top: 790px; }
+  .card-security .padlock-wrap {
+    position: absolute;
+    left: -7.06px;
+    top: 24.65px;
+    width: 182.06px;
+    height: 196.77px;
+  }
+  .card-security .padlock-wrap img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .card-security .padlock-color {
+    mix-blend-mode: multiply;
+    -webkit-mask-image: url("assets/padlock-mask.svg");
+    mask-image: url("assets/padlock-mask.svg");
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+  }
+  .card-security .chip {
+    position: absolute;
+    left: 174px;
+    top: 56.38px;
+    padding: 6px 10px;
+    border-radius: 40px;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.21);
+    font-size: 14px;
+    line-height: 1.2;
+    color: #fff;
+    white-space: nowrap;
+  }
+  .card-security h3 {
+    position: absolute;
+    left: 175px;
+    top: 103.62px;
+    width: 190px;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.84px;
+    color: #fff;
+  }
+  .card-security .arrow-btn { right: 13.02px; }
+
+  /* card: integrated AI agent (notched white card) */
+  .card-agent {
+    position: absolute;
+    left: 1139.82px;
+    top: 697.35px;
+    width: 300px;
+    height: 322.65px;
+  }
+  .card-agent .shape { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .card-agent .sphere-glow {
+    position: absolute;
+    left: 47.07px;
+    top: 42.04px;
+    width: 88.69px;
+    height: 88.76px;
+    filter: blur(16.35px);
+    opacity: 0.5;
+    object-fit: cover;
+    object-position: bottom;
+  }
+  .card-agent .sphere {
+    position: absolute;
+    left: 29.72px;
+    top: 16.99px;
+    width: 97.18px;
+    height: 97.25px;
+    object-fit: cover;
+    object-position: bottom;
+  }
+  .card-agent h3 {
+    position: absolute;
+    left: 33.97px;
+    top: 134.9px;
+    width: 175px;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.84px;
+    color: #567a8b;
+  }
+  .card-agent p {
+    position: absolute;
+    left: 33.97px;
+    top: 221.46px;
+    width: 180.43px;
+    font-size: 16px;
+    line-height: 1.2;
+    color: #567a8b;
+    opacity: 0.8;
+  }
+  .card-agent .arrow-btn {
+    left: 240px;
+    top: 103.38px;
+    background: #fff;
+    box-shadow: 0 10px 22px rgba(70,115,137,0.35);
+  }
+
+  /* card: 42% stat */
+  .card-stat { left: 1464px; top: 790.68px; }
+  .card-stat .digit,
+  .card-stat .digit-clip p {
+    font-size: 127.98px;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -3.84px;
+    color: #fff;
+    white-space: nowrap;
+  }
+  .card-stat .digit { position: absolute; left: 24.94px; top: 42px; }
+  .card-stat .digit-clip {
+    position: absolute;
+    left: 93.58px;
+    top: 26.7px;
+    width: 83.83px;
+    height: 102.38px;
+    overflow: hidden;
+  }
+  .card-stat .digit-clip p { position: absolute; left: -0.32px; top: 15px; }
+  .card-stat .pct {
+    position: absolute;
+    left: 168px;
+    top: 76px;
+    font-size: 63.99px;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -1.92px;
+    color: #fff;
+    white-space: nowrap;
+  }
+  .card-stat .caption {
+    position: absolute;
+    left: 100.46px;
+    top: 154.3px;
+    width: 261.67px;
+    font-size: 16px;
+    line-height: 1.2;
+    color: #fff;
+  }
+  .card-stat .arrow-btn { right: 13.91px; }
+
+  /* ---------- active users ---------- */
+  .active-users {
+    position: absolute;
+    left: 1626px;
+    top: 657.69px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 0 24px;
+    border-radius: 4px 40px 40px 4px;
+    border: 1px solid rgba(255,255,255,0.21);
+    background: linear-gradient(23.5deg, rgba(255,255,255,0.2) 12.97%, rgba(129,163,180,0.2) 76.8%);
+    color: #fff;
+    white-space: nowrap;
+  }
+  .active-users .label { font-size: 20px; letter-spacing: -0.6px; opacity: 0.6; line-height: 1.2; }
+  .active-users .count { font-size: 28px; font-weight: 500; letter-spacing: -0.84px; line-height: 1.2; }
+  .avatars {
+    position: absolute;
+    left: 1453.49px;
+    top: 648.33px;
+    display: flex;
+    align-items: center;
+  }
+  .avatars img {
+    width: 64.73px;
+    height: 64.73px;
+    border-radius: 50%;
+    margin-right: -23.74px;
+    position: relative;
+  }
+  .avatars img:nth-child(1) { z-index: 4; }
+  .avatars img:nth-child(2) { z-index: 3; }
+  .avatars img:nth-child(3) { z-index: 2; }
+  .avatars img:nth-child(4) { z-index: 1; margin-right: 0; }
+
+  /* ---------- background video ----------
+     Recovered from the Figma file's "Bird Animation" frame
+     (freepik_video-upscale_2860829408): a bluebird flying across the sky.
+     Plays as the bottom layer; the static bird portrait hides while the
+     video runs, but the wordmark and UI stay on top. Remove the <video>
+     element (or the file) to fall back to the static composition. */
+  .hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.6s ease;
+  }
+  .stage.has-video .hero-video { opacity: 1; }
+  /* animation:none is required — the birdIn entrance animation's fill mode
+     would otherwise override this opacity and keep the static bird visible */
+  .stage.has-video .bird { animation: none; opacity: 0; transition: opacity 1.6s ease; }
+
+  /* ---------- hover motion ---------- */
+  .btn-primary, .btn-secondary, .resources, nav a, .arrow-btn { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), box-shadow 0.35s ease, background-color 0.35s ease; }
+  .btn-primary:hover, .btn-secondary:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(1,90,180,0.28); }
+  .btn-primary .disc svg { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); }
+  .btn-primary:hover .disc svg { transform: translateX(3px); }
+  .glass:hover .arrow-btn, .card-agent:hover .arrow-btn { transform: scale(1.12) rotate(45deg); }
+  nav a:hover { background: rgba(255,255,255,0.35); }
+
+  /* ---------- entrance + ambient animation ---------- */
+  @media (prefers-reduced-motion: no-preference) {
+    .wordmark {
+      animation: wordmarkIn 1.6s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .bird {
+      animation: birdIn 1.8s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .glow { animation: glowPulse 12s ease-in-out 2s infinite; }
+    .logo, .resources { animation: fadeDown 0.9s cubic-bezier(0.22,1,0.36,1) 0.2s both; }
+    nav { animation: navIn 0.9s cubic-bezier(0.22,1,0.36,1) 0.2s both; }
+    .h-line1 { animation: lineIn1 1s cubic-bezier(0.22,1,0.36,1) 0.55s both; }
+    .h-line2 { animation: lineIn2 1s cubic-bezier(0.22,1,0.36,1) 0.7s both; }
+    .lede { animation: fadeUpSoft 1s cubic-bezier(0.22,1,0.36,1) 0.9s both; }
+    .cta-row { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 1.05s both; }
+    .card-security {
+      animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 1.1s both,
+                 floatY 7s ease-in-out 3s infinite;
+    }
+    .card-agent {
+      animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 1.25s both,
+                 floatY 8s ease-in-out 3.4s infinite;
+    }
+    .card-stat {
+      animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 1.4s both,
+                 floatY 9s ease-in-out 3.8s infinite;
+    }
+    .card-agent .sphere { animation: sphereBob 5s ease-in-out 2.6s infinite; }
+    .card-agent .sphere-glow { animation: sphereGlowBob 5s ease-in-out 2.6s infinite; }
+    .card-stat .digit-clip p { animation: digitRise 1.1s cubic-bezier(0.22,1,0.36,1) 1.7s both; }
+    .avatars { animation: fadeUpSoft 0.8s cubic-bezier(0.22,1,0.36,1) 1.3s both; }
+    .avatars img { animation: popIn 0.6s cubic-bezier(0.34,1.56,0.64,1) both; }
+    .avatars img:nth-child(1) { animation-delay: 1.35s; }
+    .avatars img:nth-child(2) { animation-delay: 1.45s; }
+    .avatars img:nth-child(3) { animation-delay: 1.55s; }
+    .avatars img:nth-child(4) { animation-delay: 1.65s; }
+    .active-users { animation: slideFromRight 0.9s cubic-bezier(0.22,1,0.36,1) 1.5s both; }
+  }
+
+  @keyframes wordmarkIn {
+    from { opacity: 0; transform: translateX(-50%) scale(1.03); filter: blur(14px); }
+    to   { opacity: 1; transform: translateX(-50%) scale(1); filter: blur(0); }
+  }
+  @keyframes birdIn {
+    from { opacity: 0; transform: translateY(30px) scale(1.02); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes glowPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.65; }
+  }
+  @keyframes navIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(-16px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes lineIn1 {
+    from { opacity: 0; transform: translateX(-100%) translateY(34px); }
+    to   { opacity: 1; transform: translateX(-100%) translateY(0); }
+  }
+  @keyframes lineIn2 {
+    from { opacity: 0; transform: translateX(-100%) translateY(34px); }
+    to   { opacity: 1; transform: translateX(-100%) translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUpSoft {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes floatY {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-9px); }
+  }
+  @keyframes sphereBob {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-7px) rotate(4deg); }
+  }
+  @keyframes sphereGlowBob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+  @keyframes digitRise {
+    from { transform: translateY(110px); }
+    to   { transform: translateY(0); }
+  }
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.4); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  @keyframes slideFromRight {
+    from { opacity: 0; transform: translateX(36px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+
+    <video class="hero-video" src="assets/bird-animation.mp4" autoplay muted loop playsinline></video>
+    <img class="glow" src="assets/glow-ellipse.svg" alt="">
+    <div class="wordmark">BLueBIRD</div>
+    <img class="bird" src="assets/bird.png" alt="Mountain bluebird">
+
+    <div class="logo"><img src="assets/logo-sprite.png" alt="Bluebird logo"></div>
+    <nav>
+      <a href="#" class="active">home</a>
+      <a href="#">about</a>
+      <a href="#">services</a>
+      <a href="#">Industries</a>
+      <a href="#">threat Intelligence</a>
+      <a href="#">contact</a>
+    </nav>
+    <a class="resources" href="#">Resources</a>
+
+    <div class="h-line1">Innovation</div>
+    <div class="h-line2"><span class="amp">&amp;</span> security</div>
+    <p class="lede">We are at the forefront of merging cutting-edge technology</p>
+    <div class="cta-row">
+      <a class="btn-primary" href="#">
+        <span>Our Solutions</span>
+        <span class="disc">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M7.5 4.5L13 10L7.5 15.5" stroke="#0172f8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </a>
+      <a class="btn-secondary" href="#">Contact us</a>
+    </div>
+
+    <div class="glass card-security">
+      <div class="padlock-wrap">
+        <img class="padlock-color" src="assets/padlock-color.png" alt="">
+        <img src="assets/padlock.png" alt="Crystal padlock">
+      </div>
+      <span class="chip">Perfect Security</span>
+      <h3>AI ensures total protection</h3>
+      <span class="arrow-btn">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M6 14L14 6M14 6H7M14 6V13" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </div>
+
+    <div class="card-agent">
+      <img class="shape" src="assets/card-notch.svg" alt="">
+      <img class="sphere-glow" src="assets/sphere-glow.png" alt="">
+      <img class="sphere" src="assets/sphere.png" alt="AI sphere">
+      <h3>Integrated AI Agent</h3>
+      <p>Integrated AI agent for personalized client experiences.</p>
+      <span class="arrow-btn">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M6 14L14 6M14 6H7M14 6V13" stroke="#567a8b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </div>
+
+    <div class="glass card-stat">
+      <p class="digit">4</p>
+      <div class="digit-clip"><p>2</p></div>
+      <p class="pct">%</p>
+      <p class="caption">Join us in redefining the future of security with innovative solutions</p>
+      <span class="arrow-btn">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M6 14L14 6M14 6H7M14 6V13" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </div>
+
+    <div class="avatars">
+      <img src="assets/avatar-1.png" alt="">
+      <img src="assets/avatar-2.png" alt="">
+      <img src="assets/avatar-3.png" alt="">
+      <img src="assets/avatar-4.png" alt="">
+    </div>
+    <div class="active-users">
+      <span class="label">Active Users</span>
+      <span class="count">+323</span>
+    </div>
+
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || document.documentElement.clientWidth || 1920;
+      var scale = Math.min(1, width / 1920);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (1080 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+
+    var video = document.querySelector('.hero-video');
+    video.addEventListener('canplay', function () { stage.classList.add('has-video'); });
+    video.addEventListener('error', function () { video.remove(); });
+  })();
+</script>
+</body>
+</html>

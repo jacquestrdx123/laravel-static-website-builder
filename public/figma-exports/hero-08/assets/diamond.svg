@@ -1,0 +1,10 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="176.569" height="176.569" viewBox="0 0 176.569 176.569" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 5">
+<foreignObject x="-9.85283" y="-9.85283" width="196.275" height="196.275"><div xmlns="http://www.w3.org/1999/xhtml" style="backdrop-filter:blur(4.93px);clip-path:url(#bgblur_0_0_18_clip_path);height:100%;width:100%"></div></foreignObject><rect id="Rectangle 14" data-figma-bg-blur-radius="9.85283" x="88.2847" y="0.707107" width="123.853" height="123.853" transform="rotate(45 88.2847 0.707107)" stroke="white" stroke-opacity="0.31"/>
+<rect id="Rectangle 13" x="88.2847" y="47.7352" width="57.3458" height="57.3458" transform="rotate(45 88.2847 47.7352)" fill="white" stroke="white" stroke-opacity="0.31" stroke-width="0.965964"/>
+<path id="Polygon 1" d="M98.6822 88.2849L83.0864 99.8619L83.0864 76.7079L98.6822 88.2849Z" fill="black"/>
+</g>
+<defs>
+<clipPath id="bgblur_0_0_18_clip_path" transform="translate(9.85283 9.85283)"><rect x="88.2847" y="0.707107" width="123.853" height="123.853" transform="rotate(45 88.2847 0.707107)"/>
+</clipPath></defs>
+</svg>

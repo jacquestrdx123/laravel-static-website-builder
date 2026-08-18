@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>byheart — Daily Hero 31 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Michroma&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: Montserrat, sans-serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1440px;
+    height: 810px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: #122832;
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .bg {
+    position: absolute;
+    left: 62px; top: -68px;
+    width: 1607px; height: 947px;
+    transform: rotate(2.28deg);
+    transform-origin: center;
+  }
+  .bg img, .bg video { width: 100%; height: 100%; object-fit: cover; object-position: bottom; pointer-events: none; }
+  .mask {
+    position: absolute;
+    left: 0; top: 0;
+    width: 1503px; height: 866px;
+    pointer-events: none;
+  }
+  .g1 { position: absolute; left: -215px; top: -252px; width: 581px; height: 605px; pointer-events: none; }
+  .g2 { position: absolute; left: -339px; top: 466px; width: 581px; height: 605px; pointer-events: none; }
+  .g3 { position: absolute; left: 1154px; top: 289px; width: 581px; height: 605px; pointer-events: none; transform: rotate(180deg); }
+  .g4 { position: absolute; left: 949px; top: 560px; width: 552px; height: 450px; pointer-events: none; transform: rotate(180deg); }
+
+  .logo {
+    position: absolute;
+    left: 31px; top: 25px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .logo img {
+    width: 18px; height: 15px;
+    object-fit: cover;
+    object-position: 40% 50%;
+  }
+  .logo span {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 21px;
+    color: #fff;
+  }
+  nav {
+    position: absolute;
+    left: 1031px; top: 36px;
+    display: flex;
+    gap: 80px;
+    font-size: 12px;
+    color: #fff;
+  }
+  .menu {
+    position: absolute;
+    left: 1390px; top: 28px;
+    width: 24px; height: 24px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+  }
+  .menu i { width: 4px; height: 4px; background: #fff; border-radius: 50%; display: block; }
+
+  .title {
+    position: absolute;
+    left: 24px; top: 160px;
+    font-family: Michroma, sans-serif;
+    font-size: 76px;
+    letter-spacing: -2.27px;
+    line-height: 1.05;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #fff 0%, rgba(255,255,255,0.32) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .title span { display: block; }
+  .title .mid { margin-left: 51px; }
+  .lead {
+    position: absolute;
+    left: 111px; top: 371px;
+    width: 263px;
+    font-size: 18px;
+    line-height: 1.4;
+    color: #fff;
+  }
+  .cta {
+    position: absolute;
+    left: 107px; top: 486px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #fff;
+    border-radius: 999px;
+    padding: 4px 4px 4px 12px;
+    color: #273c59;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: -0.32px;
+  }
+  .cta i {
+    width: 51px; height: 51px;
+    border-radius: 999px;
+    background: rgba(49,199,237,0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cta i img { width: 18px; height: 18px; }
+
+  .play {
+    position: absolute;
+    left: 746px; top: 380px;
+    width: 172px; height: 172px;
+  }
+
+  .card {
+    position: absolute;
+    width: 216px; height: 232px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 40px;
+    overflow: hidden;
+    color: #fff;
+  }
+  .card-a { left: 955px; top: 173px; }
+  .card-b { left: 492px; top: 526px; }
+  .card .lab {
+    position: absolute;
+    left: 20px; top: 31px;
+    font-size: 12px;
+  }
+  .card .val {
+    position: absolute;
+    left: 20px; top: 86px;
+    font-family: Michroma, sans-serif;
+    font-size: 40px;
+    text-transform: uppercase;
+  }
+  .card .unit {
+    position: absolute;
+    left: 134px; top: 86px;
+    font-size: 12px;
+  }
+  .card .graph {
+    position: absolute;
+    left: -16px; top: 100px;
+    width: 247px; height: 153px;
+  }
+  .card .prog {
+    position: absolute;
+    left: -17px; top: 109px;
+    width: 250px; height: 250px;
+  }
+  .card .badge {
+    position: absolute;
+    right: 12px; top: 12px;
+    width: 45px; height: 45px;
+  }
+  .card .trend {
+    position: absolute;
+    right: 27px; top: 27px;
+    width: 15px; height: 15px;
+  }
+  .card-b .val { left: 80px; top: 163px; }
+  .card-b .unit { left: 142px; top: 163px; }
+
+  .crystal {
+    position: absolute;
+    left: 49px; top: 610px;
+    width: 163px; height: 163px;
+  }
+  .crystal .pic {
+    position: absolute;
+    left: 30px; top: 31px;
+    width: 102px; height: 102px;
+    object-fit: cover;
+  }
+  .crystal .ring {
+    position: absolute;
+    inset: 0;
+    width: 163px; height: 163px;
+  }
+
+  .social {
+    position: absolute;
+    left: 1358px; top: 184px;
+    display: flex;
+    flex-direction: column;
+    gap: 46px;
+  }
+  .social a {
+    position: relative;
+    width: 45px; height: 45px;
+    color: #fff;
+    font-size: 12px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .social a img { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+  .sub {
+    position: absolute;
+    left: 1065px; top: 650px;
+    font-family: Michroma, sans-serif;
+    font-size: 28px;
+    letter-spacing: -0.56px;
+    line-height: 1;
+    text-transform: uppercase;
+    text-align: right;
+    width: 151px;
+    background: linear-gradient(90deg, rgba(255,255,255,0) 14%, #fff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .note {
+    position: absolute;
+    left: 1262px; top: 644px;
+    width: 138px;
+    font-size: 18px;
+    line-height: 1.4;
+    color: #fff;
+  }
+  .mini {
+    position: absolute;
+    left: 1260px; top: 545px;
+    width: 71px; height: 73px;
+    border-radius: 99px;
+    object-fit: cover;
+  }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <div class="bg"><video src="assets/hero-video.mp4" poster="assets/heart-bg.png" autoplay muted loop playsinline></video></div>
+    <img class="mask" src="assets/subtract.svg" alt="">
+    <img class="g1" src="assets/glow-a.svg" alt="">
+    <img class="g2" src="assets/glow-a.svg" alt="">
+    <img class="g3" src="assets/glow-b.svg" alt="">
+    <img class="g4" src="assets/glow-c.svg" alt="">
+
+    <a class="logo" href="#">
+      <img src="assets/logo.png" alt="">
+      <span>byheart</span>
+    </a>
+    <nav>
+      <a href="#">Story</a>
+      <a href="#">Impact</a>
+      <a href="#">Future</a>
+    </nav>
+    <div class="menu">
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    </div>
+
+    <h1 class="title">
+      <span>Shaped</span>
+      <span class="mid">By a l0ve</span>
+      <span>Story</span>
+    </h1>
+    <p class="lead">Discover how care and connection can transform your journey ahead.</p>
+    <a class="cta" href="#">Get Start <i><img src="assets/caret.svg" alt=""></i></a>
+
+    <img class="play" src="assets/play.svg" alt="">
+
+    <div class="card card-a">
+      <div class="lab">Latest Test</div>
+      <div class="val">42.5</div>
+      <div class="unit">btm</div>
+      <img class="graph" src="assets/graph.svg" alt="">
+      <img class="badge" src="assets/badge-ring.svg" alt="">
+      <img class="trend" src="assets/trend.svg" alt="">
+    </div>
+    <div class="card card-b">
+      <div class="lab">Improving</div>
+      <img class="prog" src="assets/progress.svg" alt="">
+      <div class="val">85</div>
+      <div class="unit">%</div>
+      <img class="badge" src="assets/badge-ring.svg" alt="">
+      <img class="trend" src="assets/trend.svg" alt="">
+    </div>
+
+    <div class="crystal">
+      <img class="pic" src="assets/crystal.png" alt="">
+      <img class="ring" src="assets/dash-ring.svg" alt="">
+    </div>
+
+    <div class="social">
+      <a href="#"><img src="assets/social-ring.svg" alt=""><span>IG</span></a>
+      <a href="#"><img src="assets/social-ring.svg" alt=""><span>In</span></a>
+      <a href="#"><img src="assets/social-ring.svg" alt=""><span>Yt</span></a>
+    </div>
+
+    <img class="mini" src="assets/heart-thumb.png" alt="">
+    <div class="sub">A SECOND<br>CHANCE<br>AT LIFE</div>
+    <p class="note">One selfless gift can rewrite futures and save lives.</p>
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1440;
+      var scale = Math.min(1, width / 1440);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (810 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>

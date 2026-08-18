@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atmos 2 — Daily Hero 22 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: Outfit, sans-serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1440px;
+    height: 810px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: #0e0e27;
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .bg {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 1461px;
+    height: 822px;
+  }
+  .bg img, .bg video { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+
+  .wave {
+    position: absolute;
+    left: -73px;
+    top: 633px;
+    width: 1544px;
+    height: 190px;
+    pointer-events: none;
+  }
+
+  .brand {
+    position: absolute;
+    left: 24px;
+    top: 35px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .brand img { width: 11px; height: 11px; }
+  .brand span {
+    font-size: 8px;
+    letter-spacing: 0.08px;
+    text-transform: uppercase;
+    color: #fff;
+    line-height: 1.2;
+  }
+
+  nav {
+    position: absolute;
+    left: 50%;
+    top: 36px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 75px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 300;
+    letter-spacing: 0.24px;
+    line-height: 0.9;
+    white-space: nowrap;
+  }
+
+  .plus {
+    position: absolute;
+    right: 56px;
+    top: 28px;
+    width: 25px;
+    height: 25px;
+  }
+  .plus img { width: 100%; height: 100%; }
+
+  .headline {
+    position: absolute;
+    left: 24px;
+    top: 144px;
+    width: 453px;
+    color: #fff;
+    font-weight: 200;
+    font-size: 60px;
+    line-height: 1.2;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+  }
+  .headline em { font-style: italic; font-weight: 400; }
+
+  .lede {
+    position: absolute;
+    left: 24px;
+    top: 711px;
+    width: 291px;
+    color: #fff;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.4;
+    letter-spacing: 0.16px;
+  }
+
+  .cta {
+    position: absolute;
+    left: 366px;
+    top: 713px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 30px;
+    background: #fff;
+    border-radius: 99px;
+    color: #2e3d47;
+    font-size: 16px;
+    letter-spacing: 0.16px;
+  }
+  .cta .chev {
+    width: 10px;
+    height: 17px;
+    display: grid;
+    grid-template-columns: repeat(3, 3.3px);
+    grid-template-rows: repeat(3, 3.3px);
+    gap: 0;
+    transform: rotate(-90deg);
+  }
+  .cta .chev i {
+    width: 3.3px;
+    height: 3.3px;
+    border-radius: 10px;
+    background: #2e3d47;
+  }
+  .cta .chev i:nth-child(1) { opacity: 0.2; }
+  .cta .chev i:nth-child(2) { opacity: 0.2; }
+  .cta .chev i:nth-child(3) { opacity: 0.6; }
+  .cta .chev i:nth-child(4) { opacity: 0.6; }
+
+  .pager {
+    position: absolute;
+    right: 35px;
+    top: 165px;
+    text-align: right;
+    color: #fff;
+    text-transform: uppercase;
+  }
+  .pager .on {
+    font-weight: 200;
+    font-size: 60px;
+    letter-spacing: 0.6px;
+    line-height: 1.2;
+  }
+  .pager .off {
+    display: block;
+    margin-top: 25px;
+    font-weight: 300;
+    font-size: 30px;
+    letter-spacing: 0.3px;
+    opacity: 0.4;
+  }
+  .pager .off.b { opacity: 0.3; margin-top: 49px; }
+  .pager .off.c { opacity: 0.2; margin-top: 49px; }
+
+  .stack {
+    position: absolute;
+    left: 170px;
+    top: 408px;
+    width: 237px;
+    height: 217px;
+  }
+  .tile {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tile img.frame { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .tile img.photo { position: relative; object-fit: cover; }
+  .tile.d { left: 0; top: 98px; width: 217px; height: 217px; transform: rotate(-39.76deg); }
+  .tile.d .photo { width: 110px; height: 111px; }
+  .tile.c { left: 22px; top: 78px; width: 206px; height: 206px; transform: rotate(-26.51deg); }
+  .tile.c .photo { width: 110px; height: 111px; }
+  .tile.b { left: 47px; top: 63px; width: 185px; height: 185px; transform: rotate(-13.25deg); }
+  .tile.b .photo { width: 110px; height: 111px; }
+  .tile.a { left: 73px; top: 49px; width: 164px; height: 165px; }
+  .tile.a .photo { width: 164px; height: 165px; }
+
+  .ring-wrap {
+    position: absolute;
+    left: 1153px;
+    top: 650px;
+    width: 227px;
+    height: 227px;
+  }
+  .ring-wrap img.ring {
+    width: 185px;
+    height: 185px;
+    transform: rotate(-165deg) scaleY(-1);
+    object-fit: contain;
+  }
+  .ring-wrap .shadow {
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+    width: 88px;
+    height: 8px;
+  }
+
+  .metric {
+    position: absolute;
+    left: 1292px;
+    top: 702px;
+    width: 113px;
+    color: #000;
+  }
+  .metric b { display: block; font-size: 25px; font-weight: 400; line-height: 1.2; }
+  .metric span { display: block; margin-top: 4px; font-weight: 300; font-size: 14px; line-height: 1.4; }
+
+  .cta { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); }
+  .cta:hover { transform: translateY(-3px); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .headline { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.2s both; }
+    .stack, .cta, .lede { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.5s both; }
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <div class="bg"><video src="assets/hero-video.mp4" poster="assets/bg.png" autoplay muted loop playsinline></video></div>
+    <img class="wave" src="assets/wave.svg" alt="">
+
+    <a class="brand" href="#"><img src="assets/logo.svg" alt=""><span>atmos 2</span></a>
+    <nav>
+      <a href="#">Why Atmos</a>
+      <a href="#">How it Works</a>
+      <a href="#">Technology</a>
+      <a href="#">Ecosystem</a>
+    </nav>
+    <a class="plus" href="#"><img src="assets/plus.svg" alt=""></a>
+
+    <h1 class="headline">Your <em>smart ring</em> for everyday use.</h1>
+    <p class="lede">Atmos Pro is your ultimate smart ring for daily assistance and convenience.</p>
+    <a class="cta" href="#">
+      Pre Order
+      <span class="chev" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+    </a>
+
+    <div class="pager">
+      <div class="on">01</div>
+      <div class="off">02</div>
+      <div class="off b">03</div>
+      <div class="off c">04</div>
+    </div>
+
+    <div class="stack">
+      <div class="tile d"><img class="frame" src="assets/card-frame-1.svg" alt=""><img class="photo" src="assets/card-icon.png" alt=""></div>
+      <div class="tile c"><img class="frame" src="assets/card-frame-2.svg" alt=""><img class="photo" src="assets/card-icon.png" alt=""></div>
+      <div class="tile b"><img class="frame" src="assets/card-frame-3.svg" alt=""><img class="photo" src="assets/card-icon.png" alt=""></div>
+      <div class="tile a"><img class="frame" src="assets/card-frame-4.svg" alt=""><img class="photo" src="assets/card-ring.png" alt=""></div>
+    </div>
+
+    <div class="ring-wrap">
+      <img class="ring" src="assets/ring.png" alt="">
+      <img class="shadow" src="assets/shadow.svg" alt="">
+    </div>
+    <div class="metric">
+      <b>24/7</b>
+      <span>Real-Time Monitoring</span>
+    </div>
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1440;
+      var scale = Math.min(1, width / 1440);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (810 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>

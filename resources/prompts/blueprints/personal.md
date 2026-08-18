@@ -1,6 +1,6 @@
 <site_type_blueprint type="personal">
 Structural recipe for personal sites. Follow the structure; visuals come from the brief,
-style guide, and design_seed. A human being, not a company — first-person voice, intimate
+style guide, and hero_reference. A human being, not a company — first-person voice, intimate
 scale (smaller type ceilings, closer spacing than business sites).
 
 ## Page skeleton (index.html)

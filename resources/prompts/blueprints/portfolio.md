@@ -1,6 +1,6 @@
 <site_type_blueprint type="portfolio">
 Structural recipe for portfolio sites. Follow the structure; visual identity comes from the
-brief, style guide, and design_seed. The work is the site — chrome recedes, imagery dominates.
+brief, style guide, and hero_reference. The work is the site — chrome recedes, imagery dominates.
 
 ## Page skeleton (index.html)
 

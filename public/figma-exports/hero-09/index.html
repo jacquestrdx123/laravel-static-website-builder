@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shakky — Daily Hero 09 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Goblin+One&family=Jomhuria&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: Fredoka, sans-serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1440px;
+    height: 810px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: #ffe7cf;
+    border-radius: 40px;
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .wordmark {
+    position: absolute;
+    left: 50%;
+    top: 263px;
+    transform: translateX(-50%);
+    font-family: Jomhuria, cursive;
+    font-size: 537px;
+    line-height: 1;
+    letter-spacing: -10.74px;
+    color: #ffe4d4;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .splash {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 94px;
+    bottom: 0;
+    width: 100%;
+    height: calc(100% - 94px);
+    object-fit: cover;
+    filter: blur(6px);
+    pointer-events: none;
+  }
+  .berry {
+    position: absolute;
+    object-fit: cover;
+    pointer-events: none;
+  }
+  .berry.a {
+    left: 269px;
+    top: 182px;
+    width: 116px;
+    height: 116px;
+    transform: rotate(38.57deg);
+  }
+  .berry.b {
+    left: 179px;
+    top: 493px;
+    width: 116px;
+    height: 116px;
+    transform: rotate(30deg);
+  }
+
+  header {
+    position: absolute;
+    left: 38px;
+    top: 20px;
+    width: 1364px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .brand img { width: 20px; height: 30px; object-fit: contain; object-position: bottom; }
+  .brand span {
+    font-family: 'Goblin One', cursive;
+    font-size: 20px;
+    letter-spacing: -0.81px;
+    color: #f3f3f3;
+    line-height: 1.2;
+  }
+  .links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 80px;
+    padding: 4px;
+    border-radius: 999px;
+    background: rgba(255,252,243,0.1);
+  }
+  .links a {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 20px;
+    border-radius: 999px;
+    color: #fff;
+    font-size: 16px;
+    letter-spacing: -0.16px;
+    text-transform: capitalize;
+    opacity: 0.8;
+  }
+  .links a.active {
+    font-weight: 500;
+    background: linear-gradient(270deg, rgba(255,228,212,0.29), rgba(255,228,212,0));
+  }
+  .links img { width: 12px; height: 12px; }
+  .left-cluster { display: flex; align-items: center; }
+
+  .tools { display: flex; align-items: center; gap: 40px; }
+  .icons { display: flex; gap: 12px; }
+  .icon-btn {
+    position: relative;
+    width: 51px;
+    height: 51px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,252,243,0.2);
+  }
+  .icon-btn img {
+    position: absolute;
+    left: 15px;
+    top: 15px;
+    width: 20px;
+    height: 20px;
+  }
+  .badge {
+    position: absolute;
+    right: -1px;
+    top: -1px;
+    background: #ff5b5b;
+    color: #fffcdb;
+    font-size: 12px;
+    line-height: 1.2;
+    padding: 4px;
+    border-radius: 4px;
+    min-width: 16px;
+    text-align: center;
+  }
+  .franchise {
+    height: 51px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: #fff;
+    color: #262324;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: -0.16px;
+    display: flex;
+    align-items: center;
+    text-transform: capitalize;
+  }
+
+  .tags {
+    position: absolute;
+    left: 1037px;
+    top: 238px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .tags span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px 26px;
+    border: 2px solid rgba(255,228,212,0.2);
+    border-radius: 999px;
+    color: #ffe4d4;
+    font-weight: 500;
+    font-size: 20px;
+    letter-spacing: -0.2px;
+    opacity: 0.4;
+  }
+
+  .card {
+    position: absolute;
+    left: 38px;
+    bottom: 25px;
+    width: 499px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 6px 40px 6px 6px;
+    border-radius: 32px;
+    background: rgba(255,246,240,0.04);
+    backdrop-filter: blur(40px);
+    overflow: hidden;
+  }
+  .stats {
+    display: flex;
+    background: rgba(255,255,255,0.34);
+    border-radius: 26px;
+    padding: 6px;
+  }
+  .stat {
+    width: 72px;
+    padding: 20px 12px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.4);
+    color: #262324;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 4px;
+  }
+  .stat + .stat { margin-top: 4px; }
+  .stat b { font-weight: 500; font-size: 18px; opacity: 0.8; }
+  .stat small { font-size: 16px; opacity: 0.4; }
+  .col { display: flex; flex-direction: column; }
+  .shake {
+    width: 156px;
+    height: 156px;
+    object-fit: cover;
+  }
+  .info { flex: 1; padding: 12px 0; display: flex; flex-direction: column; gap: 20px; }
+  .info h2 { color: #fff; font-weight: 500; font-size: 20px; letter-spacing: -0.2px; opacity: 0.8; }
+  .info p { color: #fff; font-size: 16px; letter-spacing: -0.16px; opacity: 0.8; margin-top: 10px; }
+  .actions { display: flex; }
+  .cart {
+    flex: 1;
+    height: 51px;
+    border-radius: 999px;
+    background: #fff;
+    color: #262324;
+    font-weight: 500;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cone {
+    width: 51px;
+    height: 51px;
+    border-radius: 999px;
+    background: #262324;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cone img { width: 20px; height: 20px; }
+
+  .pct {
+    position: absolute;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
+    text-align: center;
+    color: #ffe4d4;
+  }
+  .pct img { width: 42px; height: 42px; margin: 0 auto 8px; }
+  .pct b { display: block; font-weight: 600; font-size: 36px; letter-spacing: -1.44px; line-height: 0.6; }
+
+  .arrows {
+    position: absolute;
+    right: 30px;
+    bottom: 30px;
+    display: flex;
+    gap: 6px;
+  }
+  .arrows button {
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 999px;
+    background: #fffcf3;
+    cursor: pointer;
+    color: #262324;
+    font-size: 18px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .wordmark { animation: fadeUp 1.1s cubic-bezier(0.22,1,0.36,1) 0.15s both; }
+    .card { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.55s both; }
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <img class="bg" src="assets/bg.png" alt="">
+    <p class="wordmark">Strawlicious</p>
+    <img class="splash" src="assets/splash.png" alt="">
+    <img class="berry a" src="assets/berry.png" alt="">
+    <img class="berry b" src="assets/berry.png" alt="">
+
+    <header>
+      <div class="left-cluster">
+        <a class="brand" href="#">
+          <img src="assets/logo-cone.png" alt="">
+          <span>Shakky</span>
+        </a>
+        <nav class="links">
+          <a class="active" href="#">home</a>
+          <a href="#">Our Shakes <img src="assets/caret.svg" alt=""></a>
+          <a href="#">About Us</a>
+          <a href="#">contact</a>
+        </nav>
+      </div>
+      <div class="tools">
+        <div class="icons">
+          <a class="icon-btn" href="#" aria-label="Search"><img src="assets/search.svg" alt=""></a>
+          <a class="icon-btn" href="#" aria-label="Cart">
+            <img src="assets/icon-c.svg" alt="">
+            <span class="badge">2</span>
+          </a>
+        </div>
+        <a class="franchise" href="#">Franchise program</a>
+      </div>
+    </header>
+
+    <div class="tags">
+      <span>Fresh</span>
+      <span>Sweet</span>
+      <span>Irresistible</span>
+    </div>
+
+    <div class="card">
+      <div class="stats">
+        <div class="col">
+          <div class="stat"><b>350</b><small>kcal</small></div>
+          <div class="stat"><b>250</b><small>ml</small></div>
+        </div>
+        <img class="shake" src="assets/shake.png" alt="Strawberry Bliss">
+      </div>
+      <div class="info">
+        <div>
+          <h2>Strawberry Bliss</h2>
+          <p>Fresh strawberries blended into a smooth, creamy shake.</p>
+        </div>
+        <div class="actions">
+          <a class="cart" href="#">Add to Cart</a>
+          <a class="cone" href="#" aria-label="Shake"><img src="assets/icon-c.svg" alt=""></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="pct">
+      <img src="assets/strawberry.svg" alt="">
+      <b>100%</b>
+    </div>
+    <div class="arrows">
+      <button type="button" aria-label="Previous">‹</button>
+      <button type="button" aria-label="Next">›</button>
+    </div>
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1440;
+      var scale = Math.min(1, width / 1440);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (810 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>

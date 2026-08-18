@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abrany — Daily Hero 07 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400;500;600&family=Funnel+Sans:wght@300;400;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: 'Funnel Sans', sans-serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1440px;
+    height: 810px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: #b5c9e5;
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .glow {
+    position: absolute;
+    left: 50%;
+    top: 464px;
+    transform: translateX(-50%);
+    width: 1617px;
+    height: 602px;
+    pointer-events: none;
+  }
+  .hud {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 975px;
+    height: 975px;
+    pointer-events: none;
+    opacity: 0.7;
+  }
+  .brain {
+    position: absolute;
+    left: 520px;
+    top: 80px;
+    width: 620px;
+    height: 620px;
+    object-fit: contain;
+    pointer-events: none;
+  }
+  video.brain { object-fit: cover; }
+  .wordmark {
+    position: absolute;
+    left: 12%;
+    bottom: 225px;
+    font-family: Oswald, sans-serif;
+    font-size: 300px;
+    letter-spacing: -18px;
+    text-transform: uppercase;
+    color: rgba(228,240,255,0.2);
+    filter: blur(20px);
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .logo {
+    position: absolute;
+    left: 38px;
+    top: 32px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .logo img { width: 13px; height: 13px; }
+  .logo span {
+    font-family: Oswald, sans-serif;
+    font-size: 10px;
+    letter-spacing: -0.6px;
+    text-transform: uppercase;
+    color: #273c59;
+  }
+  nav {
+    position: absolute;
+    left: 50%;
+    top: 34px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 95px;
+    font-family: 'Funnel Display', sans-serif;
+    font-size: 12px;
+    color: #273c59;
+    text-transform: capitalize;
+  }
+  nav a.dim { opacity: 0.4; }
+  .contact {
+    position: absolute;
+    right: 70px;
+    top: 34px;
+    display: flex;
+    align-items: center;
+    gap: 38px;
+    font-family: 'Funnel Display', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: #273c59;
+  }
+  .contact img { width: 23px; height: 5px; }
+
+  .headline {
+    position: absolute;
+    left: 34px;
+    top: 168px;
+    font-family: 'Funnel Display', sans-serif;
+    font-weight: 600;
+    font-size: 72px;
+    line-height: 0.92;
+    letter-spacing: -2.16px;
+    text-transform: uppercase;
+    color: #273c59;
+  }
+  .headline .fade {
+    background: linear-gradient(180deg, #9badc7 90%, rgba(68,77,142,0));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .lede {
+    position: absolute;
+    left: 111px;
+    top: 442px;
+    width: 258px;
+    font-size: 16px;
+    line-height: 1.2;
+    color: #273c59;
+  }
+  .cta {
+    position: absolute;
+    left: 111px;
+    top: 559px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 4px 32px 4px 4px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.62);
+  }
+  .cta .disc {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+  }
+  .cta .disc img { width: 100%; height: 100%; object-fit: cover; }
+  .cta span { font-weight: 600; font-size: 16px; letter-spacing: -0.32px; color: #273c59; }
+
+  .glass {
+    background: rgba(158,180,212,0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .learners {
+    position: absolute;
+    left: 970px;
+    top: 175px;
+    width: 321px;
+    height: 73px;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 20px;
+    color: #fff;
+  }
+  .avs { display: flex; }
+  .avs img { width: 33px; height: 33px; border-radius: 50%; margin-right: -7px; object-fit: cover; }
+  .learners strong { display: block; font-size: 21px; }
+  .learners small { opacity: 0.67; font-weight: 300; font-size: 18px; }
+
+  .neural {
+    position: absolute;
+    left: 545px;
+    top: 477px;
+    width: 231px;
+    height: 176px;
+    border-radius: 40px;
+    overflow: hidden;
+    color: #fff;
+  }
+  .neural img.mini { position: absolute; left: -3px; top: 22px; width: 125px; height: 70px; object-fit: cover; }
+  .neural .lbl { position: absolute; left: 122px; top: 37px; }
+  .neural .lbl small { display: block; opacity: 0.67; font-size: 18px; font-weight: 300; }
+  .neural .lbl b { font-size: 21px; }
+  .neural .graph { position: absolute; left: 0; bottom: 0; width: 100%; height: 104px; object-fit: contain; }
+
+  .dash {
+    position: absolute;
+    left: 1090px;
+    top: 328px;
+    width: 231px;
+    height: 267px;
+    border-radius: 40px;
+    overflow: hidden;
+    color: #fff;
+    text-align: center;
+  }
+  .dash .num { margin-top: 64px; font-family: 'Funnel Display', sans-serif; font-size: 32px; letter-spacing: -0.96px; }
+  .dash .cap { opacity: 0.67; font-weight: 300; font-size: 18px; }
+  .tiles { position: absolute; left: 6px; right: 6px; bottom: 6px; display: flex; gap: 6px; }
+  .tile {
+    flex: 1;
+    height: 115px;
+    background: rgba(255,255,255,0.13);
+    border-radius: 12px;
+    padding: 16px 12px;
+    text-align: left;
+  }
+  .tile:first-child { border-radius: 12px 12px 12px 34px; }
+  .tile:last-child { border-radius: 12px 12px 34px 12px; }
+  .tile b { display: block; font-size: 21px; margin-top: 28px; }
+  .tile small { opacity: 0.67; font-size: 14px; font-weight: 300; }
+
+  .play {
+    position: absolute;
+    left: 823px;
+    top: 335px;
+    width: 139px;
+    height: 139px;
+  }
+  .foot-l {
+    position: absolute;
+    left: 34px;
+    bottom: 28px;
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+    font-family: 'Funnel Display', sans-serif;
+    font-weight: 600;
+    color: #273c59;
+  }
+  .foot-l .a { font-size: 14px; }
+  .foot-l .b { font-size: 28px; }
+  .foot-r {
+    position: absolute;
+    right: 48px;
+    bottom: 28px;
+    font-family: 'Funnel Display', sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+    letter-spacing: -0.72px;
+    text-transform: uppercase;
+    color: #273c59;
+    text-align: left;
+  }
+  .foot-r img { width: 107px; height: 107px; position: absolute; right: -8px; top: -90px; }
+
+  .cta:hover { transform: translateY(-3px); }
+  .cta, .glass { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); }
+  @media (prefers-reduced-motion: no-preference) {
+    .headline, .lede, .cta { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.25s both; }
+    .neural, .dash, .learners { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.7s both; }
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <img class="glow" src="assets/glow.svg" alt="">
+    <img class="hud" src="assets/hud.svg" alt="">
+    <div class="wordmark">BRAINY</div>
+    <video class="brain" src="assets/hero-video.mp4" poster="assets/small-brain.png" autoplay muted loop playsinline></video>
+
+    <a class="logo" href="#"><img src="assets/logo.png" alt=""><span>Abrany</span></a>
+    <nav>
+      <a href="#">home</a>
+      <a class="dim" href="#">Couses</a>
+      <a class="dim" href="#">Treiners</a>
+      <a class="dim" href="#">Pricing</a>
+    </nav>
+    <a class="contact" href="#">Contact Us <img src="assets/menu.svg" alt=""></a>
+
+    <div class="headline">
+      First<br>Personal<br><span class="fade">Brain</span><br>Trainer
+    </div>
+    <p class="lede">Train your mind with precision, adapt in real time, and unlock measurable cognitive performance.</p>
+    <a class="cta" href="#">
+      <span class="disc"><img src="assets/brain-cta.png" alt=""></span>
+      <span>Start Training</span>
+    </a>
+
+    <div class="glass learners">
+      <div class="avs">
+        <img src="assets/av1.png" alt="">
+        <img src="assets/av2.png" alt="">
+        <img src="assets/av3.png" alt="">
+        <img src="assets/av4.png" alt="">
+        <img src="assets/av1.png" alt="">
+      </div>
+      <div><strong>544+</strong><small>Active Learners</small></div>
+    </div>
+
+    <div class="glass neural">
+      <img class="mini" src="assets/mini-brain.png" alt="">
+      <div class="lbl"><small>Neural</small><b>Insights</b></div>
+      <img class="graph" src="assets/graph.svg" alt="">
+    </div>
+
+    <div class="glass dash">
+      <div class="num">345</div>
+      <div class="cap">sessions tracked</div>
+      <div class="tiles">
+        <div class="tile"><b>24K</b><small>data points</small></div>
+        <div class="tile"><b>1.33</b><small>avg score</small></div>
+      </div>
+    </div>
+
+    <img class="play" src="assets/play.svg" alt="">
+    <div class="foot-l"><span class="a">01</span><span class="b">02</span></div>
+    <div class="foot-r">
+      <img src="assets/small-brain.png" alt="">
+      Your<br>mind<br>Upgraded
+    </div>
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1440;
+      var scale = Math.min(1, width / 1440);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (810 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>

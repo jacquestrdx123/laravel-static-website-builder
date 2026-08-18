@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Junghans — Daily Hero 35 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:wght@600&family=Outfit:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: Outfit, sans-serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1440px;
+    height: 810px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: #bdc0c9;
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .bg {
+    position: absolute;
+    inset: 0;
+    width: 1440px;
+    height: 810px;
+    object-fit: cover;
+    pointer-events: none;
+  }
+  .glow-a {
+    position: absolute;
+    left: -274px;
+    top: -328px;
+    width: 789px;
+    height: 1277px;
+    pointer-events: none;
+  }
+  .glow-b {
+    position: absolute;
+    left: 1212px;
+    top: -177px;
+    width: 445px;
+    height: 313px;
+    pointer-events: none;
+  }
+  .glow-c {
+    position: absolute;
+    left: 366px;
+    top: 644px;
+    width: 445px;
+    height: 248px;
+    pointer-events: none;
+  }
+  .glow-a img, .glow-b img, .glow-c img { width: 100%; height: 100%; }
+  .grid {
+    position: absolute;
+    inset: 0;
+    width: 1440px;
+    height: 810px;
+    pointer-events: none;
+  }
+  .grid img { width: 100%; height: 100%; }
+
+  .logo {
+    position: absolute;
+    left: 19px;
+    top: 14px;
+    width: 34px;
+    height: 34px;
+  }
+  .logo img { width: 100%; height: 100%; }
+
+  nav {
+    position: absolute;
+    left: 249px;
+    top: 27px;
+    display: flex;
+    align-items: center;
+    gap: 34px;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #2a2a2a;
+    white-space: nowrap;
+  }
+  nav .sep { width: 1px; height: 8px; background: #2a2a2a; }
+  nav a.active { position: relative; }
+  nav a.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 18px;
+    width: 75px;
+    height: 1px;
+    background: #c08f6d;
+  }
+  .tools {
+    position: absolute;
+    right: 24px;
+    top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 45px;
+  }
+  .tools .search { width: 18px; height: 18px; position: relative; }
+  .tools .search img { position: absolute; }
+  .tools .search .ring { width: 18px; height: 18px; }
+  .tools .search .handle { width: 8px; height: 8px; right: 0; bottom: 0; }
+  .tools .menu { width: 15px; height: 8px; }
+
+  .brand {
+    position: absolute;
+    left: 101px;
+    top: 186px;
+    font-family: Syne, sans-serif;
+    font-weight: 800;
+    font-size: 65px;
+    letter-spacing: 7.15px;
+    text-transform: uppercase;
+    color: #2a2a2a;
+    white-space: nowrap;
+  }
+  .noir {
+    position: absolute;
+    left: 16px;
+    top: 257px;
+    font-family: Syne, sans-serif;
+    font-weight: 800;
+    font-size: 65px;
+    letter-spacing: 7.15px;
+    text-transform: uppercase;
+    color: #2a2a2a;
+    white-space: nowrap;
+  }
+  .lux {
+    position: absolute;
+    left: 471px;
+    top: 255px;
+    font-family: 'Ibarra Real Nova', serif;
+    font-weight: 600;
+    font-size: 74px;
+    line-height: 0.84;
+    letter-spacing: -5.18px;
+    text-transform: uppercase;
+    color: #c08f6d;
+    white-space: nowrap;
+  }
+  .tag {
+    position: absolute;
+    left: 301px;
+    top: 267px;
+    width: 97px;
+    font-family: 'Ibarra Real Nova', serif;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 1.4;
+    letter-spacing: -0.84px;
+    text-transform: uppercase;
+    color: #2a2a2a;
+  }
+  .lede {
+    position: absolute;
+    left: 53px;
+    top: 373px;
+    width: 160px;
+    font-size: 14px;
+    line-height: 1.3;
+    color: #2a2a2a;
+  }
+  .lede-bar {
+    position: absolute;
+    left: 21px;
+    top: 373px;
+    width: 2px;
+    height: 24px;
+    background: #c08f6d;
+  }
+
+  .cta {
+    position: absolute;
+    left: 301px;
+    top: 409px;
+    display: flex;
+    align-items: center;
+    gap: 51px;
+  }
+  .know {
+    padding: 20px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    background: linear-gradient(243deg, #464547 15%, #645b54 71%, #2d292a 71%);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .demo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #2a2a2a;
+  }
+  .demo img { width: 26px; height: 26px; }
+
+  .inset {
+    position: absolute;
+    left: 240px;
+    top: 577px;
+    width: 240px;
+    height: 233px;
+    background: #e8eff0;
+    overflow: hidden;
+  }
+  .inset img {
+    position: absolute;
+    left: -100px;
+    top: -132px;
+    width: 487px;
+    height: 535px;
+    transform: rotate(15deg);
+    object-fit: cover;
+  }
+  .aside {
+    position: absolute;
+    left: 512px;
+    top: 633px;
+    width: 177px;
+    color: #2a2a2a;
+  }
+  .aside h2 {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+  .aside p {
+    margin-top: 19px;
+    font-size: 14px;
+    line-height: 1.3;
+    width: 172px;
+  }
+
+  .pager {
+    position: absolute;
+    left: 191px;
+    top: 698px;
+    color: #2a2a2a;
+    opacity: 0.4;
+    font-family: Syne, sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .pager .cur {
+    position: absolute;
+    left: 0;
+    top: 92px;
+    font-size: 32px;
+    letter-spacing: -0.96px;
+    transform: rotate(-90deg);
+    transform-origin: left top;
+  }
+  .pager .tot {
+    position: absolute;
+    left: 0;
+    top: 21px;
+    font-size: 12px;
+    letter-spacing: -0.36px;
+    transform: rotate(-90deg);
+    transform-origin: left top;
+  }
+
+  .thumbs { position: absolute; left: 1200px; top: 425px; }
+  .thumbs img {
+    position: absolute;
+    width: 120px;
+    height: 128px;
+    object-fit: cover;
+  }
+  .thumbs .a { left: 120px; top: 0; }
+  .thumbs .b { left: 0; top: 129px; }
+  .thumbs .c { left: 120px; top: 257px; }
+
+  .know, .demo { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); }
+  .know:hover, .demo:hover { transform: translateY(-3px); }
+  @media (prefers-reduced-motion: no-preference) {
+    .brand, .noir, .lux, .tag { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.15s both; }
+    .lede, .cta { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.4s both; }
+    .inset, .aside { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.7s both; }
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <video class="bg" src="assets/hero-video.mp4" poster="assets/bg.png" autoplay muted loop playsinline></video>
+    <div class="glow-a"><img src="assets/glow-a.svg" alt=""></div>
+    <div class="glow-b"><img src="assets/glow-b.svg" alt=""></div>
+    <div class="glow-c"><img src="assets/glow-c.svg" alt=""></div>
+    <div class="grid"><img src="assets/grid.svg" alt=""></div>
+
+    <a class="logo" href="#"><img src="assets/logo.svg" alt="Junghans"></a>
+    <nav>
+      <a class="active" href="#">Collection</a>
+      <span class="sep"></span>
+      <a href="#">Watches</a>
+      <span class="sep"></span>
+      <a href="#">Services</a>
+      <span class="sep"></span>
+      <a href="#">About Us</a>
+    </nav>
+    <div class="tools">
+      <a class="search" href="#">
+        <img class="ring" src="assets/search-ring.svg" alt="">
+        <img class="handle" src="assets/search-handle.svg" alt="">
+      </a>
+      <a href="#"><img class="menu" src="assets/menu.svg" alt=""></a>
+    </div>
+
+    <div class="brand">Junghans</div>
+    <div class="noir">Noir</div>
+    <div class="lux">lux</div>
+    <p class="tag">The future of Traditional</p>
+    <div class="lede-bar"></div>
+    <p class="lede">Experience elegance and innovation with our luxury smartwatch, blending style and advanced technology seamlessly.</p>
+
+    <div class="cta">
+      <a class="know" href="#">Know more</a>
+      <a class="demo" href="#">Watch demo <img src="assets/play.svg" alt=""></a>
+    </div>
+
+    <div class="inset"><img src="assets/watch.png" alt="Watch face"></div>
+    <div class="aside">
+      <h2>Reality Wearables</h2>
+      <p>Engage with applications, content, and utilities seamlessly integrated into your surroundings.</p>
+    </div>
+    <div class="pager"><span class="tot">05</span><span class="cur">03</span></div>
+
+    <div class="thumbs">
+      <img class="a" src="assets/thumb-a.png" alt="">
+      <img class="b" src="assets/thumb-b.png" alt="">
+      <img class="c" src="assets/thumb-c.png" alt="">
+    </div>
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1440;
+      var scale = Math.min(1, width / 1440);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (810 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>

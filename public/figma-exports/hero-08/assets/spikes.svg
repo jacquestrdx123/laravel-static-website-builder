@@ -1,0 +1,14 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="94.6319" height="94.8207" viewBox="0 0 94.6319 94.8207" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="Repeat group 3" style="mix-blend-mode:plus-lighter">
+<g id="Repeat group 3_inner" data-figma-trr="r8u1.4-0f">
+<path id="Rectangle 15" d="M50.5585 33.2036L48.5251 0.3H46.1068L44.0734 33.2036L46.1068 39.6373H48.5251L50.5585 33.2036ZM44.0734 33.2036H50.5585" stroke="white" stroke-width="0.6"/>
+</g>
+<use xlink:href="#Repeat%20group%203_inner" transform="translate(47.4494 -19.5436) rotate(45)"/>
+<use xlink:href="#Repeat%20group%203_inner" transform="translate(94.8207 0.188765) rotate(90)"/>
+<use xlink:href="#Repeat%20group%203_inner" transform="translate(114.364 47.6382) rotate(135)"/>
+<use xlink:href="#Repeat%20group%203_inner" transform="translate(94.6319 95.0095) rotate(-180)"/>
+<use xlink:href="#Repeat%20group%203_inner" transform="translate(47.1825 114.553) rotate(-135)"/>
+<use xlink:href="#Repeat%20group%203_inner" transform="translate(-0.188764 94.8207) rotate(-90)"/>
+<use xlink:href="#Repeat%20group%203_inner" transform="translate(-19.7324 47.3712) rotate(-45)"/>
+</g>
+</svg>

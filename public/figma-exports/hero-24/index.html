@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hidden Treasure — Daily Hero 24 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin:wght@400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: Cabin, sans-serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1440px;
+    height: 810px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: #d8d2c6;
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .scene {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 1920px;
+    height: 1080px;
+    object-fit: cover;
+    pointer-events: none;
+  }
+  video.scene { pointer-events: none; }
+
+  .icon {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    overflow: hidden;
+  }
+  .icon img { position: absolute; }
+  .bank { left: 24px; top: 30px; }
+  .search { left: 1397px; top: 30px; }
+
+  nav.left {
+    position: absolute;
+    left: 180px;
+    top: 36px;
+    display: flex;
+    gap: 80px;
+    font-size: 12px;
+    color: #000;
+    white-space: nowrap;
+  }
+  nav.right {
+    position: absolute;
+    left: 820px;
+    top: 36px;
+    display: flex;
+    gap: 80px;
+    font-size: 12px;
+    color: #000;
+    white-space: nowrap;
+  }
+
+  .mark {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    width: 66px;
+    height: 88px;
+    background: #fff;
+    overflow: hidden;
+  }
+  .mark img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 39px;
+    height: 47px;
+    transform: translate(-50%, calc(-50% + 5px));
+    object-fit: contain;
+  }
+
+  .headline {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1440px;
+    height: 810px;
+    pointer-events: none;
+    color: #fff;
+    font-family: 'Instrument Serif', serif;
+    font-size: 260px;
+    line-height: 0.85;
+    letter-spacing: -10.4px;
+    text-transform: uppercase;
+  }
+  .headline .a {
+    position: absolute;
+    left: 50%;
+    top: 210px;
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+  .headline .b {
+    position: absolute;
+    right: 268px;
+    top: 412px;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .cta {
+    position: absolute;
+    left: 50%;
+    bottom: 24px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 16px;
+    background: #fff;
+    overflow: hidden;
+  }
+  .cta::before {
+    content: "";
+    position: absolute;
+    inset: -20px 0 auto auto;
+    width: 158px;
+    height: 109px;
+    background: url(assets/btn-gold.png) center / cover no-repeat;
+    pointer-events: none;
+  }
+  .cta span {
+    position: relative;
+    font-size: 18px;
+    letter-spacing: -0.72px;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .cta .arr {
+    position: relative;
+    width: 20px;
+    height: 20px;
+  }
+  .cta .arr img { position: absolute; width: 100%; height: 100%; }
+
+  .thumbs {
+    position: absolute;
+    right: 22px;
+    top: 236px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+  }
+  .thumbs img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .thumbs img:first-child {
+    width: 58px;
+    height: 58px;
+    box-shadow: 0 0 0 2px #fff;
+  }
+
+  .pager {
+    position: absolute;
+    left: 24px;
+    bottom: 24px;
+    color: #fff;
+    font-family: 'Instrument Serif', serif;
+    text-transform: uppercase;
+  }
+  .pager .n { font-size: 100px; letter-spacing: -4px; line-height: 0.8; }
+  .pager .d {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .pager .d img { width: 61px; height: 2px; }
+  .pager .d span { font-size: 40px; letter-spacing: -1.6px; }
+
+  .cta { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); }
+  .cta:hover { transform: translateX(-50%) translateY(-3px); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .headline { animation: fadeUp 1.1s cubic-bezier(0.22,1,0.36,1) 0.15s both; }
+    .cta { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.5s both; }
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <video class="scene" src="assets/hero-video.mp4" poster="assets/scene.png" autoplay muted loop playsinline></video>
+
+    <a class="icon bank" href="#">
+      <img src="assets/bank-roof.svg" alt="" style="left:9%;top:12%;width:82%;height:25%;">
+      <img src="assets/bank-col.svg" alt="" style="left:22%;top:38%;width:8%;height:31%;">
+      <img src="assets/bank-col.svg" alt="" style="left:41%;top:38%;width:8%;height:31%;">
+      <img src="assets/bank-col.svg" alt="" style="left:59%;top:38%;width:8%;height:31%;">
+      <img src="assets/bank-col.svg" alt="" style="left:78%;top:38%;width:8%;height:31%;">
+      <img src="assets/bank-base.svg" alt="" style="left:12%;top:69%;width:75%;height:8%;">
+      <img src="assets/bank-step.svg" alt="" style="left:6%;top:81%;width:88%;height:8%;">
+    </a>
+    <nav class="left">
+      <a href="#">Collection</a>
+      <a href="#">Sculptures</a>
+      <a href="#">Restoration</a>
+    </nav>
+    <a class="mark" href="#"><img src="assets/logo.png" alt="Museum"></a>
+    <nav class="right">
+      <a href="#">Restoration</a>
+      <a href="#">History</a>
+      <a href="#">Admission</a>
+    </nav>
+    <a class="icon search" href="#">
+      <img src="assets/search-ring.svg" alt="" style="left:12%;top:12%;width:63%;height:63%;">
+      <img src="assets/search-handle.svg" alt="" style="left:66%;top:66%;width:22%;height:22%;">
+    </a>
+
+    <h1 class="headline"><span class="a">hidden</span><span class="b">Treasure</span></h1>
+
+    <a class="cta" href="#">
+      <span>Explore</span>
+      <span class="arr">
+        <img src="assets/arrow-w-line.svg" alt="">
+        <img src="assets/arrow-w-head.svg" alt="">
+      </span>
+    </a>
+
+    <div class="thumbs">
+      <img src="assets/thumb-1.png" alt="">
+      <img src="assets/thumb-2.png" alt="">
+      <img src="assets/thumb-3.png" alt="">
+      <img src="assets/thumb-4.png" alt="">
+    </div>
+
+    <div class="pager">
+      <div class="n">01</div>
+      <div class="d"><img src="assets/line.svg" alt=""><span>05</span></div>
+    </div>
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1440;
+      var scale = Math.min(1, width / 1440);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (810 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>

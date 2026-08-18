@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wonder — Daily Hero 03 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Imprima&family=Viaoda+Libre&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: Imprima, sans-serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1440px;
+    height: 810px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: #454640;
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .clouds, .fill, .scene, .left, .right { position: absolute; pointer-events: none; }
+  .clouds { left: 50%; top: 50%; transform: translate(-50%,-50%); width: 1689px; height: 902px; object-fit: cover; }
+  .fill { left: 50%; bottom: -46px; transform: translateX(-50%); width: 1689px; height: 416px; object-fit: cover; }
+  .scene { left: 50%; top: 50%; transform: translate(-50%,-50%); width: 1516px; height: 902px; object-fit: cover; }
+  .left { left: -1410px; top: 0; width: 1890px; height: 810px; object-fit: cover; }
+  .right { left: 987px; top: 0; width: 1890px; height: 809px; object-fit: cover; }
+  .fade {
+    position: absolute;
+    left: 0; bottom: 0;
+    width: 1440px; height: 313px;
+    background: linear-gradient(180deg, transparent, rgba(0,0,0,0.6));
+    pointer-events: none;
+  }
+
+  header {
+    position: absolute;
+    left: 82px;
+    top: 15px;
+    width: 1274px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #fff;
+    font-size: 13px;
+  }
+  header nav { display: flex; gap: 140px; }
+  header nav a.dim { opacity: 0.6; }
+  header .star { width: 48px; height: 48px; }
+
+  .copy { position: absolute; left: 171px; top: 196px; color: #fff; }
+  .copy h1 {
+    font-family: 'Viaoda Libre', serif;
+    font-size: 60px;
+    line-height: 0.94;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+  .copy h1 .row { display: flex; align-items: center; gap: 18px; }
+  .copy h1 .arrow { width: 25px; height: 17px; }
+  .copy h1 .w { font-size: 77px; display: block; margin-top: 8px; }
+  .copy p { margin-top: 28px; margin-left: 58px; width: 196px; font-size: 16px; line-height: 1.2; }
+
+  .cards {
+    position: absolute;
+    left: 891px;
+    top: 273px;
+    display: flex;
+    gap: 16px;
+  }
+  .card {
+    width: 184px;
+    height: 193px;
+    border-radius: 40px;
+    overflow: hidden;
+    background: #160e05;
+    position: relative;
+  }
+  .card img.ph { width: 100%; height: 100%; object-fit: cover; }
+  .card .cap {
+    position: absolute;
+    left: 0; bottom: 0;
+    width: 100%; height: 90px;
+    background: linear-gradient(180deg, transparent, rgba(0,0,0,0.36));
+    backdrop-filter: blur(15px);
+    color: #fff;
+    padding: 28px 16px 12px;
+  }
+  .card .cap b {
+    font-family: 'Viaoda Libre', serif;
+    font-size: 40px;
+    line-height: 0.94;
+    font-weight: 400;
+  }
+  .card .cap span { font-size: 19px; line-height: 1.2; }
+  .card .play { position: absolute; left: 12px; bottom: 12px; width: 45px; height: 45px; }
+  .pips {
+    position: absolute;
+    left: 920px;
+    top: 489px;
+    display: flex;
+    gap: 8px;
+  }
+  .pips i { width: 18px; height: 8px; background: #fff; border-radius: 99px; opacity: 0.2; display: block; }
+  .pips i:first-child { opacity: 1; }
+  .pips i:nth-child(2) { opacity: 0.4; }
+  .pips i:nth-child(3) { opacity: 0.3; }
+
+  .enter {
+    position: absolute;
+    left: 50%;
+    bottom: 29px;
+    transform: translateX(-50%);
+    width: 123px;
+    height: 123px;
+  }
+  .enter img.ring { width: 100%; height: 100%; opacity: 0.6; }
+  .enter img.ch {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 40px;
+    transform: translate(-50%,-50%);
+    opacity: 0.6;
+  }
+
+  .card:hover { transform: translateY(-4px); }
+  .card { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); }
+  @media (prefers-reduced-motion: no-preference) {
+    .copy { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.3s both; }
+    .cards { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.7s both; }
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <img class="clouds" src="assets/clouds.png" alt="">
+    <img class="fill" src="assets/fill.png" alt="">
+    <img class="scene" src="assets/scene.png" alt="">
+    <img class="left" src="assets/left.png" alt="">
+    <img class="right" src="assets/right.png" alt="">
+    <div class="fade"></div>
+
+    <header>
+      <nav>
+        <a href="#">Home</a>
+        <a class="dim" href="#">Studio</a>
+        <a class="dim" href="#">Experiences</a>
+      </nav>
+      <img class="star" src="assets/star.svg" alt="Wonder">
+      <nav>
+        <a class="dim" href="#">Technologies</a>
+        <a class="dim" href="#">Journal</a>
+        <a class="dim" href="#">Contact</a>
+      </nav>
+    </header>
+
+    <div class="copy">
+      <h1>
+        <span class="row">Step <img class="arrow" src="assets/arrow.svg" alt=""> Into</span>
+        <span class="w">Wonder</span>
+      </h1>
+      <p>Designing immersive digital experiences that blur the line between imagination, AI, and reality.</p>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <img class="ph" src="assets/card-b.png" alt="">
+        <div class="cap"><span>Watch Demo</span></div>
+        <img class="play" src="assets/play.svg" alt="">
+      </div>
+      <div class="card">
+        <img class="ph" src="assets/card-a.png" alt="">
+        <div class="cap"><b>32</b> <span>Global Partners</span></div>
+      </div>
+      <div class="card">
+        <img class="ph" src="assets/card-c.png" alt="">
+        <div class="cap"><span>Watch Demo</span></div>
+        <img class="play" src="assets/play.svg" alt="">
+      </div>
+    </div>
+    <div class="pips"><i></i><i></i><i></i><i></i></div>
+    <a class="enter" href="#"><img class="ring" src="assets/enter.png" alt=""><img class="ch" src="assets/chevron.svg" alt=""></a>
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1440;
+      var scale = Math.min(1, width / 1440);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (810 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>

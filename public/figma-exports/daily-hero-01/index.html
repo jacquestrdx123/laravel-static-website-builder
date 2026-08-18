@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kazzoo — Daily Hero 01 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kavoon&family=Livvic:wght@500;600&family=Londrina+Solid:wght@400&family=Mali:wght@500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: Livvic, sans-serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1440px;
+    height: 810px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: linear-gradient(180deg, #7ec8f0 0%, #4aa3d8 28%, #2d8a4a 58%, #0b5030 100%);
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .land {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+  }
+
+  .avatar {
+    position: absolute;
+    left: 38px;
+    top: 23px;
+    width: 44px;
+    height: 44px;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .bar {
+    position: absolute;
+    left: 50%;
+    top: 23px;
+    transform: translateX(-50%);
+    width: 1048px;
+    height: 44px;
+  }
+  .bar a {
+    position: absolute;
+    top: 0;
+    padding: 14px 16px;
+    border-radius: 16px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: -0.52px;
+    text-transform: uppercase;
+    color: #fff;
+    background: rgba(255,255,255,0.09);
+  }
+  .bar a.home { left: 0; background: #fff; color: #000; }
+  .bar a.j { left: 80px; }
+  .bar a.c { left: 178px; }
+  .bar a.a { left: 724px; }
+  .bar a.p { left: 846px; }
+  .bar a.e { left: 963px; }
+  .midlogo {
+    position: absolute;
+    left: 50%;
+    top: 6px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .midlogo img { width: 37px; height: 37px; }
+  .midlogo span {
+    font-family: Kavoon, cursive;
+    font-size: 18px;
+    letter-spacing: -0.72px;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .utils {
+    position: absolute;
+    right: 38px;
+    top: 33px;
+    display: flex;
+    gap: 22px;
+    color: #fff;
+    font-size: 20px;
+  }
+
+  .headline {
+    position: absolute;
+    left: 38px;
+    top: 381px;
+    font-family: 'Londrina Solid', sans-serif;
+    font-size: 99px;
+    line-height: 0.84;
+    letter-spacing: -4px;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .sun {
+    position: absolute;
+    left: 56px;
+    top: 427px;
+    width: 123px;
+    height: 123px;
+    transform: rotate(-10.78deg);
+    object-fit: contain;
+  }
+  .lede {
+    position: absolute;
+    left: 38px;
+    top: 659px;
+    width: 577px;
+    font-size: 20px;
+    line-height: 1.2;
+    letter-spacing: -0.4px;
+    color: #fff;
+  }
+
+  .cards {
+    position: absolute;
+    left: 721px;
+    top: 532px;
+    display: flex;
+    gap: 18px;
+  }
+  .card {
+    position: relative;
+    width: 262px;
+    height: 188px;
+  }
+  .card .shape { width: 100%; height: auto; }
+  .card .char {
+    position: absolute;
+    left: -8px;
+    top: -28px;
+    width: 178px;
+    height: 178px;
+    object-fit: contain;
+  }
+  .card .stars { position: absolute; left: 148px; top: 58px; width: 60px; }
+  .card h3 {
+    position: absolute;
+    left: 148px;
+    top: 74px;
+    font-family: 'Londrina Solid', sans-serif;
+    font-size: 32px;
+    text-transform: uppercase;
+  }
+  .card p {
+    position: absolute;
+    left: 148px;
+    top: 112px;
+    width: 156px;
+    font-family: Mali, cursive;
+    font-size: 14px;
+    line-height: 1.2;
+    letter-spacing: -0.28px;
+    color: #000;
+  }
+  .card .go {
+    position: absolute;
+    right: 18px;
+    top: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 18px;
+    background: #fff;
+  }
+  .c1 h3 { color: #4d725c; }
+  .c2 h3 { color: #724d4d; }
+  .c3 h3 { color: #4d6672; }
+
+  .dots {
+    position: absolute;
+    right: 36px;
+    top: 412px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
+  .dots i { width: 8px; height: 8px; background: #fff; border-radius: 99px; display: block; }
+  .dots i.on { width: 20px; }
+
+  .card, .bar a { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); }
+  .card:hover { transform: translateY(-6px); }
+  @media (prefers-reduced-motion: no-preference) {
+    .headline, .lede { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.25s both; }
+    .cards { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.7s both; }
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <img class="land" src="assets/export.png" alt="Kazzoo landscape">
+
+    <a class="avatar" href="#"><img src="assets/avatar.png" alt=""></a>
+    <div class="bar">
+      <a class="home" href="#">Home</a>
+      <a class="j" href="#">Journey</a>
+      <a class="c" href="#">Characters</a>
+      <div class="midlogo">
+        <img src="assets/logo-char.png" alt="">
+        <span>Kazzoo</span>
+      </div>
+      <a class="a" href="#">Adventures</a>
+      <a class="p" href="#">Playworld</a>
+      <a class="e" href="#">Explore</a>
+    </div>
+    <div class="utils"><span>⌕</span><span>⋮⋮⋮</span></div>
+
+    <img class="sun" src="assets/sun.png" alt="">
+    <div class="headline">Dancing Through<br>Magical<br>Universes</div>
+    <p class="lede">Step into colorful adventures filled with playful characters, dreamy landscapes, and magical discoveries around every corner. Every scroll unlocks a new piece of the journey.</p>
+
+    <div class="cards">
+      <div class="card c1">
+        <img class="shape" src="assets/card.svg" alt="">
+        <img class="char" src="assets/muffy.png" alt="Muffy">
+        <img class="stars" src="assets/stars.svg" alt="">
+        <h3>Muffy</h3>
+        <p>A cheerful little dreamer who turns every tiny moment into a magical adventure.</p>
+        <span class="go"></span>
+      </div>
+      <div class="card c2">
+        <img class="shape" src="assets/card.svg" alt="">
+        <img class="char" src="assets/james.png" alt="James">
+        <img class="stars" src="assets/stars.svg" alt="">
+        <h3>James</h3>
+        <p>Curious, brave, and always exploring new worlds with endless excitement.</p>
+        <span class="go"></span>
+      </div>
+      <div class="card c3">
+        <img class="shape" src="assets/card.svg" alt="">
+        <img class="char" src="assets/rony.png" alt="Rony">
+        <img class="stars" src="assets/stars.svg" alt="">
+        <h3>Rony</h3>
+        <p>A playful explorer who loves collecting stories, smiles, and surprises.</p>
+        <span class="go"></span>
+      </div>
+    </div>
+    <div class="dots"><i></i><i></i><i class="on"></i><i></i><i></i></div>
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1440;
+      var scale = Math.min(1, width / 1440);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (810 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>

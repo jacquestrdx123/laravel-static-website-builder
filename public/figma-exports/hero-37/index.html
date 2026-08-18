@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Midway Hotel — Daily Hero 37 (Figma export)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: Outfit, sans-serif; }
+  .viewport { overflow: hidden; }
+  .stage {
+    position: relative;
+    width: 1440px;
+    height: 810px;
+    overflow: hidden;
+    transform-origin: top left;
+    background: #909b9f;
+  }
+  .stage img { display: block; }
+  a { text-decoration: none; color: inherit; }
+
+  .bg {
+    position: absolute;
+    inset: 0;
+    width: 1440px;
+    height: 810px;
+    object-fit: cover;
+  }
+  .veil {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 589px;
+    height: 810px;
+    background: rgba(39,23,27,0.01);
+    backdrop-filter: blur(20px);
+    pointer-events: none;
+  }
+
+  .brand {
+    position: absolute;
+    left: 29px;
+    top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .brand .mark {
+    width: 36px;
+    height: 31px;
+    overflow: hidden;
+    mix-blend-mode: screen;
+  }
+  .brand .mark img {
+    width: 260%;
+    height: 300%;
+    margin-left: -80%;
+    margin-top: -100%;
+    max-width: none;
+  }
+  .brand .word { width: 108px; height: 9px; }
+  .brand .word img { width: 100%; height: 100%; }
+
+  .nav-svg {
+    position: absolute;
+    left: 50%;
+    top: 32px;
+    transform: translateX(-50%);
+    width: 464px;
+    height: 12px;
+  }
+  .nav-svg img { width: 100%; height: 100%; }
+
+  .reserve-now {
+    position: absolute;
+    left: 1236px;
+    top: 19px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 3px 3px 3px 10px;
+    background: #fff;
+    border-radius: 999px;
+    font-size: 9.35px;
+    font-weight: 600;
+    letter-spacing: -0.19px;
+    text-transform: uppercase;
+    color: #010404;
+  }
+  .reserve-now .disc {
+    width: 31px;
+    height: 31px;
+    border-radius: 50%;
+    background: #f5cbce;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .reserve-now .disc img { width: 11px; height: 11px; }
+  .dots {
+    position: absolute;
+    left: 1385px;
+    top: 24px;
+    width: 24px;
+    height: 24px;
+    display: grid;
+    grid-template-columns: 3px 3px 3px;
+    gap: 4px;
+    align-content: center;
+    justify-content: center;
+  }
+  .dots i { width: 3px; height: 3px; background: #fff; border-radius: 50%; }
+
+  .headline {
+    position: absolute;
+    left: 56px;
+    top: 228px;
+    width: 370px;
+    height: 244px;
+  }
+  .headline img { width: 100%; height: 100%; }
+
+  .cta-stay {
+    position: absolute;
+    left: 110px;
+    top: 540px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 5px 5px 5px 15px;
+    background: #fff;
+    border-radius: 999px;
+  }
+  .cta-stay .label { width: 143px; height: 10px; }
+  .cta-stay .label img { width: 100%; height: 100%; }
+  .cta-stay .disc {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #f5cbce;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cta-stay .disc img { width: 16px; height: 16px; }
+  .cta-explore {
+    position: absolute;
+    left: 354px;
+    top: 540px;
+    width: 156px;
+    height: 56px;
+  }
+  .cta-explore img { width: 100%; height: 100%; }
+
+  .socials {
+    position: absolute;
+    left: 1378px;
+    top: 308px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+  .socials a {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .socials a img { width: 20px; height: 20px; }
+
+  .stack {
+    position: absolute;
+    left: 786px;
+    top: 516px;
+    width: 417px;
+    height: 249px;
+  }
+  .stack .lip-a {
+    position: absolute;
+    left: 88px;
+    top: 0;
+    width: 242px;
+    height: 8px;
+    border-radius: 30px 30px 0 0;
+    background: rgba(255,255,255,0.22);
+    backdrop-filter: blur(20px);
+  }
+  .stack .lip-b {
+    position: absolute;
+    left: 49px;
+    top: 8px;
+    width: 320px;
+    height: 13px;
+    border-radius: 30px 30px 0 0;
+    background: rgba(255,255,255,0.16);
+    backdrop-filter: blur(20px);
+  }
+  .stack .card {
+    position: absolute;
+    left: 0;
+    top: 21px;
+    width: 417px;
+    height: 228px;
+    border-radius: 40px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.07);
+    backdrop-filter: blur(20px);
+  }
+  .stack .copy {
+    position: absolute;
+    left: 23px;
+    top: 51px;
+    width: 157px;
+    height: 127px;
+  }
+  .stack .copy img { width: 100%; height: 100%; }
+  .stack .photo {
+    position: absolute;
+    left: 210px;
+    top: 7px;
+    width: 197px;
+    height: 211px;
+    object-fit: cover;
+  }
+  .stack .tri {
+    position: absolute;
+    right: 22px;
+    bottom: 22px;
+    width: 13px;
+    height: 21px;
+  }
+  .stack .tri i {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #f5cbce;
+  }
+  .stack .tri i:nth-child(1) { left: 0; top: 17px; }
+  .stack .tri i:nth-child(2) { left: 8px; top: 8px; }
+  .stack .tri i:nth-child(3) { left: 0; top: 0; }
+
+  .scroll {
+    position: absolute;
+    left: 65px;
+    top: 664px;
+    width: 276px;
+    height: 276px;
+  }
+  .scroll .r1, .scroll .r2, .scroll .r3 {
+    position: absolute;
+  }
+  .scroll .r1 { inset: 0; }
+  .scroll .r2 { left: 28px; top: 28px; width: 219px; height: 219px; }
+  .scroll .r3 { left: 54px; top: 54px; width: 168px; height: 168px; }
+  .scroll img { width: 100%; height: 100%; }
+  .scroll .txt {
+    position: absolute;
+    left: 69px;
+    top: 68px;
+    width: 139px;
+    height: 68px;
+  }
+  .scroll .arr {
+    position: absolute;
+    left: 128px;
+    top: 110px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .scroll .arr img { width: 20px; height: auto; }
+
+  .pager {
+    position: absolute;
+    left: 1250px;
+    top: 728px;
+    width: 172px;
+    height: 37px;
+  }
+  .pager img { width: 100%; height: 100%; }
+  .pager-line {
+    position: absolute;
+    left: 1314px;
+    top: 764px;
+    width: 73px;
+    height: 1px;
+  }
+  .pager-line img { width: 100%; height: 100%; }
+
+  .cta-stay, .cta-explore, .reserve-now { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); }
+  .cta-stay:hover, .cta-explore:hover, .reserve-now:hover { transform: translateY(-3px); }
+  @media (prefers-reduced-motion: no-preference) {
+    .headline { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.2s both; }
+    .cta-stay, .cta-explore { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.45s both; }
+    .stack { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) 0.7s both; }
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+    <img class="bg" src="assets/bg.png" alt="">
+    <div class="veil"></div>
+
+    <a class="brand" href="#">
+      <span class="mark"><img src="assets/logo.png" alt=""></span>
+      <span class="word"><img src="assets/wordmark.svg" alt="Midway.Hotel"></span>
+    </a>
+    <div class="nav-svg"><img src="assets/nav.svg" alt=""></div>
+    <a class="reserve-now" href="#">
+      Reserve Now
+      <span class="disc"><img src="assets/caret-v.svg" alt=""></span>
+    </a>
+    <a class="dots" href="#" aria-label="Menu"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></a>
+
+    <div class="headline"><img src="assets/headline.svg" alt="Crafting the art of escape"></div>
+
+    <a class="cta-stay" href="#">
+      <span class="label"><img src="assets/reserve-stay.svg" alt="Reserve Your Stay"></span>
+      <span class="disc"><img src="assets/caret-v.svg" alt=""></span>
+    </a>
+    <a class="cta-explore" href="#"><img src="assets/explore-suites.svg" alt="Explore Suites"></a>
+
+    <div class="socials">
+      <a href="#" aria-label="Instagram">
+        <img src="assets/ig-2.svg" alt="">
+      </a>
+      <a href="#" aria-label="YouTube">
+        <img src="assets/yt-1.svg" alt="">
+      </a>
+      <a href="#" aria-label="X">
+        <img src="assets/x-1.svg" alt="">
+      </a>
+    </div>
+
+    <div class="stack">
+      <div class="lip-a"></div>
+      <div class="lip-b"></div>
+      <div class="card">
+        <div class="copy"><img src="assets/card-copy.svg" alt="Experience unparalleled"></div>
+        <img class="photo" src="assets/card-photo.png" alt="">
+        <div class="tri" aria-hidden="true"><i></i><i></i><i></i></div>
+      </div>
+    </div>
+
+    <div class="scroll">
+      <div class="r1"><img src="assets/ring-outer.svg" alt=""></div>
+      <div class="r2"><img src="assets/ring-mid.svg" alt=""></div>
+      <div class="r3"><img src="assets/ring-inner.svg" alt=""></div>
+      <div class="txt"><img src="assets/scroll-text.svg" alt="Scroll down"></div>
+      <div class="arr">
+        <img src="assets/arrow-down-1.svg" alt="">
+        <img src="assets/arrow-down-2.svg" alt="">
+      </div>
+    </div>
+
+    <div class="pager"><img src="assets/pager.svg" alt="01"></div>
+    <div class="pager-line"><img src="assets/pager-line.svg" alt=""></div>
+  </div>
+</div>
+<script>
+  (function () {
+    var stage = document.getElementById('stage');
+    var viewport = stage.parentElement;
+    function fit() {
+      var width = window.innerWidth || 1440;
+      var scale = Math.min(1, width / 1440);
+      stage.style.transform = 'scale(' + scale + ')';
+      viewport.style.height = (810 * scale) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+</script>
+</body>
+</html>
