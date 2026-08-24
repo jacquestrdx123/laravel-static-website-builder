@@ -31,28 +31,183 @@
         .photo-preview .placeholder { color: var(--ink-soft); font-size: .75rem; text-align: center; padding: .4rem; }
         .template-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: .75rem;
-            margin: .75rem 0 1.25rem;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+            margin: 1rem 0 1.75rem;
         }
         .template-card {
-            border: 1px solid var(--line);
-            border-radius: 12px;
-            padding: 1rem;
-            background: var(--surface);
-            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
             text-align: left;
-            transition: border-color .15s, box-shadow .15s, background .15s;
+            font: inherit;
+            font-weight: 400;
+            color: var(--foreground);
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 1rem;
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(15, 23, 42, .04);
+            transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
         }
-        .template-card:hover { border-color: color-mix(in srgb, var(--brand) 45%, var(--line)); }
+        .template-card:hover,
+        .template-card:focus-visible {
+            opacity: 1;
+            color: var(--foreground);
+            border-color: color-mix(in srgb, var(--brand) 45%, var(--line));
+            box-shadow: 0 10px 28px -18px rgba(15, 23, 42, .35);
+            transform: translateY(-2px);
+        }
+        .template-card:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 3px var(--brand-soft), 0 10px 28px -18px rgba(15, 23, 42, .35);
+        }
         .template-card.selected {
             border-color: var(--brand);
-            background: var(--brand-soft);
-            box-shadow: 0 0 0 1px var(--brand);
+            background: var(--surface);
+            box-shadow: 0 0 0 1px var(--brand), 0 12px 28px -16px color-mix(in srgb, var(--brand) 55%, transparent);
         }
-        .template-card strong { display: block; margin-bottom: .35rem; }
-        .template-card .summary { font-size: .9rem; color: var(--foreground); margin: 0 0 .5rem; }
-        .template-card .best-for { font-size: .8rem; color: var(--muted); margin: 0; }
+        .template-card.selected:hover { opacity: 1; color: var(--foreground); }
+        .template-thumb {
+            position: relative;
+            display: block;
+            height: 138px;
+            overflow: hidden;
+            border-bottom: 1px solid var(--line);
+            background: #e8eef2;
+        }
+        .thumb-chrome {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            height: 16px;
+            padding: 0 10px;
+            background: rgba(255, 255, 255, .55);
+        }
+        .thumb-chrome b {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: rgba(15, 23, 42, .18);
+        }
+        .thumb-canvas { position: absolute; inset: 16px 0 0; }
+        .thumb-canvas .t { position: absolute; border-radius: 4px; }
+        .template-check {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 2;
+            display: grid;
+            place-items: center;
+            width: 1.45rem;
+            height: 1.45rem;
+            border-radius: 50%;
+            background: var(--brand);
+            color: #fff;
+            opacity: 0;
+            transform: scale(.85);
+            transition: opacity .15s ease, transform .15s ease;
+        }
+        .template-card.selected .template-check { opacity: 1; transform: none; }
+        .template-check svg { width: .85rem; height: .85rem; }
+        .template-body { display: flex; flex-direction: column; gap: .45rem; padding: 1rem 1.05rem 1.1rem; flex: 1; }
+        .template-card strong {
+            display: block;
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 650;
+            letter-spacing: -0.02em;
+            color: var(--foreground);
+        }
+        .template-card .summary {
+            margin: 0;
+            font-size: .875rem;
+            line-height: 1.45;
+            color: var(--muted);
+            text-wrap: pretty;
+        }
+        .template-tags { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: auto; padding-top: .25rem; }
+        .template-tags span {
+            font-size: .7rem;
+            font-weight: 500;
+            letter-spacing: .01em;
+            color: var(--muted);
+            background: color-mix(in srgb, var(--foreground) 4%, var(--surface));
+            border: 1px solid var(--line);
+            border-radius: var(--radius-pill);
+            padding: .15rem .5rem;
+        }
+        .template-card.selected .template-tags span {
+            color: var(--brand);
+            background: var(--brand-soft);
+            border-color: color-mix(in srgb, var(--brand) 28%, var(--line));
+        }
+        .template-card[data-type="business"] { --thumb-bg: #d5e6ec; --thumb-ink: #16323d; --thumb-accent: #0e7490; }
+        .template-card[data-type="portfolio"] { --thumb-bg: #1c1917; --thumb-ink: #e7e5e4; --thumb-accent: #d4a017; }
+        .template-card[data-type="restaurant"] { --thumb-bg: #3f4636; --thumb-ink: #e8e4d4; --thumb-accent: #c4b48a; }
+        .template-card[data-type="landing"] { --thumb-bg: #eef2ff; --thumb-ink: #1e1b4b; --thumb-accent: #6366f1; }
+        .template-card[data-type="personal"] { --thumb-bg: #f4ece4; --thumb-ink: #3f2e22; --thumb-accent: #c2410c; }
+        .template-card[data-type="event"] { --thumb-bg: #111827; --thumb-ink: #f8fafc; --thumb-accent: #f59e0b; }
+        .template-thumb { background: var(--thumb-bg, #e8eef2); }
+        .template-card[data-type="business"] .t1 { left: 8%; right: 8%; top: 8%; height: 38%; background: color-mix(in srgb, var(--thumb-ink) 18%, white); }
+        .template-card[data-type="business"] .t2,
+        .template-card[data-type="business"] .t3,
+        .template-card[data-type="business"] .t4 { top: 54%; height: 28%; width: 24%; background: #fff; box-shadow: 0 2px 6px rgba(15,23,42,.08); }
+        .template-card[data-type="business"] .t2 { left: 8%; }
+        .template-card[data-type="business"] .t3 { left: 38%; }
+        .template-card[data-type="business"] .t4 { left: 68%; }
+        .template-card[data-type="business"] .t5 { display: none; }
+        .template-card[data-type="portfolio"] .t1 { left: 6%; top: 8%; width: 42%; height: 84%; background: color-mix(in srgb, var(--thumb-accent) 35%, #292524); }
+        .template-card[data-type="portfolio"] .t2 { right: 6%; top: 8%; width: 42%; height: 38%; background: #44403c; }
+        .template-card[data-type="portfolio"] .t3 { right: 6%; bottom: 8%; width: 20%; height: 38%; background: #57534e; }
+        .template-card[data-type="portfolio"] .t4 { right: 28%; bottom: 8%; width: 20%; height: 38%; background: color-mix(in srgb, var(--thumb-accent) 50%, #292524); }
+        .template-card[data-type="portfolio"] .t5 { display: none; }
+        .template-card[data-type="restaurant"] .t1 { left: 0; right: 36%; top: 0; bottom: 0; border-radius: 0; background: color-mix(in srgb, var(--thumb-accent) 22%, #2a3024); }
+        .template-card[data-type="restaurant"] .t2,
+        .template-card[data-type="restaurant"] .t3,
+        .template-card[data-type="restaurant"] .t4 { right: 8%; height: 10%; width: 26%; background: color-mix(in srgb, var(--thumb-ink) 35%, transparent); }
+        .template-card[data-type="restaurant"] .t2 { top: 18%; }
+        .template-card[data-type="restaurant"] .t3 { top: 38%; }
+        .template-card[data-type="restaurant"] .t4 { top: 58%; }
+        .template-card[data-type="restaurant"] .t5 { right: 8%; bottom: 12%; width: 18%; height: 14%; border-radius: 999px; background: var(--thumb-accent); }
+        .template-card[data-type="landing"] .t1 { left: 18%; right: 18%; top: 16%; height: 12%; background: var(--thumb-ink); opacity: .85; }
+        .template-card[data-type="landing"] .t2 { left: 28%; right: 28%; top: 34%; height: 7%; background: color-mix(in srgb, var(--thumb-ink) 25%, white); }
+        .template-card[data-type="landing"] .t3 { left: 38%; width: 24%; top: 48%; height: 14%; border-radius: 999px; background: var(--thumb-accent); }
+        .template-card[data-type="landing"] .t4,
+        .template-card[data-type="landing"] .t5 { bottom: 14%; height: 16%; width: 18%; background: #fff; box-shadow: 0 2px 6px rgba(15,23,42,.08); }
+        .template-card[data-type="landing"] .t4 { left: 22%; }
+        .template-card[data-type="landing"] .t5 { right: 22%; }
+        .template-card[data-type="personal"] .t1 { left: 10%; top: 18%; width: 28px; height: 28px; border-radius: 50%; background: var(--thumb-accent); }
+        .template-card[data-type="personal"] .t2 { left: 10%; right: 18%; top: 48%; height: 8%; background: color-mix(in srgb, var(--thumb-ink) 55%, white); }
+        .template-card[data-type="personal"] .t3,
+        .template-card[data-type="personal"] .t4 { left: 10%; height: 6%; background: color-mix(in srgb, var(--thumb-ink) 18%, white); }
+        .template-card[data-type="personal"] .t3 { right: 28%; top: 62%; }
+        .template-card[data-type="personal"] .t4 { right: 40%; top: 74%; }
+        .template-card[data-type="personal"] .t5 { display: none; }
+        .template-card[data-type="event"] .t1 { left: 8%; top: 14%; width: 22%; height: 42%; background: var(--thumb-accent); }
+        .template-card[data-type="event"] .t2 { left: 36%; right: 10%; top: 16%; height: 12%; background: #fff; }
+        .template-card[data-type="event"] .t3,
+        .template-card[data-type="event"] .t4,
+        .template-card[data-type="event"] .t5 { left: 36%; right: 10%; height: 10%; background: color-mix(in srgb, var(--thumb-ink) 14%, #1f2937); }
+        .template-card[data-type="event"] .t3 { top: 38%; }
+        .template-card[data-type="event"] .t4 { top: 54%; }
+        .template-card[data-type="event"] .t5 { top: 70%; }
+        @media (max-width: 900px) {
+            .template-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (max-width: 560px) {
+            .template-grid { grid-template-columns: 1fr; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .template-card:hover, .template-card:focus-visible { transform: none; }
+        }
         .coming-soon { opacity: .65; }
     </style>
 
@@ -69,19 +224,39 @@
                 <h2 style="margin-top:0">Choose a site template</h2>
                 <p class="hint" style="margin-top:0">
                     Each template sets the page structure the AI follows — section order, content markers, and tone.
-                    Visual style still comes from your design choices later.
+                    Visual style is directed later from your design choices and our composition library.
                 </p>
 
                 <div class="template-grid" role="radiogroup" aria-label="Site template">
                     @foreach ($templates as $key => $template)
                         <button type="button"
                                 class="template-card {{ $site_type === $key ? 'selected' : '' }}"
+                                data-type="{{ $key }}"
                                 wire:click="$set('site_type', '{{ $key }}')"
                                 role="radio"
                                 aria-checked="{{ $site_type === $key ? 'true' : 'false' }}">
-                            <strong>{{ $template['label'] }}</strong>
-                            <p class="summary">{{ $template['summary'] }}</p>
-                            <p class="best-for">Best for {{ $template['best_for'] }}</p>
+                            <span class="template-thumb" aria-hidden="true">
+                                <span class="thumb-chrome"><b></b><b></b><b></b></span>
+                                <span class="thumb-canvas">
+                                    <span class="t t1"></span>
+                                    <span class="t t2"></span>
+                                    <span class="t t3"></span>
+                                    <span class="t t4"></span>
+                                    <span class="t t5"></span>
+                                </span>
+                                <span class="template-check">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                                </span>
+                            </span>
+                            <span class="template-body">
+                                <strong>{{ $template['label'] }}</strong>
+                                <p class="summary">{{ $template['summary'] }}</p>
+                                <span class="template-tags">
+                                    @foreach (explode(',', $template['best_for']) as $tag)
+                                        <span>{{ trim($tag) }}</span>
+                                    @endforeach
+                                </span>
+                            </span>
                         </button>
                     @endforeach
                 </div>
